@@ -529,6 +529,13 @@
     padding: 40px;
     text-align: center;
   }
+
+  .galleryImage_new{
+    height: 300px;
+     width: 300px;
+     border-radius: 8px;
+     margin-bottom: 15px;
+  }
   
   .gallerySection h1 {
     font-weight: bold;

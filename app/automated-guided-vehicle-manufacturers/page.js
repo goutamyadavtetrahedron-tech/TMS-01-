@@ -133,7 +133,7 @@ export default function Page() {
             {/* Left Side - Image */}
             <div className={styles.amrImageContainer}>
               <img
-                src="/images/Autonomous-Mobile-Robots-10.png"
+                src="/images/AMR web.png"
                 alt="Autonomous Mobile Robot"
               />
             </div>
@@ -354,21 +354,20 @@ export default function Page() {
         <section className={styles.gallerySection}>
           <h1>Our Gallery</h1>
           <div className={styles.galleryContainer}>
-            <div className={styles.galleryImage}>
-              <img src="/images/servicesData/A_Autonomous_mo_1-transformed-300x300.png" alt="Gallery Image 1" />
+            
+            <div className={styles.galleryImage_new}>
+              <img src="/images/agv-web-gallery.png" alt="Gallery1" />
             </div>
-            <div className={styles.galleryImage}>
-              <img src="/images/Create-a-Autono-0-1-1-300x300.webp" alt="Gallery Image 2" />
+
+             <div className={styles.galleryImage_new}>
+              <img src="/images/rgv-web-gallery.png" alt="Gallery2" />
             </div>
-            <div className={styles.galleryImage}>
-              <img src="/images/servicesData/0975fea1-43f2-47a6-8895-3bdcf636f94a-300x300.png" alt="Gallery Image 3" />
+
+             <div className={styles.galleryImage_new}>
+              <img src="/images/amr-web-gallery.png" alt="Gallery3" />
             </div>
-            <div className={styles.galleryImage}>
-              <img src="/images/servicesData/A_Autonomous_mo_1-transformed-300x300.png" alt="Gallery Image 4" />
-            </div>
-            {/* <div className={styles.galleryImage}>
-              <img src="/images/servicesData/Autonomous-Mobile-Robots-14.png" alt="Gallery Image 5" />
-            </div> */}
+            
+            
           </div>
         </section>
 
@@ -393,7 +392,10 @@ export default function Page() {
     
     {/* Right Side - Image */}
     <div className={styles.rgvImageContainer}>
-      <img src="/assets/images/rgv-graphic.png" alt="Rail Guided Vehicle System" />
+      <img
+                src="/images/RGV-web.png"
+                alt="Rail Guided Vehicle System"
+              />
     </div>
   </div>
 </section>
