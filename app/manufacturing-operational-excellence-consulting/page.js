@@ -138,6 +138,7 @@ export default function ConsultingPage() {
               zIndex: 1, // keeps right content above overlay
             }}
           >
+            
             <div
               style={{
                 width: "100%",
@@ -146,7 +147,9 @@ export default function ConsultingPage() {
                 borderRadius: 16,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
               }}
-            ></div>
+            >
+              <ContactForm buttonText="Contact Us" />
+            </div>
           </div>
         </div>
 
@@ -160,6 +163,7 @@ export default function ConsultingPage() {
             gap: "40px",
             // padding: " 6vw",
             flexWrap: "wrap",
+            marginTop: "40px",
           }}
         >
           {/* Left Column - Text */}
@@ -196,7 +200,7 @@ export default function ConsultingPage() {
           </div>
 
           {/* Right Column - Contact Form */}
-          <div
+       {/*  <div
             style={{
               flex: "1 1 35%",
               minWidth: "280px",
@@ -217,7 +221,7 @@ export default function ConsultingPage() {
             >
               <ContactForm buttonText="Contact Us" />
             </div>
-          </div>
+          </div> */}
         </section>
 
         {/* Improvement Areas */}

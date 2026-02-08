@@ -1,3 +1,6 @@
+@import "tailwindcss";
+
+
 :root {
     --tagline-size: 32px;
     --heading-size: 43px;
