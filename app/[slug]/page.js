@@ -1115,21 +1115,15 @@ export default function ServiceOrBlogPage({ params }) {
         </div>
       </div> */}
       <div
-        className="container"
+        className="container w-full"
         style={{ paddingTop: "50px", paddingBottom: "50px" }}
       >
-        <div style={styles.introSectionFlexContainer}>
-          {/* Intro Text Section (Common for detailed pages) - Left Side */}
+        <div>
           {isDetailedPage && isNonEmptyString(data.introText) && (
-            <section style={styles.introSectionContent}>
-              <div className="fs-5">{renderParagraphs(data.introText)}</div>
+            <section>
+              <div >{renderParagraphs(data.introText)}</div>
             </section>
           )}
-
-          {/* Contact Form - Right Side */}
-          <div style={styles.contactFormSide}>
-            <ContactForm />
-          </div>
         </div>
       </div>
       <div className="container py-5">
