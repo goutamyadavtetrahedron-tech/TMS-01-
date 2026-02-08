@@ -465,8 +465,8 @@ export default function TrainingPage({ params }) {
     const paragraphs = Array.isArray(text)
       ? text.filter((p) => isNonEmptyString(p))
       : isNonEmptyString(text)
-      ? text.split("\n")
-      : [];
+        ? text.split("\n")
+        : [];
     if (paragraphs.length === 0) return null; // Return null if no valid paragraphs
     // Default color from theme's text secondary, unless overridden
     const baseStyle = {
@@ -522,7 +522,7 @@ export default function TrainingPage({ params }) {
   // --- Component Rendering Functions ---
 
   const renderBanner = () => (
-    // Banner usually always shows, no major content check needed inside, but the data itself is checked initially
+    // Split layout banner with form on the right
     <div style={dynamicStyles.banner}>
       {(data.img || data.image) && (
         <img
@@ -531,27 +531,78 @@ export default function TrainingPage({ params }) {
           alt={data.title || "Training Banner"}
         />
       )}
-      <div style={dynamicStyles.bannerContent}>
-        {data.bannerTitle && (
-          <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>
-        )}
-        {data.bannerSubtitle && (
-          <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>
-        )}
-        {/* Check if bannerDescription has renderable content */}
-        {renderParagraphs(data.bannerDescription, {
-          color: "rgba(255,255,255,0.95)",
-        }) && (
-          <div style={dynamicStyles.bannerDescription}>
-            {renderParagraphs(data.bannerDescription, {
-              color: "rgba(255,255,255,0.95)",
-            })}
+
+      {/* Split Content Container */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          width: "100%",
+          maxWidth: "1400px",
+          gap: "40px",
+          padding: "0 20px",
+        }}
+      >
+        {/* Left side - Text content */}
+        <div
+          style={{
+            flex: 1,
+            minWidth: "300px",
+            maxWidth: "700px",
+            backgroundColor: "rgba(0, 20, 40, 0.45)",
+            borderRadius: "10px",
+            boxShadow: "0 4px 15px rgb(0, 0, 0)",
+            padding: "30px",
+          }}
+        >
+          {data.bannerTitle && (
+            <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>
+          )}
+          {data.bannerSubtitle && (
+            <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>
+          )}
+          {/* Check if bannerDescription has renderable content */}
+          {renderParagraphs(data.bannerDescription, {
+            color: "rgba(255,255,255,0.95)",
+          }) && (
+              <div style={dynamicStyles.bannerDescription}>
+                {renderParagraphs(data.bannerDescription, {
+                  color: "rgba(255,255,255,0.95)",
+                })}
+              </div>
+            )}
+          {renderCtaButton(
+            data.ctaButtonText || "Enroll Now / Learn More",
+            data.ctaButtonLink
+          )}
+        </div>
+
+        {/* Right side - Contact Form */}
+        <div
+          style={{
+            flex: 1,
+            minWidth: "300px",
+            maxWidth: "450px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              background: "rgba(255,255,255,0.97)",
+              borderRadius: 16,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+            }}
+          >
+            <ContactForm buttonText="Contact Us" />
           </div>
-        )}
-        {renderCtaButton(
-          data.ctaButtonText || "Enroll Now / Learn More",
-          data.ctaButtonLink
-        )}
+        </div>
       </div>
     </div>
   );
@@ -642,9 +693,9 @@ export default function TrainingPage({ params }) {
       ...dynamicStyles.cardBase,
       ...(isHovered
         ? {
-            transform: currentTheme.hoverEffect?.transform, // Use optional chaining
-            boxShadow: currentTheme.hoverEffect?.shadow,
-          }
+          transform: currentTheme.hoverEffect?.transform, // Use optional chaining
+          boxShadow: currentTheme.hoverEffect?.shadow,
+        }
         : {}),
     };
 
@@ -721,8 +772,8 @@ export default function TrainingPage({ params }) {
     const descriptionContent = renderParagraphs(sectionData.description);
     const renderedCards = isNonEmptyArray(itemsToRender)
       ? itemsToRender
-          .map((item, index) => renderCard(item, index, dataKey))
-          .filter(Boolean) // Filter out null cards
+        .map((item, index) => renderCard(item, index, dataKey))
+        .filter(Boolean) // Filter out null cards
       : [];
 
     // Don't render section if no image, no description, and no cards
@@ -1223,34 +1274,11 @@ export default function TrainingPage({ params }) {
         buttonText={modalButtonText}
       />
       {renderBanner()}
-      {/* Intro + Contact Form Section */}
-      <section style={{ padding: "4rem 0" }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center", // ⬅️ Vertically center
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "30px",
-          }}
-          className="container"
-        >
-          {/* Left: Intro Text */}
-          <div style={{ flex: 2, minWidth: "300px", maxWidth: "65%" }}>
-            {renderIntro()}
-          </div>
-
-          {/* Right: Contact Form */}
-          <div style={{ flex: 1, minWidth: "280px", maxWidth: "35%" }}>
-            <ContactForm />
-          </div>
-        </div>
-      </section>
+      {/* Intro Section */}
+      {renderIntro()}
 
       <div className="container py-4">
         {/* Sections will now only render if they have content */}
-        {/* {renderIntro()} */}
         {renderWhyChoose()}
 
         {/* Render the primary content block based on its key */}
@@ -1278,7 +1306,6 @@ export default function TrainingPage({ params }) {
         {renderCourseContent()}
         {renderMethodology()}
         {renderClients()}
-        {renderForm()}
       </div>
     </Layout>
   );
