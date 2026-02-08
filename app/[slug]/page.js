@@ -928,44 +928,170 @@ export default function ServiceOrBlogPage({ params }) {
         buttonText={modalButtonText}
       />
       {/* Banner Section */}
-      <div style={styles.banner}>
-  {(data.img || data.image) && (() => {
-    const mediaSrc = data.img || data.image;
-    const isVideo = mediaSrc.endsWith(".mp4") || mediaSrc.endsWith(".webm");
+      {data.heroLayout === "split" ? (
+        // Split Hero Section with Form (like manufacturing-operational-excellence-consulting)
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            alignItems: "stretch",
+            minHeight: 400,
+            backgroundImage: data.heroBackgroundImage
+              ? `url('${data.heroBackgroundImage}')`
+              : data.img
+                ? `url('${data.img}')`
+                : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            overflow: "hidden",
+          }}
+        >
+          {/* Overlay */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.55)",
+              zIndex: 0,
+            }}
+          />
 
-    return isVideo ? (
-      <video
-        src={mediaSrc}
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          ...styles.bannerImage,
-          objectFit: "cover",
-          width: "100%",
-          height: "100%",
-        }}
-      />
-    ) : (
-      <img
-        src={mediaSrc}
-        alt={data.title || "Service Banner"}
-        style={styles.bannerImage}
-      />
-    );
-  })()}
+          {/* Left Content Section */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: "40px 24px 40px 6vw",
+              minWidth: 0,
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            <h1
+              style={{
+                textAlign: "left",
+                fontSize: "44px",
+                marginTop: 0,
+                color: "white",
+              }}
+            >
+              {data.heroTitle || data.bannerTitle || data.title}
+            </h1>
+            <p style={{ color: "white", fontSize: "24px", marginTop: "18px" }}>
+              {data.heroSubtitle || data.bannerSubtitle}
+            </p>
 
-  <div style={styles.bannerContent}>
-    <h1 className="display-4 fw-bold mb-3" style={{ color: "white" }}>
-      {data.bannerTitle || data.title}
-    </h1>
-    {data.bannerSubtitle && (
-      <p className="lead mb-3 fs-5">{data.bannerSubtitle}</p>
-    )}
-    {data.bannerDescription && (
-      <p className="mb-4 fs-5">{data.bannerDescription}</p>
-    )}
+            {isNonEmptyArray(data.heroFeaturesList) && (
+              <ul
+                style={{
+                  color: "white",
+                  fontSize: "20px",
+                  marginTop: "18px",
+                  listStyle: "none",
+                  padding: 0,
+                }}
+              >
+                {data.heroFeaturesList.map((feature, idx) => (
+                  <li key={idx}>✅ {feature}</li>
+                ))}
+              </ul>
+            )}
+
+            {/* Contact Button */}
+            <a
+              href="/contact-us"
+              style={{
+                marginTop: "24px",
+                backgroundColor: "#007BFF",
+                color: "white",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                fontSize: "20px",
+                textDecoration: "none",
+                display: "inline-block",
+                width: "fit-content",
+                transition: "background 0.3s",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
+              onMouseOut={(e) => (e.target.style.backgroundColor = "#007BFF")}
+            >
+              Start Your Journey
+            </a>
+          </div>
+
+          {/* Right Content Section - Contact Form */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minWidth: 0,
+              padding: "40px 6vw 40px 24px",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+                maxWidth: 400,
+                background: "rgba(255,255,255,0.97)",
+                borderRadius: 16,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+              }}
+            >
+              <ContactForm buttonText="Contact Us" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Default Centered Banner
+        <div style={styles.banner}>
+          {(data.img || data.image) && (() => {
+            const mediaSrc = data.img || data.image;
+            const isVideo = mediaSrc.endsWith(".mp4") || mediaSrc.endsWith(".webm");
+
+            return isVideo ? (
+              <video
+                src={mediaSrc}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{
+                  ...styles.bannerImage,
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            ) : (
+              <img
+                src={mediaSrc}
+                alt={data.title || "Service Banner"}
+                style={styles.bannerImage}
+              />
+            );
+          })()}
+
+          <div style={styles.bannerContent}>
+            <h1 className="display-4 fw-bold mb-3" style={{ color: "white" }}>
+              {data.bannerTitle || data.title}
+            </h1>
+            {data.bannerSubtitle && (
+              <p className="lead mb-3 fs-5">{data.bannerSubtitle}</p>
+            )}
+            {data.bannerDescription && (
+              <p className="mb-4 fs-5">{data.bannerDescription}</p>
+            )}
 
     {isNonEmptyArray(data.heroFeatures) && (
       <ul className="list-unstyled d-flex flex-wrap justify-content-center gap-3 mb-4 fs-5">
@@ -978,9 +1104,10 @@ export default function ServiceOrBlogPage({ params }) {
       </ul>
     )}
 
-    {renderCtaButton("Start Your Journey")}
-  </div>
-</div>
+            {renderCtaButton("Start Your Journey")}
+          </div>
+        </div>
+      )}
 
       {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px", width: "100%" }}>
         <div style={{ width: "100%", maxWidth: "500px" }}>
@@ -1295,14 +1422,14 @@ export default function ServiceOrBlogPage({ params }) {
                                       style={{
                                         ...styles.comparisonTableThTd,
                                         ...(rowIndex ===
-                                        data.comparison.table.length - 1
+                                          data.comparison.table.length - 1
                                           ? styles.comparisonTableTrLastTd
                                           : {}),
                                         ...(cellIndex === 0
                                           ? styles.comparisonTableTdFirst
                                           : {}),
                                         ...(cellIndex ===
-                                        Object.values(row).length - 1
+                                          Object.values(row).length - 1
                                           ? styles.comparisonTableTdLast
                                           : {}),
                                       }}
@@ -1457,50 +1584,50 @@ export default function ServiceOrBlogPage({ params }) {
             {(isNonEmptyArray(data.industries) ||
               (data.industriesServed &&
                 isNonEmptyArray(data.industriesServed.images))) && (
-              <section style={styles.dynamicSection} className="text-center">
-                {/* --- MODIFIED: Conditional Title --- */}
-                {(isNonEmptyArray(data.industries) ||
-                  (data.industriesServed &&
-                    isNonEmptyArray(data.industriesServed.images))) &&
-                  renderSectionTitle(
-                    data.industriesServed?.title || "Industries We Serve"
-                  )}
-                <div className="row g-4 justify-content-center">
-                  {(data.industriesServed?.images || data.industries).map(
-                    (imgSrc, idx) => (
-                      <div className="col-lg-3 col-md-4 col-sm-6" key={idx}>
-                        <div
-                          style={{
-                            ...styles.industryImageContainer,
-                            ...(hoveredIndustry === idx
-                              ? styles.industryImageHover
-                              : {}),
-                          }}
-                          onMouseEnter={() => setHoveredIndustry(idx)}
-                          onMouseLeave={() => setHoveredIndustry(null)}
-                        >
-                          <img
-                            src={
-                              typeof imgSrc === "string"
-                                ? imgSrc
-                                : imgSrc.url /* Handle object if needed */
-                            }
-                            className="img-fluid"
-                            alt={
-                              typeof imgSrc === "string"
-                                ? `Industry ${idx + 1}`
-                                : imgSrc.alt || `Industry ${idx + 1}`
-                            }
-                            style={styles.industryImage}
-                          />
-                          {/* Optional: Add caption here if imgSrc is object with caption */}
+                <section style={styles.dynamicSection} className="text-center">
+                  {/* --- MODIFIED: Conditional Title --- */}
+                  {(isNonEmptyArray(data.industries) ||
+                    (data.industriesServed &&
+                      isNonEmptyArray(data.industriesServed.images))) &&
+                    renderSectionTitle(
+                      data.industriesServed?.title || "Industries We Serve"
+                    )}
+                  <div className="row g-4 justify-content-center">
+                    {(data.industriesServed?.images || data.industries).map(
+                      (imgSrc, idx) => (
+                        <div className="col-lg-3 col-md-4 col-sm-6" key={idx}>
+                          <div
+                            style={{
+                              ...styles.industryImageContainer,
+                              ...(hoveredIndustry === idx
+                                ? styles.industryImageHover
+                                : {}),
+                            }}
+                            onMouseEnter={() => setHoveredIndustry(idx)}
+                            onMouseLeave={() => setHoveredIndustry(null)}
+                          >
+                            <img
+                              src={
+                                typeof imgSrc === "string"
+                                  ? imgSrc
+                                  : imgSrc.url /* Handle object if needed */
+                              }
+                              className="img-fluid"
+                              alt={
+                                typeof imgSrc === "string"
+                                  ? `Industry ${idx + 1}`
+                                  : imgSrc.alt || `Industry ${idx + 1}`
+                              }
+                              style={styles.industryImage}
+                            />
+                            {/* Optional: Add caption here if imgSrc is object with caption */}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              </section>
-            )}
+                      )
+                    )}
+                  </div>
+                </section>
+              )}
 
             {/* Core Strengths / Features (Card Layout) */}
             {isNonEmptyArray(data.features) && ( // Check if the features array itself exists and is not empty
@@ -1568,9 +1695,8 @@ export default function ServiceOrBlogPage({ params }) {
                       {data.pillars.map((pillar, index) => (
                         <button
                           key={index}
-                          className={`list-group-item list-group-item-action ${
-                            activeTab === index ? "active" : ""
-                          }`}
+                          className={`list-group-item list-group-item-action ${activeTab === index ? "active" : ""
+                            }`}
                           onClick={() => setActiveTab(index)}
                           style={{
                             ...(activeTab === index
@@ -1607,13 +1733,13 @@ export default function ServiceOrBlogPage({ params }) {
                       data.pillars[activeTab] &&
                       isNonEmptyString(data.pillars[activeTab].content)
                     ) && (
-                      <div
-                        className="w-100 align-self-stretch d-flex align-items-center justify-content-center text-muted"
-                        style={styles.pillarsContent}
-                      >
-                        <p>Select an area to see details.</p>
-                      </div>
-                    )}
+                        <div
+                          className="w-100 align-self-stretch d-flex align-items-center justify-content-center text-muted"
+                          style={styles.pillarsContent}
+                        >
+                          <p>Select an area to see details.</p>
+                        </div>
+                      )}
                   </div>
                 </div>
               </section>
@@ -1635,12 +1761,12 @@ export default function ServiceOrBlogPage({ params }) {
                     {(isNonEmptyString(data.certification.content) ||
                       isNonEmptyArray(data.certification.process) ||
                       isNonEmptyString(data.certification.note)) && (
-                      <div className="text-center">
-                        {renderSectionTitle(
-                          data.certification.title || "Certification"
-                        )}
-                      </div>
-                    )}
+                        <div className="text-center">
+                          {renderSectionTitle(
+                            data.certification.title || "Certification"
+                          )}
+                        </div>
+                      )}
                     {isNonEmptyString(data.certification.content) && (
                       <div
                         className="mb-4 fs-5 text-center mx-auto"
@@ -1693,12 +1819,12 @@ export default function ServiceOrBlogPage({ params }) {
                   {(data.implementationProcess.image ||
                     isNonEmptyArray(data.implementationProcess.steps) ||
                     isNonEmptyArray(data.implementationProcess.process)) && (
-                    <div className="text-center mb-5">
-                      {renderSectionTitle(
-                        data.implementationProcess.title || "Our Approach"
-                      )}
-                    </div>
-                  )}
+                      <div className="text-center mb-5">
+                        {renderSectionTitle(
+                          data.implementationProcess.title || "Our Approach"
+                        )}
+                      </div>
+                    )}
                   <div className="row align-items-center g-4">
                     {data.implementationProcess.image && (
                       <div className="col-md-5 text-center">
@@ -1796,8 +1922,8 @@ export default function ServiceOrBlogPage({ params }) {
                         <div className="text-center">
                           {renderSectionTitle(
                             data.caseStudies?.title ||
-                              data.caseStudy?.title ||
-                              "Case Study"
+                            data.caseStudy?.title ||
+                            "Case Study"
                           )}
                         </div>
                       )}
@@ -1825,11 +1951,10 @@ export default function ServiceOrBlogPage({ params }) {
                           return (
                             <div
                               key={studyIndex}
-                              className={`mb-5 ${
-                                studyIndex < studies.length - 1
+                              className={`mb-5 ${studyIndex < studies.length - 1
                                   ? "border-bottom pb-4"
                                   : ""
-                              }`}
+                                }`}
                             >
                               {study.title && (
                                 <h4 className="mb-1 fw-semibold">
@@ -2426,7 +2551,7 @@ export default function ServiceOrBlogPage({ params }) {
             <div className="mb-4 fs-5">
               {renderParagraphs(
                 data.content ||
-                  "Detailed information about this service is tailored to specific client needs. Please contact us for more details."
+                "Detailed information about this service is tailored to specific client needs. Please contact us for more details."
               )}
             </div>
 
