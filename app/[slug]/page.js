@@ -928,131 +928,154 @@ export default function ServiceOrBlogPage({ params }) {
         buttonText={modalButtonText}
       />
       {/* Banner Section */}
-      {data.heroLayout === "split" ? (
-        // Split Hero Section with Form (like manufacturing-operational-excellence-consulting)
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "stretch",
-            minHeight: 400,
-            backgroundImage: data.heroBackgroundImage
-              ? `url('${data.heroBackgroundImage}')`
-              : data.img
-                ? `url('${data.img}')`
-                : "none",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            overflow: "hidden",
-          }}
-        >
-          {/* Overlay */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.55)",
-              zIndex: 0,
-            }}
-          />
+      {data.heroLayout === "split" ? (() => {
+        // Check if background is a video
+        const bgSource = data.heroBackgroundImage || data.img;
+        const isVideo = bgSource && (bgSource.endsWith(".mp4") || bgSource.endsWith(".webm"));
 
-          {/* Left Content Section */}
+        return (
+          // Split Hero Section with Form (like manufacturing-operational-excellence-consulting)
           <div
             style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              padding: "40px 24px 40px 6vw",
-              minWidth: 0,
               position: "relative",
-              zIndex: 1,
+              display: "flex",
+              alignItems: "stretch",
+              minHeight: 400,
+              backgroundImage: !isVideo && bgSource ? `url('${bgSource}')` : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              overflow: "hidden",
             }}
           >
-            <h1
-              style={{
-                textAlign: "left",
-                fontSize: "44px",
-                marginTop: 0,
-                color: "white",
-              }}
-            >
-              {data.heroTitle || data.bannerTitle || data.title}
-            </h1>
-            <p style={{ color: "white", fontSize: "24px", marginTop: "18px" }}>
-              {data.heroSubtitle || data.bannerSubtitle}
-            </p>
-
-            {isNonEmptyArray(data.heroFeaturesList) && (
-              <ul
+            {/* Video Background (if video) */}
+            {isVideo && (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
                 style={{
-                  color: "white",
-                  fontSize: "20px",
-                  marginTop: "18px",
-                  listStyle: "none",
-                  padding: 0,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  zIndex: 0,
                 }}
               >
-                {data.heroFeaturesList.map((feature, idx) => (
-                  <li key={idx}>✅ {feature}</li>
-                ))}
-              </ul>
+                <source src={bgSource} type={bgSource.endsWith(".webm") ? "video/webm" : "video/mp4"} />
+              </video>
             )}
 
-            {/* Contact Button */}
-            <a
-              href="/contact-us"
-              style={{
-                marginTop: "24px",
-                backgroundColor: "#007BFF",
-                color: "white",
-                padding: "12px 24px",
-                borderRadius: "8px",
-                fontSize: "20px",
-                textDecoration: "none",
-                display: "inline-block",
-                width: "fit-content",
-                transition: "background 0.3s",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#007BFF")}
-            >
-              Start Your Journey
-            </a>
-          </div>
-
-          {/* Right Content Section - Contact Form */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minWidth: 0,
-              padding: "40px 6vw 40px 24px",
-              position: "relative",
-              zIndex: 1,
-            }}
-          >
+            {/* Overlay */}
             <div
               style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
                 width: "100%",
-                maxWidth: 400,
-                background: "rgba(255,255,255,0.97)",
-                borderRadius: 16,
-                boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.55)",
+                zIndex: 1,
+              }}
+            />
+
+            {/* Left Content Section */}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                padding: "40px 24px 40px 6vw",
+                minWidth: 0,
+                position: "relative",
+                zIndex: 2,
               }}
             >
-              <ContactForm buttonText="Contact Us" />
+              <h1
+                style={{
+                  textAlign: "left",
+                  fontSize: "44px",
+                  marginTop: 0,
+                  color: "white",
+                }}
+              >
+                {data.heroTitle || data.bannerTitle || data.title}
+              </h1>
+              <p style={{ color: "white", fontSize: "24px", marginTop: "18px" }}>
+                {data.heroSubtitle || data.bannerSubtitle}
+              </p>
+
+              {isNonEmptyArray(data.heroFeaturesList) && (
+                <ul
+                  style={{
+                    color: "white",
+                    fontSize: "20px",
+                    marginTop: "18px",
+                    listStyle: "none",
+                    padding: 0,
+                  }}
+                >
+                  {data.heroFeaturesList.map((feature, idx) => (
+                    <li key={idx}>✅ {feature}</li>
+                  ))}
+                </ul>
+              )}
+
+              {/* Contact Button */}
+              <a
+                href="/contact-us"
+                style={{
+                  marginTop: "24px",
+                  backgroundColor: "#007BFF",
+                  color: "white",
+                  padding: "12px 24px",
+                  borderRadius: "8px",
+                  fontSize: "20px",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  width: "fit-content",
+                  transition: "background 0.3s",
+                  boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+                }}
+                onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
+                onMouseOut={(e) => (e.target.style.backgroundColor = "#007BFF")}
+              >
+                Start Your Journey
+              </a>
+            </div>
+
+            {/* Right Content Section - Contact Form */}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 0,
+                padding: "40px 6vw 40px 24px",
+                position: "relative",
+                zIndex: 2,
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: 400,
+                  background: "rgba(255,255,255,0.97)",
+                  borderRadius: 16,
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                }}
+              >
+                <ContactForm buttonText="Contact Us" />
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
+        );
+      })() : (
         // Default Centered Banner
         <div style={styles.banner}>
           {(data.img || data.image) && (() => {
@@ -1093,16 +1116,16 @@ export default function ServiceOrBlogPage({ params }) {
               <p className="mb-4 fs-5">{data.bannerDescription}</p>
             )}
 
-    {isNonEmptyArray(data.heroFeatures) && (
-      <ul className="list-unstyled d-flex flex-wrap justify-content-center gap-3 mb-4 fs-5">
-        {data.heroFeatures.map((feature, idx) => (
-          <li key={idx} className="d-flex align-items-center">
-            <Icons.CheckCircle size={20} className="me-2 text-success" />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-    )}
+            {isNonEmptyArray(data.heroFeatures) && (
+              <ul className="list-unstyled d-flex flex-wrap justify-content-center gap-3 mb-4 fs-5">
+                {data.heroFeatures.map((feature, idx) => (
+                  <li key={idx} className="d-flex align-items-center">
+                    <Icons.CheckCircle size={20} className="me-2 text-success" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {renderCtaButton("Start Your Journey")}
           </div>
@@ -1946,8 +1969,8 @@ export default function ServiceOrBlogPage({ params }) {
                             <div
                               key={studyIndex}
                               className={`mb-5 ${studyIndex < studies.length - 1
-                                  ? "border-bottom pb-4"
-                                  : ""
+                                ? "border-bottom pb-4"
+                                : ""
                                 }`}
                             >
                               {study.title && (
