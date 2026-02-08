@@ -131,7 +131,7 @@ export default function TrainingPage({ params }) {
     let data = consultingPages[params.slug];
     if (!data) {
         data = skillTrainingData[params.slug];
-    if (!data) return notFound();
+        if (!data) return notFound();
     }
 
     // --- Determine Current Theme ---
@@ -154,7 +154,7 @@ export default function TrainingPage({ params }) {
     const dynamicStyles = useMemo(() => ({
         // --- Banner Styles ---
         banner: {
-            position: "relative", minHeight: "400px", height: "auto", overflow: "hidden",
+            position: "relative", minHeight: "100vh", height: "auto", overflow: "hidden",
             // backgroundColor: currentTheme.bannerBg, // Use theme color
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '50px 20px', color: 'white',
@@ -365,17 +365,68 @@ export default function TrainingPage({ params }) {
 
     // --- Component Rendering Functions ---
 
-    const renderBanner = () => ( // Banner usually always shows, no major content check needed inside, but the data itself is checked initially
+    const renderBanner = () => ( // Split layout banner with form on the right
         <div style={dynamicStyles.banner}>
             {(data.img || data.image) && <img src={data.img || data.image} style={dynamicStyles.bannerImage} alt={data.title || "Training Banner"} />}
-            <div style={dynamicStyles.bannerContent}>
-                {data.bannerTitle && <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>}
-                {data.bannerSubtitle && <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>}
-                {/* Check if bannerDescription has renderable content */}
-                {renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' }) &&
-                    <div style={dynamicStyles.bannerDescription}>{renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' })}</div>
-                }
-                {renderCtaButton(data.ctaButtonText || "Enroll Now / Learn More", data.ctaButtonLink)}
+
+            {/* Split Content Container */}
+            <div
+                style={{
+                    position: "relative",
+                    zIndex: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    width: "100%",
+                    maxWidth: "1400px",
+                    gap: "40px",
+                    padding: "0 20px",
+                }}
+            >
+                {/* Left side - Text content */}
+                <div
+                    style={{
+                        flex: 1,
+                        minWidth: "300px",
+                        maxWidth: "700px",
+                        backgroundColor: "rgba(0, 20, 40, 0.45)",
+                        borderRadius: "10px",
+                        boxShadow: "0 4px 15px rgb(0, 0, 0)",
+                        padding: "30px",
+                    }}
+                >
+                    {data.bannerTitle && <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>}
+                    {data.bannerSubtitle && <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>}
+                    {/* Check if bannerDescription has renderable content */}
+                    {renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' }) &&
+                        <div style={dynamicStyles.bannerDescription}>{renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' })}</div>
+                    }
+                    {renderCtaButton(data.ctaButtonText || "Enroll Now / Learn More", data.ctaButtonLink)}
+                </div>
+
+                {/* Right side - Contact Form */}
+                <div
+                    style={{
+                        flex: 1,
+                        minWidth: "300px",
+                        maxWidth: "450px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "100%",
+                            background: "rgba(255,255,255,0.97)",
+                            borderRadius: 16,
+                            boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                        }}
+                    >
+                        <ContactForm buttonText="Contact Us" />
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -764,11 +815,6 @@ export default function TrainingPage({ params }) {
         <Layout headerStyle={1} footerStyle={1}>
             <ContactFormModal open={modalOpen} onClose={() => setModalOpen(false)} buttonText={modalButtonText} />
             {renderBanner()}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px", width: "100%" }}>
-        <div style={{ width: "100%", maxWidth: "500px" }}>
-          <ContactForm />
-        </div>
-      </div>
 
             <div className="container py-4">
                 {/* Sections will now only render if they have content */}
@@ -797,7 +843,6 @@ export default function TrainingPage({ params }) {
                 {renderCourseContent()}
                 {renderMethodology()}
                 {renderClients()}
-                {renderForm()}
 
             </div>
         </Layout>

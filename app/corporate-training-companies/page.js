@@ -91,31 +91,65 @@ export default function Page() {
             />
           </div>
 
-          {/* Text content */}
+          {/* Content Container - Split Layout */}
           <div
             style={{
-              ...bannerContent,
-              zIndex: 3,
               position: "absolute",
-              top: "50%",
-              left: "5%",
-              transform: "translateY(-50%)",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 5%",
+              gap: "40px",
             }}
           >
-            <h1 style={headingStyle}>CORPORATE TRAINING PROGRAMS</h1>
-            <h2 style={subheadingStyle}>350+ On-site & Online Trainings</h2>
-            <div style={divider}></div>
-            <p style={bannerTextStyle}>
-              Connect with our experts to discover tailored solutions that drive
-              growth and innovation.
-            </p>
+            {/* Left side - Text content */}
+            <div
+              style={{
+                flex: 1,
+                maxWidth: "600px",
+              }}
+            >
+              <h1 style={headingStyle}>CORPORATE TRAINING PROGRAMS</h1>
+              <h2 style={subheadingStyle}>350+ On-site & Online Trainings</h2>
+              <div style={divider}></div>
+              <p style={bannerTextStyle}>
+                Connect with our experts to discover tailored solutions that drive
+                growth and innovation.
+              </p>
+            </div>
+
+            {/* Right side - Contact Form */}
+            <div
+              style={{
+                flex: 1,
+                maxWidth: "450px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  background: "rgba(255,255,255,0.97)",
+                  borderRadius: 16,
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                }}
+              >
+                <ContactForm buttonText="Contact Us" />
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Full-width Paragraph */}
-        <div style={twoColumnSection}>
-          {/* Left Column - Text */}
-          <div style={leftColumn}>
+        <div style={{ ...paragraphContainer, padding: "40px 20px" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <p
               style={{
                 ...paragraphStyle,
@@ -134,14 +168,9 @@ export default function Page() {
               industry thus Manufacturing companies need to certify that people
               working in these industries must possess solid processes, strong
               leadership, and technical proficiency which help boost the
-              manufacturer’s productivity, decrease employee turnover and
+              manufacturer's productivity, decrease employee turnover and
               possibly solve the talent gap and optimize performance.
             </p>
-          </div>
-
-          {/* Right Column - Contact Form */}
-          <div style={rightColumn}>
-            <ContactForm />
           </div>
         </div>
 
