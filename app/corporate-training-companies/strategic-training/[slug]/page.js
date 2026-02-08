@@ -124,40 +124,40 @@ const themes = {
         titleFontWeight: '700',
     },
     introSectionFlexContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center", // ⬅️ vertical centering
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: "30px",
-  },
-  introSectionContent: {
-    flex: 2,
-    minWidth: "300px",
-    maxWidth: "65%",
-    width: "100%",
-  },
-  contactFormSide: {
-    flex: 1,
-    minWidth: "280px",
-    maxWidth: "35%",
-    width: "100%",
-  },
-  "@media (max-width: 768px)": {
-    introSectionFlexContainer: {
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "20px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center", // ⬅️ vertical centering
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: "30px",
     },
     introSectionContent: {
-      maxWidth: "100%",
-      width: "100%",
+        flex: 2,
+        minWidth: "300px",
+        maxWidth: "65%",
+        width: "100%",
     },
     contactFormSide: {
-      maxWidth: "100%",
-      width: "100%",
+        flex: 1,
+        minWidth: "280px",
+        maxWidth: "35%",
+        width: "100%",
     },
-  },
+    "@media (max-width: 768px)": {
+        introSectionFlexContainer: {
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+        },
+        introSectionContent: {
+            maxWidth: "100%",
+            width: "100%",
+        },
+        contactFormSide: {
+            maxWidth: "100%",
+            width: "100%",
+        },
+    },
 };
 // --- End of Theme Definitions ---
 
@@ -166,7 +166,7 @@ export default function TrainingPage({ params }) {
     let data = consultingPages[params.slug];
     if (!data) {
         data = skillTrainingData[params.slug];
-    if (!data) return notFound();
+        if (!data) return notFound();
     }
 
     // --- Determine Current Theme ---
@@ -400,17 +400,69 @@ export default function TrainingPage({ params }) {
 
     // --- Component Rendering Functions ---
 
-    const renderBanner = () => ( // Banner usually always shows, no major content check needed inside, but the data itself is checked initially
+    const renderBanner = () => (
+        // Split layout banner with form on the right
         <div style={dynamicStyles.banner}>
             {(data.img || data.image) && <img src={data.img || data.image} style={dynamicStyles.bannerImage} alt={data.title || "Training Banner"} />}
-            <div style={dynamicStyles.bannerContent}>
-                {data.bannerTitle && <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>}
-                {data.bannerSubtitle && <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>}
-                {/* Check if bannerDescription has renderable content */}
-                {renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' }) &&
-                    <div style={dynamicStyles.bannerDescription}>{renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' })}</div>
-                }
-                {renderCtaButton(data.ctaButtonText || "Enroll Now / Learn More", data.ctaButtonLink)}
+
+            {/* Split Content Container */}
+            <div
+                style={{
+                    position: "relative",
+                    zIndex: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    width: "100%",
+                    maxWidth: "1400px",
+                    gap: "40px",
+                    padding: "0 20px",
+                }}
+            >
+                {/* Left side - Text content */}
+                <div
+                    style={{
+                        flex: 1,
+                        minWidth: "300px",
+                        maxWidth: "700px",
+                        backgroundColor: "rgba(0, 20, 40, 0.45)",
+                        borderRadius: "10px",
+                        boxShadow: "0 4px 15px rgb(0, 0, 0)",
+                        padding: "30px",
+                    }}
+                >
+                    {data.bannerTitle && <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>}
+                    {data.bannerSubtitle && <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>}
+                    {/* Check if bannerDescription has renderable content */}
+                    {renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' }) &&
+                        <div style={dynamicStyles.bannerDescription}>{renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' })}</div>
+                    }
+                    {renderCtaButton(data.ctaButtonText || "Enroll Now / Learn More", data.ctaButtonLink)}
+                </div>
+
+                {/* Right side - Contact Form */}
+                <div
+                    style={{
+                        flex: 1,
+                        minWidth: "300px",
+                        maxWidth: "450px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "100%",
+                            background: "rgba(255,255,255,0.97)",
+                            borderRadius: 16,
+                            boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                        }}
+                    >
+                        <ContactForm buttonText="Contact Us" />
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -799,32 +851,11 @@ export default function TrainingPage({ params }) {
         <Layout headerStyle={1} footerStyle={1}>
             <ContactFormModal open={modalOpen} onClose={() => setModalOpen(false)} buttonText={modalButtonText} />
             {renderBanner()}
-            <section style={{ padding: "4rem 0" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center", // ⬅️ Vertically center
-                        justifyContent: "space-between",
-                        flexWrap: "wrap",
-                        gap: "30px",
-                      }}
-                      className="container"
-                    >
-                      {/* Left: Intro Text */}
-                      <div style={{ flex: 2, minWidth: "300px", maxWidth: "65%" }}>
-                        {renderIntro()}
-                      </div>
-            
-                      {/* Right: Contact Form */}
-                      <div style={{ flex: 1, minWidth: "280px", maxWidth: "35%" }}>
-                        <ContactForm />
-                      </div>
-                    </div>
-                  </section>
+            {/* Intro Section */}
+            {renderIntro()}
+
             <div className="container py-4">
                 {/* Sections will now only render if they have content */}
-                {/* {renderIntro()} */}
                 {renderWhyChoose()}
 
                 {/* Render the primary content block based on its key */}
@@ -849,7 +880,6 @@ export default function TrainingPage({ params }) {
                 {renderCourseContent()}
                 {renderMethodology()}
                 {renderClients()}
-                {renderForm()}
 
             </div>
         </Layout>
