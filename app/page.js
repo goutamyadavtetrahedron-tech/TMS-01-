@@ -15,13 +15,13 @@ import ContactForm from "@/components/ContactForm"
 
 export default function Home() {
     if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true') {
-    return (
-      <div style={{ textAlign: 'center', padding: '50px', backgroundColor: '#f8d7da' }}>
-        <h1 style={{ color: '#721c24',fontSize:"100px" } }>Site is under maintenance</h1>
-        <p style={{fontSize:"100px"}}>Please check back later!</p>
-      </div>
-    );
-  }
+        return (
+            <div style={{ textAlign: 'center', padding: '50px', backgroundColor: '#f8d7da' }}>
+                <h1 style={{ color: '#721c24', fontSize: "100px" }}>Site is under maintenance</h1>
+                <p style={{ fontSize: "100px" }}>Please check back later!</p>
+            </div>
+        );
+    }
     const [showForm, setShowForm] = useState(false)
     const pathname = usePathname()
     const [modal, setModal] = useState({ open: false, message: '', success: false });
@@ -36,10 +36,17 @@ export default function Home() {
             }
         }
 
-        checkFormVisibility()
+        // 10 seconds delay before first check
+        const initialTimeout = setTimeout(() => {
+            checkFormVisibility()
+        }, 10000)
+
         const interval = setInterval(checkFormVisibility, 10000)
 
-        return () => clearInterval(interval)
+        return () => {
+            clearTimeout(initialTimeout)
+            clearInterval(interval)
+        }
     }, [pathname])
 
     const handleCloseForm = () => {
@@ -107,7 +114,7 @@ export default function Home() {
                             color: "#555"
                         }}>✖</div>
 
-                        
+
 
                         <ContactForm />
                     </div>
