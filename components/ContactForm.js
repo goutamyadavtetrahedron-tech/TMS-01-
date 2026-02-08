@@ -21,7 +21,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
     margin: "8px 0",
     border: "1px solid #ccc",
     borderRadius: "8px",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#ffffff",
+    color: "#000000",
     fontSize: "14px",
     outline: "none",
   };
@@ -98,58 +99,58 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
   return (
     <div style={normalStyle} ref={topDivRef}>
       <form onSubmit={handleSubmitForm} style={{ padding: '30px', borderRadius: '16px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)', border: '1px solid #e0e0e0', background: '#fff', maxWidth: '100%', boxSizing: 'border-box', position: 'relative', overflow: 'hidden' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '22px', color: '#333' }}>Get in Touch</h2>
-      <input
-        type="text"
-        name="name"
-        value={formData.name}
-        onChange={handleInputChange}
-        placeholder="Full Name*"
-        required
-        style={inputStyle}
-      />
-      <input
-        type="text"
-        name="company"
-        value={formData.company}
-        onChange={handleInputChange}
-        placeholder="Company Name*"
-        required
-        style={inputStyle}
-      />
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        placeholder="Email*"
-        required
-        style={inputStyle}
-      />
-      <input
-        type="tel"
-        name="mobile"
-        value={formData.mobile}
-        onChange={handleInputChange}
-        placeholder="Mobile No.*"
-        required
-        style={inputStyle}
-      />
-      <textarea
-        name="requirements"
-        value={formData.requirements}
-        onChange={handleInputChange}
-        placeholder="Your Requirements*"
-        rows={3}
-        required
-        style={{ ...inputStyle, resize: "none" }}
-      ></textarea>
-      <div style={{ textAlign: "center", marginTop: "15px" }}>
-        <button type="submit" style={submitButtonStyle} disabled={loading}>
-          {loading ? "Submitting..." : buttonText}
-        </button>
-      </div>
-      {modal.open && (
+        <h2 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '22px', color: '#333' }}>Get in Touch</h2>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          placeholder="Full Name*"
+          required
+          style={inputStyle}
+        />
+        <input
+          type="text"
+          name="company"
+          value={formData.company}
+          onChange={handleInputChange}
+          placeholder="Company Name*"
+          required
+          style={inputStyle}
+        />
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          placeholder="Email*"
+          required
+          style={inputStyle}
+        />
+        <input
+          type="tel"
+          name="mobile"
+          value={formData.mobile}
+          onChange={handleInputChange}
+          placeholder="Mobile No.*"
+          required
+          style={inputStyle}
+        />
+        <textarea
+          name="requirements"
+          value={formData.requirements}
+          onChange={handleInputChange}
+          placeholder="Your Requirements*"
+          rows={3}
+          required
+          style={{ ...inputStyle, resize: "none" }}
+        ></textarea>
+        <div style={{ textAlign: "center", marginTop: "15px" }}>
+          <button type="submit" style={submitButtonStyle} disabled={loading}>
+            {loading ? "Submitting..." : buttonText}
+          </button>
+        </div>
+        {modal.open && (
           <div style={{
             position: "absolute",
             top: 0,
@@ -162,8 +163,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             justifyContent: "center",
             zIndex: 10,
           }}>
-        <div
-          style={{
+            <div
+              style={{
                 background: "#fff",
                 padding: "32px 48px",
                 borderRadius: "16px",
@@ -172,30 +173,30 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 minWidth: "220px",
                 maxWidth: "90vw",
                 fontSize: "18px",
-            color: modal.success ? "green" : "red",
+                color: modal.success ? "green" : "red",
                 fontWeight: "bold",
                 position: "relative",
                 zIndex: 11,
-          }}
-        >
-          <span
-            style={{
-              position: "absolute",
-              top: 8,
-              right: 16,
-              cursor: "pointer",
-              fontSize: 24,
-              color: "#888",
-            }}
-            onClick={() => setModal({ ...modal, open: false })}
-          >
-            ×
-          </span>
-          {modal.message}
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: 8,
+                  right: 16,
+                  cursor: "pointer",
+                  fontSize: 24,
+                  color: "#888",
+                }}
+                onClick={() => setModal({ ...modal, open: false })}
+              >
+                ×
+              </span>
+              {modal.message}
             </div>
-        </div>
-      )}
-    </form>
+          </div>
+        )}
+      </form>
     </div>
   );
 }
