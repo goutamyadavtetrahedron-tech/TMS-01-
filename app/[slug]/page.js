@@ -930,7 +930,7 @@ export default function ServiceOrBlogPage({ params }) {
       {/* Banner Section */}
       {data.heroLayout === "split" ? (() => {
         // Check if background is a video
-        const bgSource = data.heroBackgroundImage || data.img;
+        const bgSource = data.heroBackgroundImage || data.img || data.image;
         const isVideo = bgSource && (bgSource.endsWith(".mp4") || bgSource.endsWith(".webm"));
 
         return (
