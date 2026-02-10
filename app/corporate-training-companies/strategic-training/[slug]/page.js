@@ -402,64 +402,49 @@ export default function TrainingPage({ params }) {
 
     const renderBanner = () => (
         // Split layout banner with form on the right
-        <div style={dynamicStyles.banner}>
-            {(data.img || data.image) && <img src={data.img || data.image} style={dynamicStyles.bannerImage} alt={data.title || "Training Banner"} />}
+        <div className="relative min-h-[90vh] flex items-center justify-center p-4 lg:p-12 mb-12 overflow-hidden bg-[#004c5a]">
+            {(data.img || data.image) && (
+                <img
+                    src={data.img || data.image}
+                    className="absolute inset-0 w-full h-full object-cover opacity-90 z-0"
+                    alt={data.title || "Training Banner"}
+                />
+            )}
 
             {/* Split Content Container */}
-            <div
-                style={{
-                    position: "relative",
-                    zIndex: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexWrap: "wrap",
-                    width: "100%",
-                    maxWidth: "1400px",
-                    gap: "40px",
-                    padding: "0 20px",
-                }}
-            >
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl gap-10">
                 {/* Left side - Text content */}
-                <div
-                    style={{
-                        flex: 1,
-                        minWidth: "300px",
-                        maxWidth: "700px",
-                        backgroundColor: "rgba(0, 20, 40, 0.45)",
-                        borderRadius: "10px",
-                        boxShadow: "0 4px 15px rgb(0, 0, 0)",
-                        padding: "30px",
-                    }}
-                >
-                    {data.bannerTitle && <h1 style={dynamicStyles.bannerTitle}>{data.bannerTitle}</h1>}
-                    {data.bannerSubtitle && <p style={dynamicStyles.bannerSubtitle}>{data.bannerSubtitle}</p>}
+                <div className="flex-1 w-full max-w-2xl bg-slate-900/60 rounded-xl shadow-2xl p-8 backdrop-blur-sm text-center lg:text-left">
+                    {data.bannerTitle && (
+                        <h1 className="text-3xl lg:text-5xl font-bold mb-4 text-white drop-shadow-md">
+                            {data.bannerTitle}
+                        </h1>
+                    )}
+                    {data.bannerSubtitle && (
+                        <p className="text-lg lg:text-2xl font-light text-white/90 mb-6">
+                            {data.bannerSubtitle}
+                        </p>
+                    )}
                     {/* Check if bannerDescription has renderable content */}
-                    {renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' }) &&
-                        <div style={dynamicStyles.bannerDescription}>{renderParagraphs(data.bannerDescription, { color: 'rgba(255,255,255,0.95)' })}</div>
-                    }
-                    {renderCtaButton(data.ctaButtonText || "Enroll Now / Learn More", data.ctaButtonLink)}
+                    {renderParagraphs(data.bannerDescription, {
+                        color: "rgba(255,255,255,0.95)",
+                        fontSize: "1.1rem"
+                    }) && (
+                            <div className="mb-6 leading-relaxed">
+                                {renderParagraphs(data.bannerDescription, {
+                                    color: "rgba(255,255,255,0.95)",
+                                })}
+                            </div>
+                        )}
+                    {renderCtaButton(
+                        data.ctaButtonText || "Enroll Now / Learn More",
+                        data.ctaButtonLink
+                    )}
                 </div>
 
                 {/* Right side - Contact Form */}
-                <div
-                    style={{
-                        flex: 1,
-                        minWidth: "300px",
-                        maxWidth: "450px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <div
-                        style={{
-                            width: "100%",
-                            background: "rgba(255,255,255,0.97)",
-                            borderRadius: 16,
-                            boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-                        }}
-                    >
+                <div className="flex-1 w-full max-w-md flex justify-center items-center">
+                    <div className="w-full bg-white/95 rounded-2xl shadow-xl backdrop-blur-sm">
                         <ContactForm buttonText="Contact Us" />
                     </div>
                 </div>

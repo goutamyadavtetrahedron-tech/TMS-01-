@@ -63,84 +63,42 @@ export default function Page() {
     <Layout>
       <div style={{ ...containerStyle, fontFamily: "var(--font-poppins)" }}>
         {/* Banner Section */}
-        <section style={bannerWrapper}>
+        {/* Banner Section */}
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
           {/* Image with overlay */}
-          <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+          <div className="absolute top-0 left-0 w-full h-full z-0">
             <Image
               src="/assets/images/backgrounds/corporate-training-program.png"
               alt="Banner"
               fill
               priority
-              style={{
-                objectFit: "cover",
-                zIndex: 1,
-              }}
+              className="object-cover z-0"
             />
 
             {/* Black overlay */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.5)", // adjust opacity
-                zIndex: 2,
-              }}
-            />
+            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10" />
           </div>
 
           {/* Content Container - Split Layout */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 3,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "0 5%",
-              gap: "40px",
-            }}
-          >
+          <div className="relative z-20 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl px-6 py-20 gap-10 lg:gap-0">
             {/* Left side - Text content */}
-            <div
-              style={{
-                flex: 1,
-                maxWidth: "600px",
-              }}
-            >
-              <h1 style={headingStyle}>CORPORATE TRAINING PROGRAMS</h1>
-              <h2 style={subheadingStyle}>350+ On-site & Online Trainings</h2>
-              <div style={divider}></div>
-              <p style={bannerTextStyle}>
+            <div className="flex-1 w-full max-w-xl text-center lg:text-left text-white">
+              <h1 className="text-4xl lg:text-6xl mb-4 font-(--font-poppins)">
+                CORPORATE TRAINING PROGRAMS
+              </h1>
+              <h2 className="text-xl lg:text-2xl text-white/90 mb-4 font-(--font-poppins)">
+                350+ On-site & Online Trainings
+              </h2>
+              <div className="w-20 h-1 bg-[#00b4d8] mx-auto lg:mx-0 mb-6"></div>
+              <p className="text-lg lg:text-xl text-white/85 leading-relaxed font-(--font-poppins)">
                 Connect with our experts to discover tailored solutions that drive
                 growth and innovation.
               </p>
             </div>
 
             {/* Right side - Contact Form */}
-            <div
-              style={{
-                flex: 1,
-                maxWidth: "450px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  background: "rgba(255,255,255,0.97)",
-                  borderRadius: 16,
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-                }}
-              >
+            <div className="flex-1 w-full max-w-[450px] flex justify-center items-center">
+              <div className="w-full bg-white/95 rounded-2xl shadow-xl backdrop-blur-sm">
                 <ContactForm buttonText="Contact Us" />
               </div>
             </div>

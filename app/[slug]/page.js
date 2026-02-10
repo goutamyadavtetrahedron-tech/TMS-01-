@@ -936,16 +936,12 @@ export default function ServiceOrBlogPage({ params }) {
         return (
           // Split Hero Section with Form (like manufacturing-operational-excellence-consulting)
           <div
+            className="flex flex-col lg:flex-row items-stretch min-h-[400px] relative overflow-hidden"
             style={{
-              position: "relative",
-              display: "flex",
-              alignItems: "stretch",
-              minHeight: 400,
               backgroundImage: !isVideo && bgSource ? `url('${bgSource}')` : "none",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
-              overflow: "hidden",
             }}
           >
             {/* Video Background (if video) */}
@@ -983,42 +979,16 @@ export default function ServiceOrBlogPage({ params }) {
             />
 
             {/* Left Content Section */}
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                padding: "40px 24px 40px 6vw",
-                minWidth: 0,
-                position: "relative",
-                zIndex: 2,
-              }}
-            >
-              <h1
-                style={{
-                  textAlign: "left",
-                  fontSize: "44px",
-                  marginTop: 0,
-                  color: "white",
-                }}
-              >
+            <div className="flex-1 flex flex-col justify-center relative z-10 px-6 py-10 lg:pl-[6vw] lg:pr-6">
+              <h1 className="text-left text-3xl lg:text-[44px] mt-0 text-white font-bold">
                 {data.heroTitle || data.bannerTitle || data.title}
               </h1>
-              <p style={{ color: "white", fontSize: "24px", marginTop: "18px" }}>
+              <p className="text-white text-lg lg:text-2xl mt-[18px]">
                 {data.heroSubtitle || data.bannerSubtitle}
               </p>
 
               {isNonEmptyArray(data.heroFeaturesList) && (
-                <ul
-                  style={{
-                    color: "white",
-                    fontSize: "20px",
-                    marginTop: "18px",
-                    listStyle: "none",
-                    padding: 0,
-                  }}
-                >
+                <ul className="text-white text-base lg:text-xl mt-[18px] list-none p-0">
                   {data.heroFeaturesList.map((feature, idx) => (
                     <li key={idx}>✅ {feature}</li>
                   ))}
@@ -1028,39 +998,14 @@ export default function ServiceOrBlogPage({ params }) {
               {/* Contact Button */}
               <a
                 href="/contact-us"
-                style={{
-                  marginTop: "24px",
-                  backgroundColor: "#007BFF",
-                  color: "white",
-                  padding: "12px 24px",
-                  borderRadius: "8px",
-                  fontSize: "20px",
-                  textDecoration: "none",
-                  display: "inline-block",
-                  width: "fit-content",
-                  transition: "background 0.3s",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-                }}
-                onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#007BFF")}
+                className="mt-6 bg-[#007BFF] text-white py-3 px-6 rounded-lg text-lg lg:text-xl no-underline inline-block w-fit transition-all shadow-md hover:bg-[#0056b3]"
               >
                 Start Your Journey
               </a>
             </div>
 
             {/* Right Content Section - Contact Form */}
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minWidth: 0,
-                padding: "40px 6vw 40px 24px",
-                position: "relative",
-                zIndex: 2,
-              }}
-            >
+            <div className="flex-1 flex items-center justify-center relative z-10 p-6 lg:pr-[6vw] lg:pl-6">
               <div
                 style={{
                   width: "100%",

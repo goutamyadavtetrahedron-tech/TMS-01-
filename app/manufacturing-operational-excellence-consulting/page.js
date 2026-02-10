@@ -32,69 +32,30 @@ export default function ConsultingPage() {
     <Layout>
       <div className={styles.container}>
         {/* Hero Section */}
+        {/* Hero Section */}
         <div
-          className={styles.heroSection}
+          className={`${styles.heroSection} flex flex-col lg:flex-row items-stretch min-h-[400px] relative overflow-hidden`}
           style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "stretch",
-            minHeight: 400,
-            backgroundImage:
-              "url('/images/operational-excellence-solutions.png')",
+            backgroundImage: "url('/images/operational-excellence-solutions.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            overflow: "hidden",
           }}
         >
           {/* 🔹 Overlay over the entire hero section */}
           <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.55)", // adjust darkness here
-              zIndex: 0,
-            }}
+            className="absolute top-0 left-0 w-full h-full bg-black/55 z-0"
           ></div>
 
           {/* Left Content Section */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              padding: "40px 24px 40px 6vw",
-              minWidth: 0,
-              position: "relative",
-              zIndex: 1, // ensures text appears above overlay
-            }}
-          >
-            <h1
-              style={{
-                textAlign: "left",
-                fontSize: "44px",
-                marginTop: 0,
-                color: "white",
-              }}
-            >
+          <div className="flex-1 flex flex-col justify-center relative z-10 px-6 py-10 lg:pl-[6vw] lg:pr-6">
+            <h1 className="text-left text-3xl lg:text-[44px] mt-0 text-white font-bold">
               Operational Excellence Solutions
             </h1>
-            <p style={{ color: "white", fontSize: "24px", marginTop: "18px" }}>
+            <p className="text-white text-lg lg:text-2xl mt-[18px]">
               Reduce Manufacturing Cost & Increase Productivity
             </p>
-            <ul
-              style={{
-                color: "white",
-                fontSize: "20px",
-                marginTop: "18px",
-                listStyle: "none",
-                padding: 0,
-              }}
-            >
+            <ul className="text-white text-base lg:text-xl mt-[18px] list-none p-0">
               <li>✅ Boost Profit Margins</li>
               <li>✅ Optimize Resources</li>
               <li>✅ Drive Innovation</li>
@@ -105,40 +66,15 @@ export default function ConsultingPage() {
             {/* Contact Button */}
             <a
               href="/contact-us"
-              style={{
-                marginTop: "24px",
-                backgroundColor: "#007BFF",
-                color: "white",
-                padding: "12px 24px",
-                borderRadius: "8px",
-                fontSize: "20px",
-                textDecoration: "none",
-                display: "inline-block",
-                width: "fit-content",
-                transition: "background 0.3s",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#5988baff")}
+              className="mt-6 bg-[#007BFF] text-white py-3 px-6 rounded-lg text-lg lg:text-xl no-underline inline-block w-fit transition-all shadow-md hover:bg-[#0056b3]"
             >
               Talk to an expert
             </a>
           </div>
 
           {/* Right Content Section */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minWidth: 0,
-              padding: "40px 6vw 40px 24px",
-              position: "relative",
-              zIndex: 1, // keeps right content above overlay
-            }}
-          >
-            
+          <div className="flex-1 flex items-center justify-center relative z-10 p-6 lg:pr-[6vw] lg:pl-6">
+
             <div
               style={{
                 width: "100%",
@@ -200,7 +136,7 @@ export default function ConsultingPage() {
           </div>
 
           {/* Right Column - Contact Form */}
-       {/*  <div
+          {/*  <div
             style={{
               flex: "1 1 35%",
               minWidth: "280px",
