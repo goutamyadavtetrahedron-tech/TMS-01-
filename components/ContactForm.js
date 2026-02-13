@@ -12,6 +12,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
     mobile: "",
     requirements: "",
   });
+  /* errors state to track validation issues. */
+  const [errors, setErrors] = useState({});
   const [modal, setModal] = useState({ open: false, message: "", success: false });
   const [loading, setLoading] = useState(false);
 
@@ -43,10 +45,20 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    /* Clear error for the field being edited */
+    if (errors[e.target.name]) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: null }));
+    }
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    /* Reset errors before validation */
+    setErrors({});
+    if (formData.email.endsWith("@gmail.com")) {
+      setErrors((prev) => ({ ...prev, email: "Please enter a valid business email address." }));
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("/api/contact", {
@@ -125,8 +137,16 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
           onChange={handleInputChange}
           placeholder="Email*"
           required
-          style={inputStyle}
+          style={{
+            ...inputStyle,
+            border: errors.email ? "1px solid red" : inputStyle.border,
+          }}
         />
+        {errors.email && (
+          <p style={{ color: "red", fontSize: "12px", marginTop: "-5px", marginBottom: "8px" }}>
+            {errors.email}
+          </p>
+        )}
         <input
           type="tel"
           name="mobile"
