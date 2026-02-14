@@ -732,7 +732,6 @@
   margin: auto;
   padding: 40px;
   text-align: center;
-
 }
 
 .faqContainer {
@@ -743,13 +742,17 @@
 .faqItem {
   padding: 10px 0;
   cursor: pointer;
+  border-bottom: 1px solid #eee;
+  /* Added separator for better mobile UX */
 }
 
 .faqQuestion {
   font-weight: bold;
   font-size: 1.6rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  /* Aligns + icon with top of multi-line text */
+  text-align: left;
   gap: 10px;
 }
 
@@ -757,6 +760,8 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #007bff;
+  min-width: 20px;
+  /* Ensures symbol aligns properly */
 }
 
 .faqAnswer {
@@ -766,6 +771,29 @@
   margin-top: 10px;
   margin-bottom: 5px;
   text-align: left;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .faqSection {
+    padding: 30px 4px;
+    /* Reduced padding */
+  }
+
+  .faqQuestion {
+    font-size: 1.2rem;
+    /* Smaller font for mobile */
+  }
+
+  .faqQuestion span {
+    font-size: 1.2rem;
+  }
+
+  .faqAnswer {
+    font-size: 1rem;
+    padding-left: 20px;
+  }
 }
 
 
