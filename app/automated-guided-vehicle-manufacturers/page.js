@@ -55,13 +55,26 @@ export default function Page() {
         {/* About Operational Excellence Consulting */}
         <section className={styles.agvSection}>
           <h1 className={styles.agvTitle}>Automated Guided Vehicle</h1>
-          <p className={styles.agvDescription}>
-            Automated Guided Vehicles are driverless vehicles that fundamentally perform transportation functions. As experts in Automated Guided Vehicles, we're here to help you implement these cutting-edge systems to enhance your operations.
-            <br />
-            Automated Guided Vehicles (AGVs) are material handling vehicles used to autonomously transport carriers throughout a warehouse, distribution center, or manufacturing facility without human operators. Automated Guided Vehicle manufacturers specialize in producing these advanced systems. We are leading AGV suppliers in India, providing advanced automated guided vehicles to enhance your material handling processes.
-            <br />
-            An Automated Guided Vehicle (AGV) is a mobile robot used for material transport in industrial settings. AGVs navigate via technologies like magnetic tape, lasers, or cameras, following predetermined routes. Commonly found in manufacturing, warehousing, and distribution, they enhance efficiency, reduce labor costs, and improve safety by automating repetitive material handling tasks. Capable of carrying various loads, from small parts to heavy pallets, AGVs streamline operations and boost productivity. Their integration into logistics systems exemplifies the advancements in automation and robotics, making them essential for modern industrial automation. Automated guided vehicle manufacturers play a crucial role in developing these advanced systems.
-          </p>
+
+          <div className={styles.amrContent} style={{ marginBottom: "60px" }}>
+            {/* left Side - Text */}
+            <div className={styles.amrTextContainer}>
+              <p className={styles.agvDescription}>
+                Automated Guided Vehicles are driverless vehicles that fundamentally perform transportation functions. As experts in Automated Guided Vehicles, we're here to help you implement these cutting-edge systems to enhance your operations.
+                <br />
+                Automated Guided Vehicles (AGVs) are material handling vehicles used to autonomously transport carriers throughout a warehouse, distribution center, or manufacturing facility without human operators. Automated Guided Vehicle manufacturers specialize in producing these advanced systems. We are leading AGV suppliers in India, providing advanced automated guided vehicles to enhance your material handling processes.
+                <br />
+                An Automated Guided Vehicle (AGV) is a mobile robot used for material transport in industrial settings. AGVs navigate via technologies like magnetic tape, lasers, or cameras, following predetermined routes. Commonly found in manufacturing, warehousing, and distribution, they enhance efficiency, reduce labor costs, and improve safety by automating repetitive material handling tasks. Capable of carrying various loads, from small parts to heavy pallets, AGVs streamline operations and boost productivity. Their integration into logistics systems exemplifies the advancements in automation and robotics, making them essential for modern industrial automation. Automated guided vehicle manufacturers play a crucial role in developing these advanced systems.
+              </p>
+            </div>
+            {/* right Side - Image */}
+            <div className={styles.amrImageContainer}>
+              <img
+                src="/images/agv_image.png"
+                alt="Autonomous Mobile Robot"
+              />
+            </div>
+          </div>
 
           <div className={styles.agvGrid}>
             <div className={styles.agvCard}>
@@ -324,6 +337,14 @@ export default function Page() {
             </div>
           </div>
         </section>
+
+        <section className={styles.faqSection}>
+          <img
+            src="/images/agv_section.jpeg"
+            alt="AGV Section"
+          />
+        </section>
+
 
         {/* Our Gallery */}
         <section className={styles.gallerySection}>
