@@ -398,6 +398,13 @@ export default function Page() {
 
 
 
+        {/* Major Clients Section */}
+        <section className={styles.clientSection}>
+          <div className={styles.clientImageContainer}>
+            <img src="/images/image077.jpeg" alt="Major Clients" className={styles.clientImage} />
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <section className={styles.faqSection}>
           <h1>FAQs</h1>

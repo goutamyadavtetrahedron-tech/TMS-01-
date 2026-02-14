@@ -550,13 +550,15 @@
 .faqItem {
   padding: 10px 0;
   cursor: pointer;
+  border-bottom: 1px solid #eee;
 }
 
 .faqQuestion {
   font-weight: bold;
   font-size: 1.6rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  text-align: left;
   gap: 10px;
 }
 
@@ -564,6 +566,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #007bff;
+  min-width: 20px;
 }
 
 .faqAnswer {
@@ -700,5 +703,23 @@
     width: 100%;
     padding-left: 4px;
     padding-right: 4px;
+  }
+
+  /* Specific FAQ Responsive Styles */
+  .faqSection {
+    padding: 30px 4px;
+  }
+
+  .faqQuestion {
+    font-size: 1.2rem;
+  }
+
+  .faqQuestion span {
+    font-size: 1.2rem;
+  }
+
+  .faqAnswer {
+    font-size: 1rem;
+    padding-left: 20px;
   }
 }
