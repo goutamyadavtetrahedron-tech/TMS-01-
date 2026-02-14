@@ -33,44 +33,19 @@ export default function Page() {
       <div className={styles.container}>
         {/* Hero Section */}
         <section>
-          <div className={styles.heroSection} style={{ display: 'flex', alignItems: 'stretch', minHeight: 400 }}>
-            <div style={{ 
-              flex: 1, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center', 
-              padding: '40px 24px 40px 6vw', 
-              minWidth: 0 
-            }}>
-              <div style={{
-                background: 'rgba(0,0,0,0.72)',
-                borderRadius: '16px',
-                padding: '32px 28px',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
-                maxWidth: 700,
-                width: '100%',
-                margin: '0 auto'
-              }}>
-                <h1 style={{
-                  textAlign: "left", 
-                  fontSize: "36px", 
-                  marginTop: "0", 
-                  color: 'white',
-                  marginBottom: '18px'
-                }}>
+          <div className={styles.heroSection}>
+            <div className={styles.heroContent}>
+              <div className={styles.heroCard}>
+                <h1 className={styles.heroTitle}>
                   Automated Guided Vehicle Manufacturers | AGV | AMR | RGV
                 </h1>
-                <p style={{
-                  color: 'white', 
-                  fontSize: '18px', 
-                  marginTop: '0'
-                }}>
+                <p className={styles.heroDescription}>
                   From repetitive tasks on the factory floor to activities in Agriculture, Logistics, Hospitality, and more, the use of Autonomous Mobile Robots is changing how business gets done
                 </p>
               </div>
             </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0, padding: '40px 6vw 40px 24px' }}>
-              <div style={{ width: '100%', maxWidth: 400, background: 'rgba(255,255,255,0.97)', borderRadius: 16, boxShadow: '0 8px 32px rgba(0,0,0,0.10)' }}>
+            <div className={styles.heroFormContainer}>
+              <div className={styles.contactFormWrapper}>
                 <ContactForm buttonText="Contact Us" />
               </div>
             </div>
@@ -354,51 +329,51 @@ export default function Page() {
         <section className={styles.gallerySection}>
           <h1>Our Gallery</h1>
           <div className={styles.galleryContainer}>
-            
+
             <div className={styles.galleryImage_new}>
               <img src="/images/agv-web-gallery.png" alt="Gallery1" />
             </div>
 
-             <div className={styles.galleryImage_new}>
+            <div className={styles.galleryImage_new}>
               <img src="/images/rgv-web-gallery.png" alt="Gallery2" />
             </div>
 
-             <div className={styles.galleryImage_new}>
+            <div className={styles.galleryImage_new}>
               <img src="/images/amr-web-gallery.png" alt="Gallery3" />
             </div>
-            
-            
+
+
           </div>
         </section>
 
         {/* Rail Guided Vehicles Section */}
-<section className={styles.rgvSection}>
-  <h1 className={styles.rgvTitle}>Rail Guided Vehicles</h1>
-  <div className={styles.rgvContent}>
-    {/* Left Side - Text */}
-    <div className={styles.rgvTextContainer}>
-      <p>
-        Rail-Guided Vehicles (RGVs) are advanced automated systems designed to transport materials with speed, safety, and precision along fixed tracks. They are widely used in warehouses, factories, and logistics hubs to handle repetitive tasks with consistency and reliability.
-      </p>
-      <p>
-        By reducing manual labor and minimizing errors, RGVs not only save time but also cut operational costs. Their ability to integrate seamlessly with automated storage and retrieval systems makes them a smart choice for industries aiming to boost efficiency and productivity.
-      </p>
-      <div className={styles.rgvButtonContainer}>
-        <button className={styles.rgvButton} onClick={() => openModal("Book a Call")}>
-          Book a Call Now
-        </button>
-      </div>
-    </div>
-    
-    {/* Right Side - Image */}
-    <div className={styles.rgvImageContainer}>
-      <img
+        <section className={styles.rgvSection}>
+          <h1 className={styles.rgvTitle}>Rail Guided Vehicles</h1>
+          <div className={styles.rgvContent}>
+            {/* Left Side - Text */}
+            <div className={styles.rgvTextContainer}>
+              <p>
+                Rail-Guided Vehicles (RGVs) are advanced automated systems designed to transport materials with speed, safety, and precision along fixed tracks. They are widely used in warehouses, factories, and logistics hubs to handle repetitive tasks with consistency and reliability.
+              </p>
+              <p>
+                By reducing manual labor and minimizing errors, RGVs not only save time but also cut operational costs. Their ability to integrate seamlessly with automated storage and retrieval systems makes them a smart choice for industries aiming to boost efficiency and productivity.
+              </p>
+              <div className={styles.rgvButtonContainer}>
+                <button className={styles.rgvButton} onClick={() => openModal("Book a Call")}>
+                  Book a Call Now
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side - Image */}
+            <div className={styles.rgvImageContainer}>
+              <img
                 src="/images/RGV-web.png"
                 alt="Rail Guided Vehicle System"
               />
-    </div>
-  </div>
-</section>
+            </div>
+          </div>
+        </section>
 
 
 

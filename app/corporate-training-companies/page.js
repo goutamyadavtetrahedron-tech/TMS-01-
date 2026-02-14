@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./style.module.css";
 import ContactForm from "@/components/ContactForm";
 import Layout from "@/components/layout/Layout";
 import Image from "next/image";
@@ -133,13 +134,11 @@ export default function Page() {
         </div>
 
         {/* Highlights Section */}
-        <div style={highlightSection}>
-          <h2
-            style={{ ...highlightHeading, fontFamily: "var(--font-poppins)" }}
-          >
+        <div className={styles.highlightSection}>
+          <h2 className={styles.highlightHeading}>
             Highlights
           </h2>
-          <div style={highlightGrid}>
+          <div className={styles.highlightGrid}>
             {[
               {
                 id: 1,
@@ -177,21 +176,18 @@ export default function Page() {
                 icon: "/assets/images/course/highlights5.png",
               },
             ].map((item) => (
-              <div
-                key={item.id}
-                style={{ ...highlightCard, fontFamily: "var(--font-poppins)" }}
-              >
-                <div style={iconWrapper}>
+              <div key={item.id} className={styles.highlightCard}>
+                <div className={styles.iconWrapper}>
                   <Image
                     src={item.icon}
                     alt={item.title}
                     width={48}
                     height={48}
-                    style={highlightIcon}
+                    className={styles.highlightIcon}
                   />
                 </div>
-                <h3 style={highlightTitle}>{item.title}</h3>
-                <p style={highlightText}>{item.description}</p>
+                <h3 className={styles.highlightTitle}>{item.title}</h3>
+                <p className={styles.highlightText}>{item.description}</p>
               </div>
             ))}
           </div>
@@ -204,6 +200,7 @@ export default function Page() {
               ...paragraphStyle,
               textAlign: "justify",
               marginBottom: "20px",
+              padding: "8px",
               fontSize: "18px",
               lineHeight: "1.8",
               fontFamily: "var(--font-poppins)",
@@ -285,7 +282,7 @@ const bannerWrapper = {
   right: "50%",
   marginLeft: "-50vw", // ✅ trick to break out of any centered container
   marginRight: "-50vw",
-  width: "100vw", // ✅ ensures full viewport width
+  width: "100%", // ✅ ensure full viewport width without scroll
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-start",
@@ -336,7 +333,7 @@ const containerStyle = {
 const bannerContainer = {
   position: "relative",
   // borderRadius: "24px",
-  width: "100vw",
+  width: "100%",
   height: "100vh",
   overflow: "hidden",
   // margin: "40px 0",
@@ -380,6 +377,9 @@ const twoColumnSection = {
   padding: "0 40px",
   boxSizing: "border-box",
   flexWrap: "wrap", // ✅ ensures responsive stacking on smaller screens
+  "@media (max-width: 768px)": {
+    flexDirection: "column"
+  }
 };
 
 const leftColumn = {
@@ -464,80 +464,9 @@ const buttonArrow = {
 };
 
 const paragraphContainer = {
-  width: "100vw",
+  width: "100%",
   maxWidth: "100%",
   margin: "0",
   padding: "0",
   boxSizing: "border-box",
-};
-
-const highlightSection = {
-  padding: "80px 0",
-};
-
-const highlightHeading = {
-  fontSize: "36px",
-  fontWeight: "700",
-  color: "#003366",
-  textAlign: "center",
-  marginBottom: "48px",
-};
-
-const highlightGrid = {
-  display: "grid",
-  gridTemplateColumns: "repeat(5, 1fr)",
-  gap: "32px",
-  maxWidth: "1200px",
-  margin: "0 auto",
-  padding: "20px 0",
-  "@media (max-width: 1200px)": {
-    gridTemplateColumns: "repeat(3, 1fr)",
-  },
-  "@media (max-width: 768px)": {
-    gridTemplateColumns: "repeat(2, 1fr)",
-  },
-  "@media (max-width: 480px)": {
-    gridTemplateColumns: "1fr",
-  },
-};
-
-const highlightCard = {
-  padding: "32px",
-  borderRadius: "16px",
-  backgroundColor: "#ffffff",
-  boxShadow: "0 4px 24px rgba(0, 0, 0, 0.05)",
-  transition: "transform 0.3s ease",
-  textAlign: "center",
-  minWidth: "240px",
-  ":hover": {
-    transform: "translateY(-8px)",
-  },
-};
-
-const iconWrapper = {
-  backgroundColor: "#e6f7ff",
-  width: "80px",
-  height: "80px",
-  borderRadius: "50%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  margin: "0 auto 24px",
-};
-
-const highlightIcon = {
-  filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))",
-};
-
-const highlightTitle = {
-  fontSize: "20px",
-  fontWeight: "600",
-  color: "#003366",
-  marginBottom: "12px",
-};
-
-const highlightText = {
-  fontSize: "16px",
-  lineHeight: "1.6",
-  color: "#666",
 };

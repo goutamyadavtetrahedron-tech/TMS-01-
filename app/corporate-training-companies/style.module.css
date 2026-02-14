@@ -1,0 +1,104 @@
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    font-family: var(--font-poppins);
+}
+
+.highlightSection {
+    padding: 80px 20px;
+    width: 100%;
+}
+
+.highlightHeading {
+    font-size: 36px;
+    font-weight: 700;
+    color: #003366;
+    text-align: center;
+    margin-bottom: 48px;
+    font-family: var(--font-poppins);
+}
+
+.highlightGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.highlightCard {
+    padding: 32px;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    text-align: center;
+    min-width: 240px;
+    font-family: var(--font-poppins);
+}
+
+.highlightCard:hover {
+    transform: translateY(-8px);
+}
+
+.iconWrapper {
+    background-color: #e6f7ff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.highlightIcon {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.highlightTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #003366;
+    margin-bottom: 12px;
+}
+
+.highlightText {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+    .highlightGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .highlightGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .highlightSection {
+        padding: 60px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .highlightGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .highlightHeading {
+        font-size: 28px;
+        margin-bottom: 32px;
+    }
+
+    .highlightCard {
+        padding: 24px;
+        min-width: auto;
+    }
+}

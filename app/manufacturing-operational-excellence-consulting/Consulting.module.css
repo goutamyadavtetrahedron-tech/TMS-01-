@@ -679,3 +679,26 @@
     text-align: center;
   }
 }
+
+/* Reduce white spacing on mobile for content below hero section */
+@media (max-width: 768px) {
+
+  .improvementSection,
+  .aboutSection,
+  .aboutImageSection,
+  .objectiveSection,
+  .challengesSection,
+  .comparisonSection,
+  .feedbackSection,
+  .caseStudySection,
+  .servingSection,
+  .benefitsSection,
+  .implementationSection,
+  .clientSection,
+  .faqSection {
+    max-width: 100vw;
+    width: 100%;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
