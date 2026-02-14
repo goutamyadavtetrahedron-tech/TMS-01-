@@ -1169,62 +1169,7 @@ export default function TrainingPage({ params }) {
                 {formData.description}
               </p>
             )}
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="formName" style={dynamicStyles.formLabel}>
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="formName"
-                    style={dynamicStyles.formInput}
-                    placeholder="Your Name"
-                    required
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="formEmail" style={dynamicStyles.formLabel}>
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="formEmail"
-                    style={dynamicStyles.formInput}
-                    placeholder="Your Email"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formSubject" style={dynamicStyles.formLabel}>
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="formSubject"
-                  style={dynamicStyles.formInput}
-                  placeholder="Training Inquiry: [Training Name]"
-                  defaultValue={`Training Inquiry: ${data.title || ""}`}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formMessage" style={dynamicStyles.formLabel}>
-                  Message
-                </label>
-                <textarea
-                  id="formMessage"
-                  style={dynamicStyles.formTextarea}
-                  rows="5"
-                  placeholder="Your Message / Questions"
-                  required
-                ></textarea>
-              </div>
-              <div className="text-center mt-4">
-                {renderCtaButton(formData.buttonTitle || "Submit Request")}
-              </div>
-            </form>
+            <ContactForm buttonText={formData.buttonTitle || "Submit Request"} />
           </div>
         </div>
       </section>

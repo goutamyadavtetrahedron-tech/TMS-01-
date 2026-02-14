@@ -97,55 +97,49 @@ export default function Page() {
     <Layout>
       <div style={{ ...containerStyle, fontFamily: "var(--font-poppins)" }}>
         {/* Banner Section */}
-        <section style={bannerWrapper}>
-          {/* Image with black overlay */}
-          <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Image with overlay */}
+          <div className="absolute top-0 left-0 w-full h-full z-0">
             <Image
               src="/assets/images/backgrounds/technical-training-program.png"
               alt="Technical Training Banner"
               fill
               priority
-              style={{ objectFit: "cover", zIndex: 1 }}
+              className="object-cover z-0"
             />
-
             {/* Black overlay */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.5)", // adjust opacity as needed
-                zIndex: 2,
-              }}
-            />
+            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10" />
           </div>
 
-          {/* Text content above overlay */}
-          <div
-            style={{
-              ...bannerContent,
-              position: "absolute",
-              top: "50%",
-              left: "5%",
-              transform: "translateY(-50%)",
-              zIndex: 3,
-            }}
-          >
-            <h1 style={headingStyle}>Technical Training Programs</h1>
-            <h2 style={subheadingStyle}>You Can Do It When You Skill It</h2>
-            <div style={divider}></div>
-            <p style={bannerTextStyle}>
-              Request to know more about the Technical Training
-            </p>
+          {/* Content Container - Split Layout */}
+          <div className="relative z-20 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl px-6 py-20 gap-10 lg:gap-0">
+            {/* Left side - Text content */}
+            <div className="flex-1 w-full max-w-lg text-left text-white" style={{ fontFamily: "var(--font-poppins)" }}>
+              <h1 style={headingStyle}>
+                Technical Training Programs
+              </h1>
+              <h2 style={subheadingStyle}>
+                You Can Do It When You Skill It
+              </h2>
+              <div style={{ ...divider, margin: "1rem 0", display: "inline-block" }}></div>
+              <p style={bannerTextStyle}>
+                Request to know more about the Technical Training
+              </p>
+            </div>
+
+            {/* Right side - Contact Form */}
+            <div className="flex-1 w-full max-w-[450px] flex justify-center items-center">
+              <div className="w-full bg-white/95 rounded-2xl shadow-xl backdrop-blur-sm">
+                <ContactForm buttonText="Contact Us" />
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Main Description */}
-        <div style={twoColumnSection}>
-          <div style={leftColumn}>
-            <p style={{ ...paragraphStyle }}>
+        <div style={{ ...paragraphContainer, padding: "40px 20px" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <p style={{ ...paragraphStyle, fontFamily: "var(--font-poppins)" }}>
               Technical Training is all about the job obtaining the necessary
               skills to do a job, adding new tools to enhance the job.
               Relearning, smarter, faster, processes to expand the job. It helps
@@ -155,23 +149,20 @@ export default function Page() {
               Technical Training workshops are best suited for middle management
               people, line engineers, and supervisors.
             </p>
-            <p style={{ ...paragraphStyle }}>
+            <p style={{ ...paragraphStyle, fontFamily: "var(--font-poppins)" }}>
               Tetrahedron has 160+ Technical Workshop modules to ensure the
               right technical skills for the workers. Our training is designed
               so that each participant can learn and acquire the right job skill
               specific to its job role and implement the learning in real-time.
               Our client is tangible proof of our work.
             </p>
-            <p style={{ ...paragraphStyle }}>
+            <p style={{ ...paragraphStyle, fontFamily: "var(--font-poppins)" }}>
               Tetrahedron has partnered with clients in industry sectors ranging
               from pharmaceuticals to engineering to medical devices and
               automotive to design, develop and deliver technical content and
               technical training to internal teams, manufacturing professionals,
               etc.
             </p>
-          </div>
-          <div style={rightColumn}>
-            <ContactForm />
           </div>
         </div>
 

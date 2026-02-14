@@ -3,16 +3,29 @@ import Layout from "@/components/layout/Layout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useState } from "react";
+
 export default function Home() {
   const router = useRouter();
+
+  const [errors, setErrors] = useState({});
 
   async function handleContactThreeSubmit(e) {
     e.preventDefault();
     const form = e.target;
+    // Clear previous errors
+    setErrors({});
+
+    const email = form.email.value;
+    if (email.endsWith("@gmail.com")) {
+      setErrors((prev) => ({ ...prev, email: "Please enter a valid business email address." }));
+      return;
+    }
+
     const data = {
       name: form.name.value,
       company: form.companyName.value,
-      email: form.email.value,
+      email: email,
       mobile: form.Phone.value,
       message: form.message.value,
     };
@@ -197,6 +210,11 @@ export default function Home() {
                         required
                         style={{ fontFamily: "var(--font-poppins)" }}
                       />
+                      {errors.email && (
+                        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="col-xl-3 col-lg-6">

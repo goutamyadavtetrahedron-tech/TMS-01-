@@ -57,31 +57,40 @@ export default function Page() {
     <Layout>
       <div style={{ ...containerStyle, fontFamily: "var(--font-poppins)" }}>
         {/* Banner Section */}
-        <div style={bannerContainer}>
-          <div style={imageOverlay}>
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Image with overlay */}
+          <div className="absolute top-0 left-0 w-full h-full z-0">
             <Image
               src="/assets/images/backgrounds/page-header-bg1.jpg"
               alt="Banner"
-              layout="fill"
-              objectFit="cover"
+              fill
+              priority
+              className="object-cover z-0"
               style={{ filter: "brightness(0.7)" }}
             />
           </div>
-          <div style={{ ...contentWrapper, fontFamily: "var(--font-poppins)" }}>
-            <div style={{ ...textContent, width: "50%", fontFamily: "var(--font-poppins)" }}>
-              <h1 style={{ ...headingStyle, fontFamily: "var(--font-poppins)" }}>
+
+          {/* Content Container - Split Layout */}
+          <div className="relative z-20 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl px-6 py-20 gap-10 lg:gap-0">
+            {/* Left side - Text content */}
+            <div className="flex-1 w-full max-w-lg text-left text-white" style={{ fontFamily: "var(--font-poppins)" }}>
+              <h1 style={headingStyle}>
                 Process Improvement Training Courses
               </h1>
-              <h2 style={{ ...subheadingStyle, fontFamily: "var(--font-poppins)" }}>
+              <h2 style={subheadingStyle}>
                 Learn valuable &amp; practical skills for your business growth
               </h2>
-              <div style={{ ...divider, fontFamily: "var(--font-poppins)" }}></div>
+              <div style={{ ...divider, margin: "1rem 0", display: "inline-block" }}></div>
             </div>
-            <div style={{ width: "50%", fontFamily: "var(--font-poppins)" }}>
-              <ContactForm />
+
+            {/* Right side - Contact Form */}
+            <div className="flex-1 w-full max-w-[450px] flex justify-center items-center">
+              <div className="w-full bg-white/95 rounded-2xl shadow-xl backdrop-blur-sm">
+                <ContactForm buttonText="Contact Us" />
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Main Description */}
         <div style={paragraphContainer}>
@@ -225,7 +234,7 @@ export default function Page() {
                 <h3 style={{ ...highlightTitle, fontSize: "20px", marginBottom: "10px", textAlign: "center" }}>
                   {program.title}
                 </h3>
-                <p style={{ ...highlightText, fontSize: "16px", lineHeight: "1.6", textAlign: "center"  }}>
+                <p style={{ ...highlightText, fontSize: "16px", lineHeight: "1.6", textAlign: "center" }}>
                   {program.description}
                 </p>
               </div>

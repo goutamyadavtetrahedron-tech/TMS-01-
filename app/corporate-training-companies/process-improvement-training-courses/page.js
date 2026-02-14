@@ -57,59 +57,50 @@ export default function Page() {
     <Layout>
       <div style={{ ...containerStyle, fontFamily: "var(--font-poppins)" }}>
         {/* Banner Section */}
-        <section style={bannerWrapper}>
-          <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Image with overlay */}
+          <div className="absolute top-0 left-0 w-full h-full z-0">
             <Image
               src="/assets/images/backgrounds/technical-training-program.png"
               alt="Banner"
               fill
-              style={{
-                objectFit: "cover",
-                zIndex: 1,
-              }}
+              priority
+              className="object-cover z-0"
             />
             {/* Black overlay */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.5)", // adjust opacity as needed
-                zIndex: 2,
-              }}
-            />
+            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10" />
           </div>
 
-          {/* Text content above overlay */}
-          <div
-            style={{
-              ...bannerContent,
-              position: "absolute",
-              top: "50%",
-              left: "5%",
-              transform: "translateY(-50%)",
-              zIndex: 3,
-            }}
-          >
-            <h1 style={headingStyle}>Process Improvement Training Courses</h1>
-            <h2 style={subheadingStyle}>
-              Learn valuable & practical skills for your business growth
-            </h2>
-            <div style={divider}></div>
-            <p style={bannerTextStyle}>
-              Connect with our experts to discover tailored solutions that drive
-              growth and operational excellence.
-            </p>
+          {/* Content Container - Split Layout */}
+          <div className="relative z-20 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl px-6 py-20 gap-10 lg:gap-0">
+            {/* Left side - Text content */}
+            <div className="flex-1 w-full max-w-lg text-left text-white" style={{ fontFamily: "var(--font-poppins)" }}>
+              <h1 style={headingStyle}>
+                Process Improvement Training Courses
+              </h1>
+              <h2 style={subheadingStyle}>
+                Learn valuable & practical skills for your business growth
+              </h2>
+              <div style={{ ...divider, margin: "1rem 0", display: "inline-block" }}></div>
+              <p style={bannerTextStyle}>
+                Connect with our experts to discover tailored solutions that drive
+                growth and operational excellence.
+              </p>
+            </div>
+
+            {/* Right side - Contact Form */}
+            <div className="flex-1 w-full max-w-[450px] flex justify-center items-center">
+              <div className="w-full bg-white/95 rounded-2xl shadow-xl backdrop-blur-sm">
+                <ContactForm buttonText="Contact Us" />
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Two-column Section */}
-        <div style={twoColumnSection}>
-          {/* Left Column */}
-          <div style={leftColumn}>
-            <p style={paragraphStyle}>
+        {/* Full-width Paragraph Section */}
+        <div style={{ ...paragraphContainer, padding: "40px 20px" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <p style={{ ...paragraphStyle, fontFamily: "var(--font-poppins)" }}>
               Process Improvement Training Workshops help you improve your
               organization’s Quality and Process. This training course will help
               you learn to leverage your current business strategy to drive
@@ -119,7 +110,7 @@ export default function Page() {
               order to minimize risk and improve customer satisfaction, you need
               to ensure your processes are optimized.
             </p>
-            <p style={paragraphStyle}>
+            <p style={{ ...paragraphStyle, fontFamily: "var(--font-poppins)" }}>
               With an effective strategy for continuous improvement, your
               business minimizes the risk of stagnating and falling behind in
               today’s competitive marketplace. From workplace organization and
@@ -131,11 +122,6 @@ export default function Page() {
               at all levels, managers and business owners must demonstrate their
               own commitment by providing the necessary training and support.
             </p>
-          </div>
-
-          {/* Right Column - Contact Form */}
-          <div style={rightColumn}>
-            <ContactForm />
           </div>
         </div>
 
