@@ -34,13 +34,13 @@ export default function Page() {
         {/* Hero Section */}
         <section>
           <div className={styles.heroSection} style={{ display: 'flex', alignItems: 'stretch', minHeight: 400 }}>
-            <div style={{ 
-              flex: 1, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center', 
-              padding: '40px 24px 40px 6vw', 
-              minWidth: 0 
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              padding: '40px 24px 40px 6vw',
+              minWidth: 0
             }}>
               <div style={{
                 background: 'rgba(0,0,0,0.72)',
@@ -52,17 +52,17 @@ export default function Page() {
                 margin: '0 auto'
               }}>
                 <h1 style={{
-                  textAlign: "left", 
-                  fontSize: "36px", 
-                  marginTop: "0", 
+                  textAlign: "left",
+                  fontSize: "36px",
+                  marginTop: "0",
                   color: 'white',
                   marginBottom: '18px'
                 }}>
                   Automated Guided Vehicle Manufacturers | AGV | AMR | RGV
                 </h1>
                 <p style={{
-                  color: 'white', 
-                  fontSize: '18px', 
+                  color: 'white',
+                  fontSize: '18px',
                   marginTop: '0'
                 }}>
                   From repetitive tasks on the factory floor to activities in Agriculture, Logistics, Hospitality, and more, the use of Autonomous Mobile Robots is changing how business gets done
@@ -80,13 +80,26 @@ export default function Page() {
         {/* About Operational Excellence Consulting */}
         <section className={styles.agvSection}>
           <h1 className={styles.agvTitle}>Automated Guided Vehicle</h1>
-          <p className={styles.agvDescription}>
-            Automated Guided Vehicles are driverless vehicles that fundamentally perform transportation functions. As experts in Automated Guided Vehicles, we're here to help you implement these cutting-edge systems to enhance your operations.
-            <br />
-            Automated Guided Vehicles (AGVs) are material handling vehicles used to autonomously transport carriers throughout a warehouse, distribution center, or manufacturing facility without human operators. Automated Guided Vehicle manufacturers specialize in producing these advanced systems. We are leading AGV suppliers in India, providing advanced automated guided vehicles to enhance your material handling processes.
-            <br />
-            An Automated Guided Vehicle (AGV) is a mobile robot used for material transport in industrial settings. AGVs navigate via technologies like magnetic tape, lasers, or cameras, following predetermined routes. Commonly found in manufacturing, warehousing, and distribution, they enhance efficiency, reduce labor costs, and improve safety by automating repetitive material handling tasks. Capable of carrying various loads, from small parts to heavy pallets, AGVs streamline operations and boost productivity. Their integration into logistics systems exemplifies the advancements in automation and robotics, making them essential for modern industrial automation. Automated guided vehicle manufacturers play a crucial role in developing these advanced systems.
-          </p>
+
+          <div className={styles.amrContent} style={{ marginBottom: "60px" }}>
+            {/* left Side - Text */}
+            <div className={styles.amrTextContainer}>
+              <p className={styles.agvDescription}>
+                Automated Guided Vehicles are driverless vehicles that fundamentally perform transportation functions. As experts in Automated Guided Vehicles, we're here to help you implement these cutting-edge systems to enhance your operations.
+                <br />
+                Automated Guided Vehicles (AGVs) are material handling vehicles used to autonomously transport carriers throughout a warehouse, distribution center, or manufacturing facility without human operators. Automated Guided Vehicle manufacturers specialize in producing these advanced systems. We are leading AGV suppliers in India, providing advanced automated guided vehicles to enhance your material handling processes.
+                <br />
+                An Automated Guided Vehicle (AGV) is a mobile robot used for material transport in industrial settings. AGVs navigate via technologies like magnetic tape, lasers, or cameras, following predetermined routes. Commonly found in manufacturing, warehousing, and distribution, they enhance efficiency, reduce labor costs, and improve safety by automating repetitive material handling tasks. Capable of carrying various loads, from small parts to heavy pallets, AGVs streamline operations and boost productivity. Their integration into logistics systems exemplifies the advancements in automation and robotics, making them essential for modern industrial automation. Automated guided vehicle manufacturers play a crucial role in developing these advanced systems.
+              </p>
+            </div>
+            {/* right Side - Image */}
+            <div className={styles.amrImageContainer}>
+              <img
+                src="/images/agv_image.png"
+                alt="Autonomous Mobile Robot"
+              />
+            </div>
+          </div>
 
           <div className={styles.agvGrid}>
             <div className={styles.agvCard}>
@@ -350,55 +363,70 @@ export default function Page() {
           </div>
         </section>
 
+        <section className={styles.faqSection}>
+          <img
+            src="/images/agv_section.jpeg"
+            alt="AGV Section"
+          />
+        </section>
+
+
         {/* Our Gallery */}
         <section className={styles.gallerySection}>
           <h1>Our Gallery</h1>
           <div className={styles.galleryContainer}>
-            
+
             <div className={styles.galleryImage_new}>
               <img src="/images/agv-web-gallery.png" alt="Gallery1" />
             </div>
 
-             <div className={styles.galleryImage_new}>
+            <div className={styles.galleryImage_new}>
               <img src="/images/rgv-web-gallery.png" alt="Gallery2" />
             </div>
 
-             <div className={styles.galleryImage_new}>
+            <div className={styles.galleryImage_new}>
               <img src="/images/amr-web-gallery.png" alt="Gallery3" />
             </div>
-            
-            
+
+
           </div>
         </section>
 
         {/* Rail Guided Vehicles Section */}
-<section className={styles.rgvSection}>
-  <h1 className={styles.rgvTitle}>Rail Guided Vehicles</h1>
-  <div className={styles.rgvContent}>
-    {/* Left Side - Text */}
-    <div className={styles.rgvTextContainer}>
-      <p>
-        Rail-Guided Vehicles (RGVs) are advanced automated systems designed to transport materials with speed, safety, and precision along fixed tracks. They are widely used in warehouses, factories, and logistics hubs to handle repetitive tasks with consistency and reliability.
-      </p>
-      <p>
-        By reducing manual labor and minimizing errors, RGVs not only save time but also cut operational costs. Their ability to integrate seamlessly with automated storage and retrieval systems makes them a smart choice for industries aiming to boost efficiency and productivity.
-      </p>
-      <div className={styles.rgvButtonContainer}>
-        <button className={styles.rgvButton} onClick={() => openModal("Book a Call")}>
-          Book a Call Now
-        </button>
-      </div>
-    </div>
-    
-    {/* Right Side - Image */}
-    <div className={styles.rgvImageContainer}>
-      <img
+        <section className={styles.rgvSection}>
+          <h1 className={styles.rgvTitle}>Rail Guided Vehicles</h1>
+          <div className={styles.rgvContent}>
+            {/* Left Side - Text */}
+            <div className={styles.rgvTextContainer}>
+              <p>
+                Rail-Guided Vehicles (RGVs) are advanced automated systems designed to transport materials with speed, safety, and precision along fixed tracks. They are widely used in warehouses, factories, and logistics hubs to handle repetitive tasks with consistency and reliability.
+              </p>
+              <p>
+                By reducing manual labor and minimizing errors, RGVs not only save time but also cut operational costs. Their ability to integrate seamlessly with automated storage and retrieval systems makes them a smart choice for industries aiming to boost efficiency and productivity.
+              </p>
+              <div className={styles.rgvButtonContainer}>
+                <button className={styles.rgvButton} onClick={() => openModal("Book a Call")}>
+                  Book a Call Now
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side - Image */}
+            <div className={styles.rgvImageContainer}>
+              <img
                 src="/images/RGV-web.png"
                 alt="Rail Guided Vehicle System"
               />
-    </div>
-  </div>
-</section>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.faqSection}>
+          <img
+            src="/images/major_client.jpeg"
+            alt="Major Clients"
+          />
+        </section>
 
 
 
