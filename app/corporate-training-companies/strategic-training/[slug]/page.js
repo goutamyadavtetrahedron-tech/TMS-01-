@@ -796,12 +796,20 @@ export default function TrainingPage({ params }) {
                             ))}
                         </div>
                     ) : hasImage ? (
+                        <>
                         <img
                             src={clientData.image}
                             alt="Client Logos"
                             className="img-fluid"
-                            style={{ maxHeight: '1000px', width: 'auto', margin: 'auto', filter: 'grayscale(60%)', opacity: 0.75 }}
+                            style={{ maxHeight: '1000px', width: 'auto', margin: 'auto' }}
                         />
+                        <img
+                            src={clientData.image2}
+                            alt="Client Logos"
+                            className="img-fluid"
+                            style={{ maxHeight: '1000px', width: 'auto', margin: 'auto' }}
+                        />
+                        </>
                     ) : null}
                     {textContent && <div className="fs-5 mt-3 text-muted">{textContent}</div>}
                 </div>

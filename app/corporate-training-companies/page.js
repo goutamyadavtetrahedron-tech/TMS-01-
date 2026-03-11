@@ -84,13 +84,13 @@ export default function Page() {
           <div className="relative z-20 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl px-6 py-20 gap-10 lg:gap-0">
             {/* Left side - Text content */}
             <div className="flex-1 w-full max-w-xl text-center lg:text-left text-white">
-              <h1 className="text-4xl lg:text-6xl mb-4 font-(--font-poppins)">
+              <h1 className="text-4xl lg:text-6xl mb-4 font-(--font-poppins) text-white">
                 CORPORATE TRAINING PROGRAMS
               </h1>
-              <h2 className="text-xl lg:text-2xl text-white/90 mb-4 font-(--font-poppins)">
+              <h2 className="text-xl lg:text-2xl text-white mb-4 font-(--font-poppins)">
                 350+ On-site & Online Trainings
               </h2>
-              <div className="w-20 h-1 bg-[#00b4d8] mx-auto lg:mx-0 mb-6"></div>
+              <div className="w-20 h-1 bg-[#FF5E14] mx-auto lg:mx-0 mb-6"></div>
               <p className="text-lg lg:text-xl text-white/85 leading-relaxed font-(--font-poppins)">
                 Connect with our experts to discover tailored solutions that drive
                 growth and innovation.
@@ -217,6 +217,22 @@ export default function Page() {
             performance.350+ Online Trainings For Manufacturing Employee.
           </p>
         </div>
+        <div className="container text-center my-24">
+                    <h2 className="section-title__title">
+                        Trusted By Leading Brands
+                    </h2>
+                    <div className="border-amber-600 mt-8">
+                        <img
+                            src="/assets/images/training_client.jpeg"
+                            alt="Clients"
+                            className="border-amber-200"
+                        />
+                         <img
+                            src="/assets/images/training_client2.jpeg"
+                            alt="Clients"
+                            className="border-amber-200"
+                        />
+                    </div></div>
       </div>
     </Layout>
   );

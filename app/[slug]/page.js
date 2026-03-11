@@ -2445,12 +2445,20 @@ export default function ServiceOrBlogPage({ params }) {
                     renderSectionTitle(data.clients.title || "Our Clients")}
                   <div className="container">
                     {data.clients.image && (
+                      <>
                       <img
                         src={data.clients.image}
                         alt="Client Logos"
                         className="img-fluid"
                         style={{ maxHeight: "1000px", width: "auto" }}
                       />
+                      <img
+                        src={data.clients.image2}
+                        alt="Client Logos"
+                        className="img-fluid"
+                        style={{ maxHeight: "1000px", width: "auto" }}
+                      /></>
+                      
                     )}
                     {isNonEmptyString(data.clients.text) && (
                       <div className="fs-5 mt-3">

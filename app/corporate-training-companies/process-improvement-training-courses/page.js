@@ -312,6 +312,23 @@ export default function Page() {
             ))}
           </div>
         </div>
+
+        <div className="container text-center my-24">
+                    <h2 className="section-title__title">
+                        Trusted By Leading Brands
+                    </h2>
+                    <div className="border-amber-600 mt-8">
+                        <img
+                            src="/assets/images/training_client.jpeg"
+                            alt="Clients"
+                            className="border-amber-200"
+                        />
+                         <img
+                            src="/assets/images/training_client2.jpeg"
+                            alt="Clients"
+                            className="border-amber-200"
+                        />
+                    </div></div>
       </div>
     </Layout>
   );

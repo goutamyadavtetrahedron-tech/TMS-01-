@@ -80,6 +80,18 @@ export default function Home() {
                 <Services />
                 <Awards />
                 <Testimonial />
+                <div className="container text-center my-24">
+                    <h2 className="section-title__title">
+                        Trusted By Leading Brands
+                    </h2>
+                    <div className="border-amber-600 mt-8">
+                        <img
+                            src="/assets/images/home_client.jpeg"
+                            alt="Clients"
+                            className="border-amber-200"
+                        />
+                    </div></div>
+
             </div>
 
             {showForm && (
