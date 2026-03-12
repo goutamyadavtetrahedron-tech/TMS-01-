@@ -2452,12 +2452,15 @@ export default function ServiceOrBlogPage({ params }) {
                         className="img-fluid"
                         style={{ maxHeight: "1000px", width: "auto" }}
                       />
-                      <img
-                        src={data.clients.image2}
-                        alt="Client Logos"
-                        className="img-fluid"
-                        style={{ maxHeight: "1000px", width: "auto" }}
-                      /></>
+                       {data.clients.image2 && (
+        <img
+          src={data.clients.image2}
+          alt="Client Logos"
+          className="img-fluid"
+          style={{ maxHeight: "1000px", width: "auto" }}
+        />
+      )}
+                      </>
                       
                     )}
                     {isNonEmptyString(data.clients.text) && (

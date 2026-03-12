@@ -1131,7 +1131,7 @@ export default function TrainingPage({ params }) {
                 maxHeight: "1000px",
                 width: "auto",
                 margin: "auto",
-              
+               
               }}
             />
             <img

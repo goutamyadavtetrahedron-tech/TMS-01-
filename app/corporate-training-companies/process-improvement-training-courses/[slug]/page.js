@@ -1129,7 +1129,7 @@ export default function TrainingPage({ params }) {
                 margin: "auto",
                 
               }}
-            />
+            /> 
 
             <img
               src={clientData.image2}

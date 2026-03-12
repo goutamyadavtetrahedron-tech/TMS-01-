@@ -758,7 +758,7 @@ export default function TrainingPage({ params }) {
                                 <div key={index} className="col-6 col-sm-4 col-md-3 col-lg-2 mb-4 text-center">
                                     <img src={logo.image} alt={logo.name || `Client ${index + 1}`} className="img-fluid" style={{ maxHeight: '60px', filter: 'grayscale(70%)', opacity: 0.8 }} />
                                 </div>
-                            ))}
+                            ))} 
                         </div>
                     ) : hasImage ? (
                         <img
