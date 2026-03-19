@@ -312,7 +312,6 @@ export default function Page() {
             ))}
           </div>
         </div> 
-
         <div className="container text-center my-24">
                     <h2 className="section-title__title">
                         Trusted By Leading Brands
