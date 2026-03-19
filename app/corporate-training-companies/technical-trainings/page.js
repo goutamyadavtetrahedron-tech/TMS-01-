@@ -382,7 +382,7 @@ export default function Page() {
                             className="border-amber-200"
                         />
                          <img
-                            src="/assets/images/training_client2.jpeg"
+                            src="/assets/images/training_new.png"
                             alt="Clients"
                             className="border-amber-200"
                         />
