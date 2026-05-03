@@ -8,7 +8,7 @@ const teamMembersData = [
         name: "MR. NITIN KUMAR",
         imgSrc: "/assets/images/team/M1.png",
         title: "Alumni IIM Calcutta",
-        bio: "Mr. Nitin Kumar is a seasoned strategic and operations leader with 27+ years of experience across diverse manufacturing sectors. He is the Founder-Director of TMS and an expert in driving operational excellence and digital transformation.",
+        bio: "Mr. Nitin Kumar is a seasoned strategic and operations leader with 23+ years of experience across diverse manufacturing sectors. He is the Founder-Director of TMS and an expert in driving operational excellence and digital transformation.",
         highlights: [
             "Alumnus of IIM-Calcutta and IIT Roorkee",
             "Expertise in Lean, Six Sigma, and Industry 4.0 implementations",
@@ -24,7 +24,7 @@ const teamMembersData = [
         name: "MR. ALOK SAHU",
         imgSrc: "/assets/images/team/M2.png",
         title: "Alumni IIM Calcutta",
-        bio: "Mr. Alok Sahu is a seasoned manufacturing strategist with 22+ years of experience in factory transformation and Lean practices. As the Founder-Director of TMS, he brings global expertise to Indian industries through innovative and sustainable manufacturing solutions.",
+        bio: "Mr. Alok Sahu is a seasoned manufacturing strategist with 23+ years of experience in factory transformation and Lean practices. As the Founder-Director of TMS, he brings global expertise to Indian industries through innovative and sustainable manufacturing solutions.",
         highlights: [
             "Alumnus of IIM-Calcutta and NIT Rourkela",
             "Expert in Lean methods, Industry 4.0, and low-cost automation",

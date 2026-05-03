@@ -3,6 +3,7 @@
 import styles from "./style.module.css";
 import ContactForm from "@/components/ContactForm";
 import Layout from "@/components/layout/Layout";
+import StatsCounter from "@/components/elements/StatsCounter";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -234,6 +235,9 @@ export default function Page() {
                         />
                     </div></div>
       </div>
+   
+
+   <StatsCounter/>
     </Layout>
   );
 }

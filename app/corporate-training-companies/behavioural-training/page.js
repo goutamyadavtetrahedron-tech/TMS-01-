@@ -2,6 +2,7 @@
 
 import ContactForm from "@/components/ContactForm";
 import Layout from "@/components/layout/Layout";
+import StatsCounter from "@/components/elements/StatsCounter";
 import Image from "next/image";
 
 const signaturePrograms = [
@@ -258,6 +259,7 @@ export default function Page() {
                         />
                     </div></div>
       </div>
+       <StatsCounter/>
     </Layout>
   );
 }
