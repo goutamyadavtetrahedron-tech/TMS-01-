@@ -145,7 +145,7 @@ export default function Banner() {
                                             </h2>
                                             <div className="main-slider-two__btn-and-call-box">
                                                 <div className="main-slider-two__btn-box">
-                                                    <Link href="contact" className="main-slider-two__btn thm-btn">Read
+                                                    <Link href="/contact-us/" className="main-slider-two__btn thm-btn" style={{color: "#111827"}}>Read
                                                         more<span className="icon-dabble-arrow-right"></span></Link>
                                                 </div>
                                                 <div className="main-slider-two__call">
@@ -154,7 +154,7 @@ export default function Banner() {
                                                     </div>
                                                     <div className="main-slider-two__call-number">
                                                         <p>Need Help</p>
-                                                        <h5><Link href="tel:8984189814">(+91) 8984189814</Link></h5>
+                                                        <h3><Link href="tel:8984189814">(+91) 8984189814</Link></h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,7 +198,7 @@ export default function Banner() {
                                             </h2>
                                             <div className="main-slider-two__btn-and-call-box">
                                                 <div className="main-slider-two__btn-box">
-                                                    <Link href="contact" className="main-slider-two__btn thm-btn">Read
+                                                    <Link href="/contact-us/" className="main-slider-two__btn thm-btn" style={{color: "#111827"}}>Read
                                                         more<span className="icon-dabble-arrow-right"></span></Link>
                                                 </div>
                                                 <div className="main-slider-two__call">
@@ -207,7 +207,7 @@ export default function Banner() {
                                                     </div>
                                                     <div className="main-slider-two__call-number">
                                                         <p>Need Help</p>
-                                                        <h5><Link href="tel:8984189814">(+91) 8984189814</Link></h5>
+                                                        <h3><Link href="tel:8984189814">(+91) 8984189814</Link></h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,7 +243,7 @@ export default function Banner() {
                                             </h2>
                                             <div className="main-slider-two__btn-and-call-box">
                                                 <div className="main-slider-two__btn-box">
-                                                    <Link href="contact" className="main-slider-two__btn thm-btn">Read
+                                                    <Link href="/contact-us/" className="main-slider-two__btn thm-btn" style={{color: "#111827"}}>Read
                                                         more<span className="icon-dabble-arrow-right"></span></Link>
                                                 </div>
                                                 <div className="main-slider-two__call">
@@ -252,7 +252,7 @@ export default function Banner() {
                                                     </div>
                                                     <div className="main-slider-two__call-number">
                                                         <p>Need Help</p>
-                                                        <h5><Link href="tel:8984189814">(+91) 8984189814</Link></h5>
+                                                        <h3><Link href="tel:8984189814">(+91) 8984189814</Link></h3>
                                                     </div>
                                                 </div>
                                             </div>

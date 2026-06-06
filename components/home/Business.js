@@ -50,17 +50,17 @@ export default function Services2() {
                                     <img src={service.img} alt={service.title} />
                                 </div>
                                 <div className="services-four__content">
-                                    <h5 className="services-four__title"
+                                    <h3 className="services-four__title"
                                     ref={node=>{if(node) node.style.setProperty("line-height", "0.5", "important")}}>
                                         <Link href={service.link} style={{ lineHeight: "0.5" }}>{service.title}</Link>
-                                    </h5>
+                                    </h3>
                                     <p className="services-four__text">
                                         {expanded[index] ? service.fullText : `${service.text}`}
                                     </p>
                                     <button 
                                         className="services-four__btn"
                                         onClick={() => toggleReadMore(index)}
-                                        style={{ background: "none", border: "none", color: "#007bff", cursor: "pointer" }}
+                                        style={{ background: "none", border: "none", color: "#0056b3", cursor: "pointer", fontWeight: "600" }}
                                     >
                                         {expanded[index] ? "Read Less" : "Read More"}
                                     </button>

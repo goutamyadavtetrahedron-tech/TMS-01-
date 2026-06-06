@@ -53,19 +53,19 @@ export default function Success() {
                                     <div className="success-one__points-icon">
                                         <span className="icon-constructo-pro"></span>
                                     </div>
-                                    <p className="success-one__points-text"><Link href="about">Master Craft
+                                    <p className="success-one__points-text"><Link href="/about-us/">Master Craft
                                             Construction</Link></p>
                                 </li>
                                 <li>
                                     <div className="success-one__points-icon">
                                         <span className="icon-proconstruct"></span>
                                     </div>
-                                    <p className="success-one__points-text"><Link href="about">Quality Construction Co</Link>
+                                    <p className="success-one__points-text"><Link href="/about-us/">Quality Construction Co</Link>
                                     </p>
                                 </li>
                             </ul>
                             <div className="success-one__btn-box">
-                                <Link href="about" className="success-one__btn thm-btn">Read more<span
+                                <Link href="/about-us/" className="success-one__btn thm-btn">Read more<span
                                         className="icon-dabble-arrow-right"></span></Link>
                             </div>
                         </div>

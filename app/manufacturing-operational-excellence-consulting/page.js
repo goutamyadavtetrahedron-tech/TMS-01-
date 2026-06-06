@@ -5,6 +5,7 @@ import styles from "./Consulting.module.css";
 import { useState } from "react";
 import ContactFormModal from "@/components/ContactFormModal";
 import ContactForm from "@/components/ContactForm";
+import { CheckCircle } from "lucide-react";
 
 export default function ConsultingPage() {
   const [openFAQs, setOpenFAQs] = useState({}); // Object to track multiple open states
@@ -56,11 +57,11 @@ export default function ConsultingPage() {
               Reduce Manufacturing Cost & Increase Productivity
             </p>
             <ul className="text-white text-base lg:text-xl mt-[18px] list-none p-0">
-              <li>✅ Boost Profit Margins</li>
-              <li>✅ Optimize Resources</li>
-              <li>✅ Drive Innovation</li>
-              <li>✅ Enhance Quality</li>
-              <li>✅ Streamline Processes</li>
+              <li className="flex items-center gap-2 mb-2"><CheckCircle size={20} className="text-blue-400" /> <span>Boost Profit Margins</span></li>
+              <li className="flex items-center gap-2 mb-2"><CheckCircle size={20} className="text-blue-400" /> <span>Optimize Resources</span></li>
+              <li className="flex items-center gap-2 mb-2"><CheckCircle size={20} className="text-blue-400" /> <span>Drive Innovation</span></li>
+              <li className="flex items-center gap-2 mb-2"><CheckCircle size={20} className="text-blue-400" /> <span>Enhance Quality</span></li>
+              <li className="flex items-center gap-2 mb-2"><CheckCircle size={20} className="text-blue-400" /> <span>Streamline Processes</span></li>
             </ul>
 
             {/* Contact Button */}

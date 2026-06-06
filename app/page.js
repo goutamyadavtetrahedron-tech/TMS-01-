@@ -166,7 +166,7 @@ const submitButtonStyle = {
     width: "100%",
     padding: "12px",
     backgroundColor: "var(--elitecons-base)",
-    color: "#fff",
+    color: "#111827",
     border: "none",
     borderRadius: "8px",
     fontWeight: "bold",

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import ContactFormModal from "@/components/ContactFormModal";
+import { FaXTwitter } from "react-icons/fa6";
 
 const poppinsFont = {
   fontFamily: "Poppins, sans-serif !important"
@@ -67,21 +68,23 @@ export default function Footer() {
                       </Link>
                     </div>
                     <p className="footer-widget-two__about-text" ref={el => el && el.style.setProperty("font-size", "18px", "important")}>
-                      We believe in the best solution at the most competitive price. 
+                      We believe in the best solution at the most competitive price.
                     </p>
                     <div className="site-footer-two__social">
-                      <Link href="#" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                      <Link href="https://www.facebook.com/TetrahedronManufacturingServices" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                         <i className="icon-facebook"></i>
                       </Link>
-                      <Link href="#" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <i className="icon-twitter"></i>
+                      <Link href="https://www.instagram.com/tetrahedron_tms/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <i className="icon-instagram"></i>
                       </Link>
-                      <Link href="#" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                      <Link href="https://x.com/tetrahedrontms" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <FaXTwitter />
+                      </Link>
+
+                      <Link href="https://www.linkedin.com/company/tetrahedronmanufacturingservicesprivatelimited/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                         <i className="icon-link-in"></i>
                       </Link>
-                      <Link href="#" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <i className="icon-pinterest"></i>
-                      </Link>
+
                     </div>
                     <form className="footer-widget-two__about-form mc-form">
                       <div className="footer-widget-two__about-form-input-box">
@@ -114,35 +117,35 @@ export default function Footer() {
                     </div>
                     <ul className="footer-widget-two__service-list list-unstyled">
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="service-details" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           Consulting Services
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="service-details" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/corporate-training-companies/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           Corporate Training
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="service-details" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/automated-guided-vehicle-manufacturers/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           Automation
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="service-details" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           Sitemap
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="service-details" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           DMCA PROTECTED
@@ -162,34 +165,33 @@ export default function Footer() {
                     </div>
                     <ul className="footer-widget-two__service-list list-unstyled">
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span> Home
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="about" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/about-us/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span> About Us
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="contact" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/contact-us/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span> Contact Us
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="gallery" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/gallery/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span> Gallery
                         </Link>
                       </li>
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="resources" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/blog/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
-                          <span className="icon-angle-left"></span> Resources
-                          Services
+                          <span className="icon-angle-left"></span> Blog
                         </Link>
                       </li>
                     </ul>
@@ -230,10 +232,12 @@ export default function Footer() {
                         <div className="icon">
                           <span className="icon-arrow-up-2"></span>
                         </div>
-                        <div className="content">
+                        <div className="content" >
                           <p ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                            Main Office:- 204, Block A, Ecotech III, Noida,
-                            Khera Choganpur, Uttar Pradesh 201306, India
+                            <Link href="https://maps.app.goo.gl/U4G6MZNJ3Vvommwe7" ref={el => el && el.style.setProperty("font-size", "17px", "important")} target="_blank" rel="noopener noreferrer">
+                              Main Office:- 204, Block A, Ecotech III, Noida,
+                              Khera Choganpur, Uttar Pradesh 201306, India
+                            </Link>
                           </p>
                         </div>
                       </li>
@@ -265,13 +269,13 @@ export default function Footer() {
               </p>
               <ul className="list-unstyled site-footer-two__bottom-menu">
                 <li ref={el => el && el.style.setProperty("font-size", "15px", "important")}>
-                  <Link href="about" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Terms & Condition</Link>
+                  <Link href="/terms-of-service/" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Terms & Condition</Link>
                 </li>
                 <li ref={el => el && el.style.setProperty("font-size", "15px", "important")}>
-                  <Link href="about" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Privacy Policy</Link>
+                  <Link href="/privacy-policy/" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Privacy Policy</Link>
                 </li>
                 <li ref={el => el && el.style.setProperty("font-size", "15px", "important")}>
-                  <Link href="contact" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Contact Us</Link>
+                  <Link href="/contact-us/" ref={el => el && el.style.setProperty("font-size", "15px", "important")}>Contact Us</Link>
                 </li>
               </ul>
             </div>

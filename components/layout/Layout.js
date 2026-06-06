@@ -52,7 +52,7 @@ export default function Layout({ breadcrumbTitle, children, wrapperCls }) {
 
                 {breadcrumbTitle && <Breadcrumb breadcrumbTitle={breadcrumbTitle} />}
 
-                {children}
+                <main>{children}</main>
 
                < Footer1 />
             </div>

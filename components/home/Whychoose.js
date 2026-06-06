@@ -30,7 +30,7 @@ export default function Whychoose() {
                                         <span className="icon-engineer-2"></span>
                                     </div>
                                     <div className="why-choose-two__points-content">
-                                        <h5 className="why-choose-two__points-title"><Link href="about">BuildWise</Link></h5>
+                                        <h5 className="why-choose-two__points-title"><Link href="/about-us/">BuildWise</Link></h5>
                                         <p className="why-choose-two__points-text">Customer satisfaction is crucial for
                                             amohlodi <br/> business as it leads</p>
                                     </div>
@@ -40,7 +40,7 @@ export default function Whychoose() {
                                         <span className="icon-buildings"></span>
                                     </div>
                                     <div className="why-choose-two__points-content">
-                                        <h5 className="why-choose-two__points-title"><Link href="about">Buildings</Link></h5>
+                                        <h5 className="why-choose-two__points-title"><Link href="/about-us/">Buildings</Link></h5>
                                         <p className="why-choose-two__points-text">Customer satisfaction is crucial for
                                             amohlodi <br/> business as it leads</p>
                                     </div>

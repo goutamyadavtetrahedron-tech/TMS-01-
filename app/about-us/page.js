@@ -555,7 +555,7 @@ export default function About() {
                     </div>
                     <p className="faq-one__text">Here are answers to some of the most common questions we receive. If you have other questions, feel free to get in touch with our team.</p>
                     <div className="faq-one__btn-box">
-                      <Link href="/contact" className="faq-one__btn thm-btn">Learn more<span className="icon-dabble-arrow-right"></span></Link>
+                      <Link href="/contact-us/" className="faq-one__btn thm-btn">Learn more<span className="icon-dabble-arrow-right"></span></Link>
                     </div>
                   </div>
                 </div>

@@ -291,7 +291,7 @@ export default function Menu() {
           <Link href="/#" aria-haspopup="true">
             Skill Training
           </Link>
-          <ul role="menu">
+          <ul role="menu" style={{ left: "-70%", top: "100%", width: "70px" }}>
             <li>
               <Link href="/corporate-training-companies/">
                 Corporate Training Course In India

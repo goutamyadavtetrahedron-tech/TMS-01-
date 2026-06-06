@@ -168,7 +168,7 @@ export default function Testimonial() {
                             </div>
 
                             <div className="testimonial-two__client-content">
-                              <h4
+                              <h3
                                 className="testimonial-two__client-name"
                                 style={{
                                   margin: 0,
@@ -178,7 +178,7 @@ export default function Testimonial() {
                                 }}
                               >
                                 {item.name}
-                              </h4>
+                              </h3>
                               <p
                                 className="testimonial-two__client-sub-title"
                                 style={{

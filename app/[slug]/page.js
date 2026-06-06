@@ -553,7 +553,7 @@ export default function ServiceOrBlogPage({ params }) {
   //   }));
   // };
 
-  console.log("🚀 Component mounted with slug:", params.slug);
+  // console.log("🚀 Component mounted with slug:", params.slug);
 
   const dispatch = useDispatch();
   const currentBlog = useSelector(selectCurrentBlog);
@@ -577,41 +577,41 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Improved fallback logic
   const getFallbackData = (slug) => {
-    console.log("🔍 Checking fallback data for slug:", slug);
+    // console.log("🔍 Checking fallback data for slug:", slug);
 
     // Check blogPages first
     if (typeof blogPages !== "undefined" && blogPages[slug]) {
-      console.log("✅ Found in blogPages");
+      // console.log("✅ Found in blogPages");
       return { data: blogPages[slug], type: "blogPages" };
     }
 
     // Then consultingPages
     if (consultingPages && consultingPages[slug]) {
-      console.log("✅ Found in consultingPages");
+      // console.log("✅ Found in consultingPages");
       return { data: consultingPages[slug], type: "consultingPages" };
     }
 
     // Then skillTrainingData
     if (skillTrainingData && skillTrainingData[slug]) {
-      console.log("✅ Found in skillTrainingData");
+      // console.log("✅ Found in skillTrainingData");
       return { data: skillTrainingData[slug], type: "skillTrainingData" };
     }
 
-    console.log("❌ Not found in any fallback data");
+    // console.log("❌ Not found in any fallback data");
     return { data: null, type: "notFound" };
   };
 
   // Determine data source consistently
   const data = useMemo(() => {
-    console.log("🔄 Recalculating data with:", {
-      blogNotFound,
-      fallbackType,
-      slug: params.slug,
-    });
+    // console.log("🔄 Recalculating data with:", {
+    //   blogNotFound,
+    //   fallbackType,
+    //   slug: params.slug,
+    // });
 
     // If we have a current blog from Redux and no error, use it
     if (currentBlog && !blogNotFound && currentBlog.slug === params.slug) {
-      console.log("✅ Using currentBlog from Redux");
+      // console.log("✅ Using currentBlog from Redux");
       return currentBlog;
     }
 
@@ -644,8 +644,8 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Main useEffect for fetching blog data
   useEffect(() => {
-    console.log("🔄 useEffect triggered for slug:", params.slug);
-    console.log("🔄 Current isInitialized:", isInitialized);
+    // console.log("🔄 useEffect triggered for slug:", params.slug);
+    // console.log("🔄 Current isInitialized:", isInitialized);
 
     // Reset states for new slug
     setBlogNotFound(false);
@@ -653,13 +653,13 @@ export default function ServiceOrBlogPage({ params }) {
     setFallbackType(null);
 
     const fetchBlogData = async () => {
-      console.log("📡 Starting fetchBlogData for:", params.slug);
+      // console.log("📡 Starting fetchBlogData for:", params.slug);
 
       try {
         // Test the API endpoint directly first
-        console.log("🔍 Testing direct API call...");
+        // console.log("🔍 Testing direct API call...");
         const directFetch = await fetch(`/api/blogs/slug/${params.slug}`);
-        console.log("🔍 Direct fetch response status:", directFetch.status);
+        // console.log("🔍 Direct fetch response status:", directFetch.status);
 
         if (!directFetch.ok) {
           const errorText = await directFetch.text();
@@ -668,12 +668,12 @@ export default function ServiceOrBlogPage({ params }) {
         }
 
         const directResult = await directFetch.json();
-        console.log("✅ Direct fetch success:", directResult);
+        // console.log("✅ Direct fetch success:", directResult);
 
         // Now try the Redux dispatch
-        console.log("📡 Dispatching Redux action...");
+        // console.log("📡 Dispatching Redux action...");
         const result = await dispatch(fetchBlogBySlug(params.slug)).unwrap();
-        console.log("✅ Redux fetchBlogBySlug success:", result);
+        // console.log("✅ Redux fetchBlogBySlug success:", result);
 
         setBlogNotFound(false);
         setDebugInfo({
@@ -701,7 +701,7 @@ export default function ServiceOrBlogPage({ params }) {
 
         // If no fallback data found, trigger 404
         if (fallback.type === "notFound") {
-          console.log("❌ No fallback data found, will show 404");
+          // console.log("❌ No fallback data found, will show 404");
         }
       } finally {
         setIsInitialized(true);
@@ -709,7 +709,7 @@ export default function ServiceOrBlogPage({ params }) {
     };
 
     // Always fetch recent blogs for sidebar
-    console.log("📡 Dispatching fetchBlogs for recent blogs");
+    // console.log("📡 Dispatching fetchBlogs for recent blogs");
     dispatch(fetchBlogs({ limit: 10, status: "published" }));
 
     // Execute the main fetch
@@ -718,16 +718,16 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Separate useEffect for debugging
   useEffect(() => {
-    console.log("📊 Redux State Debug:");
-    console.log("  - currentBlog:", currentBlog);
-    console.log("  - allBlogs count:", allBlogs?.length || 0);
-    console.log("  - blogsLoading:", blogsLoading);
-    console.log("  - blogsError:", blogsError);
-    console.log("  - blogNotFound:", blogNotFound);
-    console.log("  - debugInfo:", debugInfo);
-    console.log("  - fallbackType:", fallbackType);
-    console.log("  - isInitialized:", isInitialized);
-    console.log("  - data:", data ? "Found" : "Not found");
+    // console.log("📊 Redux State Debug:");
+    // console.log("  - currentBlog:", currentBlog);
+    // console.log("  - allBlogs count:", allBlogs?.length || 0);
+    // console.log("  - blogsLoading:", blogsLoading);
+    // console.log("  - blogsError:", blogsError);
+    // console.log("  - blogNotFound:", blogNotFound);
+    // console.log("  - debugInfo:", debugInfo);
+    // console.log("  - fallbackType:", fallbackType);
+    // console.log("  - isInitialized:", isInitialized);
+    // console.log("  - data:", data ? "Found" : "Not found");
   }, [
     currentBlog,
     allBlogs,
@@ -763,7 +763,7 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Show 404 if no data found anywhere
   if (!data && fallbackType === "notFound") {
-    console.log("❌ Triggering 404 - no data found");
+    // console.log("❌ Triggering 404 - no data found");
     notFound();
     return null;
   }
@@ -831,7 +831,7 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Loading state
   if (blogsLoading && !blogNotFound) {
-    console.log("🔄 Rendering loading state");
+    // console.log("🔄 Rendering loading state");
     return (
       <Layout>
         <div
@@ -867,7 +867,7 @@ export default function ServiceOrBlogPage({ params }) {
         image: blog.image?.url,
       }));
 
-    console.log("✅ Rendering BlogDetails with currentBlog");
+    // console.log("✅ Rendering BlogDetails with currentBlog");
     return (
       <Layout>
         <BlogDetails blog={currentBlog} recentBlogs={recentBlogsData} />
@@ -882,7 +882,7 @@ export default function ServiceOrBlogPage({ params }) {
     typeof blogPages !== "undefined" &&
     blogPages[params.slug]
   ) {
-    console.log("📝 Using static fallback for:", params.slug);
+    // console.log("📝 Using static fallback for:", params.slug);
     return (
       <Layout>
         <BlogDetails blog={blogPages[params.slug]} recentBlogs={recentBlogs} />
@@ -918,7 +918,7 @@ export default function ServiceOrBlogPage({ params }) {
   // If no data found at all, return not found
   if (!data) return notFound();
 
-  console.log(data.img, "this is new data");
+  // console.log(data.img, "this is new data");
 
   return (
     <Layout>
@@ -990,7 +990,7 @@ export default function ServiceOrBlogPage({ params }) {
               {isNonEmptyArray(data.heroFeaturesList) && (
                 <ul className="text-white text-base lg:text-xl mt-[18px] list-none p-0">
                   {data.heroFeaturesList.map((feature, idx) => (
-                    <li key={idx}>✅ {feature}</li>
+                    <li key={idx} className="flex items-center gap-2 mb-2"><Icons.CheckCircle size={20} className="text-blue-400" /> <span>{feature}</span></li>
                   ))}
                 </ul>
               )}

@@ -48,10 +48,10 @@ export default function Header({
               />
               <img
                 src="/assets/images/logocertified.jpeg"
-                alt="Logo"
+                alt="Certified Logo"
                 style={{
                   width: "70px",
-                  height: "60px",
+                  height: "auto",
                   minHeight: "73px",
                   minWidth: "80px",
                 }}
@@ -151,6 +151,7 @@ export default function Header({
                       style={{ height: "24px" }}
                     >
                       <Link
+                        aria-label="Facebook"
                         href="https://www.facebook.com/TetrahedronManufacturingServices"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -158,6 +159,7 @@ export default function Header({
                         <i className="icon-facebook"></i>
                       </Link>
                       <Link
+                        aria-label="Instagram"
                         href="https://www.instagram.com/tetrahedron_tms/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -165,13 +167,15 @@ export default function Header({
                         <i className="icon-instagram"></i>
                       </Link>
                       <Link
-                        href="https://x.com/Tetrahe35782523"
+                        aria-label="Twitter / X"
+                        href="https://x.com/tetrahedrontms"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <i className="icon-Frame"></i>
                       </Link>
                       <Link
+                        aria-label="LinkedIn"
                         href="https://www.linkedin.com/company/tetrahedronmanufacturingservicesprivatelimited/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -205,6 +209,7 @@ export default function Header({
                   >
                     {/* Mobile menu trigger button: only visible below md */}
                     <button
+                      aria-label="Toggle navigation"
                       className="mobile-nav__toggler mobile-nav__toggler-menu mobile-menu-trigger-md-down"
                       onClick={(e) => {
                         e.preventDefault();
@@ -225,8 +230,8 @@ export default function Header({
                         padding: "8px 12px",
                         borderRadius: "4px",
                         zIndex: 9999,
-                        minWidth: "40px",
-                        minHeight: "40px",
+                        minWidth: "48px",
+                        minHeight: "48px",
                       }}
                     >
                       <i className="fa fa-bars"></i>
@@ -250,7 +255,7 @@ export default function Header({
                     <button
                       onClick={() => openContactModal("Quick Support")}
                       className="main-menu-two__btn thm-btn"
-                      style={{ backgroundColor: "#ffc001" }}
+                      style={{ backgroundColor: "#ffc001", color: "#111827" }}
                       ref={(node) => {
                         if (node)
                           node.style.setProperty(
