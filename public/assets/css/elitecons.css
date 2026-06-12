@@ -16212,10 +16212,13 @@ ul {
   display: block;
   overflow: hidden;
   background-color: #090909;
+  aspect-ratio: 696 / 393;
 }
 
 .gallery-page__img img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .gallery-page__icon {
@@ -16266,8 +16269,9 @@ ul {
 }
 
 .gallery-page .masonary-layout {
-  columns: 4;
-  column-gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 @keyframes marquee {

@@ -87,7 +87,7 @@ export default function Home() {
                           Main Office
                         </h3>
                         <p style={{ fontFamily: "var(--font-poppins)" }}>
-                          204, Block A, Ecotech III, Noida, Khera Choganpur,{" "}
+                          204, Block A, Ecotech III, Greater Noida,{" "}
                           <br /> Uttar Pradesh 201306, India
                           <br />
                         </p>

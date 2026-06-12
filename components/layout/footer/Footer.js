@@ -117,7 +117,7 @@ export default function Footer() {
                     </div>
                     <ul className="footer-widget-two__service-list list-unstyled">
                       <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                        <Link href="/manufacturing-operational-excellence-consulting/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           Consulting Services
@@ -144,13 +144,13 @@ export default function Footer() {
                           Sitemap
                         </Link>
                       </li>
-                      <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
+                      {/* <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                         <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}
                           <span className="icon-angle-left"></span>
                           DMCA PROTECTED
                         </Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>
@@ -235,8 +235,8 @@ export default function Footer() {
                         <div className="content" >
                           <p ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                             <Link href="https://maps.app.goo.gl/U4G6MZNJ3Vvommwe7" ref={el => el && el.style.setProperty("font-size", "17px", "important")} target="_blank" rel="noopener noreferrer">
-                              Main Office:- 204, Block A, Ecotech III, Noida,
-                              Khera Choganpur, Uttar Pradesh 201306, India
+                              Main Office:- 204, Block A, Ecotech III, Greater Noida,
+                              Uttar Pradesh 201306, India
                             </Link>
                           </p>
                         </div>

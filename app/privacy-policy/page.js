@@ -53,7 +53,7 @@ export default function PrivacyPolicyPage() {
 
                                 <h3 className="text-lg font-semibold mb-3 mt-6 text-gray-800" style={{ fontFamily: "var(--font-poppins)" }}>How do I withdraw my consent?</h3>
                                 <p className="mb-4 text-gray-700" style={{ fontFamily: "var(--font-poppins)" }}>
-                                    If after you opt-in, you change your mind, you may withdraw your consent for us to contact you, or for the continued collection, use, or disclosure of your information, at any time, by contacting us at <a href="mailto:marketing@tetrahedron.in" className="text-blue-500 hover:underline" style={{ fontFamily: "var(--font-poppins)" }}>marketing@tetrahedron.in</a> or mailing us at Main Office: 204, Block A, Ecotech III, Noida, Khera Choganpur, Uttar Pradesh 201306, India.
+                                    If after you opt-in, you change your mind, you may withdraw your consent for us to contact you, or for the continued collection, use, or disclosure of your information, at any time, by contacting us at <a href="mailto:marketing@tetrahedron.in" className="text-blue-500 hover:underline" style={{ fontFamily: "var(--font-poppins)" }}>marketing@tetrahedron.in</a> or mailing us at Main Office: 204, Block A, Ecotech III, Greater Noida, Uttar Pradesh 201306, India.
                                 </p>
                             </div>
                         </div>
@@ -170,7 +170,7 @@ export default function PrivacyPolicyPage() {
                             </div>
                             <div className="px-6 py-4 bg-white" style={{ fontFamily: "var(--font-poppins)" }}>
                                 <p className="mb-6 text-gray-700" style={{ textAlign: 'left', fontFamily: "var(--font-poppins)" }}>
-                                    If you would like to access, correct, amend, or delete any personal information we have about you, register a complaint, or simply want more information, contact our Privacy Compliance Officer at <a href="mailto:marketing@tetrahedron.in" className="text-blue-500 hover:underline" style={{ fontFamily: "var(--font-poppins)" }}>marketing@tetrahedron.in</a> or mail us at Main Office: 204, Block A, Ecotech III, Noida, Khera Choganpur, Uttar Pradesh 201306, India.
+                                    If you would like to access, correct, amend, or delete any personal information we have about you, register a complaint, or simply want more information, contact our Privacy Compliance Officer at <a href="mailto:marketing@tetrahedron.in" className="text-blue-500 hover:underline" style={{ fontFamily: "var(--font-poppins)" }}>marketing@tetrahedron.in</a> or mail us at Main Office: 204, Block A, Ecotech III, Greater Noida, Uttar Pradesh 201306, India.
                                 </p>
                                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4" style={{ textAlign: 'left', fontFamily: "var(--font-poppins)" }}>
                                     <div className="flex" style={{ fontFamily: "var(--font-poppins)" }}>
