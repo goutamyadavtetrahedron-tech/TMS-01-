@@ -1,0 +1,199 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #0f172a;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  --accent-red: #b40300;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 2rem 3rem 2rem;
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.contentLeft {
+  flex: 1;
+}
+
+.mainTitle {
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.highlightText {
+  color: var(--accent-red);
+}
+
+.subtitleLine {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+  display: inline-block;
+  border-bottom: 3px solid var(--accent-red);
+  padding-bottom: 5px;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+
+.featuresList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.featureItem {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.iconCircle {
+  min-width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.featureText h4 {
+  font-weight: 700;
+  color: var(--accent-red);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.featureText p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.imageContainer {
+  flex: 1.2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carImage {
+  width: 100%;
+  border-radius: 12px;
+  max-width: 800px;
+  object-fit: contain;
+}
+
+.loadBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--accent-red);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+}
+
+.loadText {
+  display: flex;
+  flex-direction: column;
+}
+
+.loadLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.loadValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.bottomBar {
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.statIcon {
+  color: var(--accent-red);
+  margin-bottom: 0.5rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.statValue {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .imageContainer {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  .loadBadge {
+    right: auto;
+    left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 3.5rem;
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}

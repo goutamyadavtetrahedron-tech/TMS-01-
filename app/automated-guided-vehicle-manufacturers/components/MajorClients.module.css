@@ -1,0 +1,40 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  padding: 5rem 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #020617;
+  margin-bottom: 4rem;
+}
+
+.imageContainer {
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.clientsImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+}

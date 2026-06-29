@@ -1,0 +1,151 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  padding: 5rem 2rem;
+  position: relative;
+  --accent-blue: #2563EB;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #020617;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.faqSection {
+  margin-bottom: 5rem;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+}
+
+.faqItem {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.faqItem:first-child {
+  border-top: 1px solid #e2e8f0;
+}
+
+.faqHeader {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 1.5rem 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.faqHeader:hover .faqQuestion {
+  color: var(--accent-blue);
+}
+
+.icon {
+  color: var(--accent-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.faqQuestion {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.faqBody {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 0 0 0 35px;
+}
+
+.faqBody.open {
+  max-height: 500px;
+  padding: 0 0 1.5rem 35px;
+}
+
+.relatedSection {
+  margin-top: 2rem;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.postCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.postImageWrapper {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background-color: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.postTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.scrollTopBtn {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  background-color: var(--accent-blue);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.scrollTopBtn:hover {
+  transform: translateY(-5px);
+}
+
+@media (max-width: 1024px) {
+  .relatedGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .mainTitle { font-size: 2rem; }
+  .relatedGrid { grid-template-columns: 1fr; }
+}

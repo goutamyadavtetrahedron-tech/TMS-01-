@@ -1,0 +1,205 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  padding: 5rem 2rem;
+  --accent-yellow: #FFC107;
+  --dark-blue: #020617;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.mainTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--dark-blue);
+  text-transform: uppercase;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.line {
+  height: 2px;
+  width: 100px;
+  background-color: #cbd5e1;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-yellow);
+  border-radius: 50%;
+}
+
+.subtext {
+  font-size: 2rem !important;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.solutionCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.solutionCard:hover {
+  transform: translateY(-10px);
+}
+
+.cardImageWrapper {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background-color: #f1f5f9;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardContent {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.typeBadge {
+  background-color: var(--accent-yellow);
+  color: var(--dark-blue);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.titleArea h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--dark-blue);
+  margin-bottom: 0.2rem;
+}
+
+.titleArea span {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.cardDesc {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  min-height: 70px;
+}
+
+.cardFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.featItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.featIcon {
+  color: var(--dark-blue);
+  background-color: var(--accent-yellow);
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.featText h5 {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--dark-blue);
+  margin-bottom: 0.2rem;
+}
+
+.featText p {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.loadBadge {
+  background-color: var(--dark-blue);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.loadValue {
+  color: var(--accent-yellow);
+  font-weight: 800;
+}
+
+@media (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 2rem;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+}

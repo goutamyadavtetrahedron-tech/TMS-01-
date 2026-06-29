@@ -1,0 +1,90 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  padding: 5rem 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: right;
+  margin-bottom: 3rem;
+}
+
+.mainTitle {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.imageWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.diagramImage {
+  width: 100%;
+  max-width: 1200px;
+  object-fit: contain;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.stepCard {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #EF4444; /* matching the red theme of the cars */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.stepTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
+}
+
+.stepIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #EF4444;
+}
+
+.stepTitle {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.stepDesc {
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .stepsGrid { grid-template-columns: repeat(2, 1fr); }
+  .header { text-align: center; }
+}
+
+@media (max-width: 768px) {
+  .mainTitle { font-size: 3rem; }
+  .stepsGrid { grid-template-columns: 1fr; }
+}

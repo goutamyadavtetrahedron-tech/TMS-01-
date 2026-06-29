@@ -1,0 +1,390 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  --accent-yellow: #FFC107;
+  --dark-blue: #020617;
+}
+
+.topSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 2rem 3rem 2rem;
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.topContent {
+  flex: 1.1;
+}
+
+.advLabel {
+  font-weight: 700;
+  color: #334155;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.mainTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.brandTitle {
+  font-size: 2.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.highlightText {
+  color: var(--accent-yellow);
+}
+
+.subText {
+  font-size: 1.2rem !important;
+  color: #1e293b !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.loadCapacityBox {
+  display: inline-block;
+}
+
+.loadBadge {
+  background-color: var(--dark-blue);
+  color: var(--accent-yellow);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.loadText {
+  display: flex;
+  flex-direction: column;
+}
+
+.loadLabel {
+  font-size: 0.75rem;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.loadValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.topImageContainer {
+  flex: 0.9;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rgvImage {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.featuresListRight {
+  position: absolute;
+  top: 83%;
+  left: -80px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.featItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--dark-blue);
+}
+
+.iconCheck {
+  color: var(--accent-yellow);
+}
+
+.advantagesSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem 2rem;
+}
+
+.advantagesHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+}
+
+.headerLine {
+  height: 2px;
+  width: 150px;
+  background-color: var(--accent-yellow);
+}
+
+.headerTitle {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  color: var(--dark-blue);
+}
+
+.advantagesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem 1.5rem;
+}
+
+.advCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.advIconWrapper {
+  color: var(--accent-yellow);
+  background-color: var(--dark-blue);
+  min-width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.2);
+}
+
+.advContent h4 {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--dark-blue);
+}
+
+.advContent p {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.bottomBar {
+  background-color: var(--dark-blue);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.bottomLeft {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  z-index: 2;
+  flex: 1;
+}
+
+.bottomIdealFor {
+  color: var(--accent-yellow);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  margin-right: 2rem;
+  white-space: nowrap;
+}
+
+.arrows {
+  letter-spacing: -2px;
+}
+
+.bottomIndustries {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+}
+
+.indItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.indIcon {
+  color: white;
+  min-width: 24px;
+}
+
+.indText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+.indDivider {
+  height: 40px;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.bottomRightSlogan {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1rem 3rem 1rem 6rem;
+  margin-left: auto;
+}
+
+.sloganBg {
+  position: absolute;
+  top: 0;
+  right: -50px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--accent-yellow);
+  transform: skewX(-20deg);
+  transform-origin: bottom left;
+  border-left: 6px solid white;
+  z-index: 1;
+}
+
+.sloganContent {
+  position: relative;
+  z-index: 2;
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: var(--dark-blue);
+  text-align: left;
+}
+
+.sloganArrows {
+  letter-spacing: -2px;
+}
+
+@media (max-width: 1200px) {
+  .advantagesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .bottomLeft {
+    width: 100%;
+    overflow-x: auto;
+    padding: 1rem 1.5rem;
+  }
+
+  .bottomRightSlogan {
+    width: 100%;
+    margin-left: 0;
+    padding: 1.5rem 2rem 1.5rem 4rem;
+    justify-content: flex-start;
+  }
+
+  .sloganBg {
+    left: 20px;
+    right: -20px;
+    transform: skewX(-15deg);
+  }
+}
+
+@media (max-width: 992px) {
+  .topSection {
+    flex-direction: column;
+  }
+
+  .featuresListRight {
+    position: relative;
+    left: 0;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: -20px;
+    z-index: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+
+  .subText {
+    font-size: 0.875rem !important;
+  }
+
+  .mainTitle {
+    font-size: 3rem;
+  }
+
+  .advantagesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bottomLeft {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bottomIdealFor {
+    font-size: 0.9rem;
+    margin-right: 0;
+    margin-bottom: 0.8rem;
+  }
+
+  .bottomIndustries {
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .indDivider {
+    display: none;
+  }
+
+  .indIcon {
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .indText {
+    font-size: 0.65rem;
+  }
+}

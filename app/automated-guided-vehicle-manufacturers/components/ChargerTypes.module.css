@@ -1,0 +1,122 @@
+.sectionWrapper {
+  width: 100%;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  padding: 5rem 2rem;
+  --accent-yellow: #FFC107;
+  --dark-blue: #0f172a;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--dark-blue);
+  text-transform: uppercase;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.line {
+  height: 2px;
+  width: 80px;
+  background-color: var(--accent-yellow);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-yellow);
+  border-radius: 50%;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.chargerCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.chargerCard:hover {
+  transform: translateY(-5px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--accent-yellow);
+  padding-bottom: 1rem;
+}
+
+.iconCircle {
+  background-color: var(--accent-yellow);
+  color: var(--dark-blue);
+  min-width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--dark-blue);
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.chargerImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cardDesc {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .cardsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .mainTitle { font-size: 2rem; }
+  .cardsGrid { grid-template-columns: 1fr; }
+}
