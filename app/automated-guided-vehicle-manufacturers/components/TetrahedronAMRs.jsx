@@ -35,11 +35,11 @@ export default function TetrahedronAMRs() {
             <span>TMS Heavy-Duty</span><br />
             <span className={`${styles.brandTitle} ${styles.highlightText}`}>AMRs</span>
           </h2>
-          
+
           <p className={`${styles.subText} wow animate__animated animate__fadeInLeft`} data-wow-delay="0.2s">
-            INTELLIGENT. AUTONOMOUS. RELIABLE.<br />
-            SMARTER WAY TO MOVE.<br />
-            STRONGER OPERATIONS.
+            Intelligent. Autonomous. Reliable.<br />
+            Smarter way to move.<br />
+            Stronger operations.
           </p>
 
           <div className={styles.topFeaturesGrid}>
