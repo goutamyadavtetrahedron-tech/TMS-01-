@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "./SolutionsForEveryMove.module.css";
 import {
   GitMerge, Package, ShieldCheck,
   Wifi, Crosshair, RefreshCcw,
   TrainTrack, Target, Settings,
-  Weight
+  Weight, X
 } from "lucide-react";
 
 export default function SolutionsForEveryMove() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const solutions = [
     {
       type: "AGV",
@@ -71,8 +73,9 @@ export default function SolutionsForEveryMove() {
             <div key={index} className={`${styles.solutionCard} wow animate__animated animate__fadeInUp`} data-wow-delay={`${0.1 * index}s`}>
               <div className={styles.cardImageWrapper}>
                 <img src={sol.image}
-                  onError={(e) => { e.target.src = `https://placehold.co/400x250?text=${sol.type}`; }}
-                  alt={sol.name} className={styles.cardImage} />
+                  onError={(e) => { e.target.src = `https://placehold.co/400x350?text=${sol.type}`; }}
+                  alt={sol.name} className={styles.cardImage} 
+                  onClick={() => setSelectedImage(sol.image)} />
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
@@ -106,6 +109,15 @@ export default function SolutionsForEveryMove() {
           ))}
         </div>
       </div>
+
+      {selectedImage && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedImage(null)}>
+          <button className={styles.closeBtn} onClick={() => setSelectedImage(null)}>
+            <X size={24} />
+          </button>
+          <img src={selectedImage} alt="Large view" className={styles.modalImage} onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
     </section>
   );
 }
