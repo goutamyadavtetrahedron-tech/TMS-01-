@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
-import ContactFormModal from "@/components/ContactFormModal";
+import JobApplicationModal from "@/components/JobApplicationModal";
 
 export default function CareerPage() {
     const [selectedOption, setSelectedOption] = useState("job");
@@ -32,7 +32,8 @@ export default function CareerPage() {
     ];
     const internshipData = [
         { title: "Digital Marketing Intern", description: "Assist with SEO, performance marketing campaigns, and social media management." },
-        { title: "Graphic Designer Intern", description: "Create compelling visual concepts, assist with marketing materials, and support brand design initiatives." }
+        { title: "Graphic Designer Intern", description: "Create compelling visual concepts, assist with marketing materials, and support brand design initiatives." },
+        { title: "ROS Engineer (Robotics)", description: "Build and optimize ROS-based control systems for robotic automation." }
     ];
 
     return (
@@ -108,94 +109,170 @@ export default function CareerPage() {
         </div>
 
         {/* Open Positions Section */}
-        <div className="container text-center" style={{fontFamily:"var(--font-poppins)"}}>
-          <h3 style={{ marginTop: "40px", fontSize: "30px", fontFamily:"var(--font-poppins)" }}>
+        <div className="container text-center" style={{ fontFamily: "var(--font-poppins)", padding: "60px 20px" }}>
+          <p style={{ color: "#ff6600", fontWeight: 600, fontSize: "14px", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "8px" }}>We&apos;re Hiring</p>
+          <h3 style={{ fontSize: "32px", fontWeight: 700, color: "#1a1a2e", fontFamily: "var(--font-poppins)", marginBottom: "8px" }}>
             Open Positions
           </h3>
+          <p style={{ color: "#666", fontSize: "15px", maxWidth: "500px", margin: "0 auto 36px" }}>
+            Join our team and build something remarkable. Explore roles that match your passion.
+          </p>
 
-          {/* Toggle Buttons */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "20px",
-              margin: "20px 0",
-            }}
-          >
+          {/* Toggle Pills */}
+          <div style={{
+            display: "inline-flex",
+            background: "#f1f1f1",
+            borderRadius: "50px",
+            padding: "5px",
+            gap: "4px",
+            marginBottom: "48px",
+          }}>
             <button
               onClick={() => setSelectedOption("job")}
               style={{
-                padding: "10px 20px",
-                fontSize: "18px",
+                padding: "10px 32px",
+                fontSize: "15px",
+                fontWeight: 600,
                 cursor: "pointer",
-                backgroundColor:
-                  selectedOption === "job" ? "#ff6600" : "#f0f0f0",
-                color: selectedOption === "job" ? "#fff" : "#000",
+                backgroundColor: selectedOption === "job" ? "#ff6600" : "transparent",
+                color: selectedOption === "job" ? "#fff" : "#555",
                 border: "none",
-                borderRadius: "5px",
+                borderRadius: "50px",
+                transition: "all 0.3s ease",
+                fontFamily: "var(--font-poppins)",
+                boxShadow: selectedOption === "job" ? "0 4px 12px rgba(255,102,0,0.35)" : "none",
               }}
             >
-              Job
+              💼 Jobs
             </button>
-
             <button
               onClick={() => setSelectedOption("internship")}
               style={{
-                padding: "10px 20px",
-                fontSize: "18px",
+                padding: "10px 32px",
+                fontSize: "15px",
+                fontWeight: 600,
                 cursor: "pointer",
-                backgroundColor:
-                  selectedOption === "internship" ? "#ff6600" : "#f0f0f0",
-                color: selectedOption === "internship" ? "#fff" : "#000",
+                backgroundColor: selectedOption === "internship" ? "#ff6600" : "transparent",
+                color: selectedOption === "internship" ? "#fff" : "#555",
                 border: "none",
-                borderRadius: "5px",
+                borderRadius: "50px",
+                transition: "all 0.3s ease",
+                fontFamily: "var(--font-poppins)",
+                boxShadow: selectedOption === "internship" ? "0 4px 12px rgba(255,102,0,0.35)" : "none",
               }}
             >
-              Internship
+              🎓 Internships
             </button>
           </div>
 
-          {/* Job & Internship Details */}
-          <div className="row career-card-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch', gap: '24px', width: '100%' }}>
+          {/* Job & Internship Cards */}
+          <div className="career-card-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch', gap: '24px', width: '100%' }}>
             {(selectedOption === "job" ? jobData : internshipData).map(
               (item, index) => (
                 <div
                   key={index}
-                  className="col-md-6 col-sm-12"
-                  style={{ marginBottom: "20px", display: 'flex', justifyContent: 'center', width: '100%', flex: '1 1 320px', maxWidth: '480px' }}
+                  className="career-card-wrapper"
+                  style={{ display: 'flex', flex: '1 1 280px', maxWidth: '340px' }}
                 >
                   <div
-                    className="services-four__single career-card"
+                    className="career-card"
                     style={{
-                      padding: "20px",
-                      border: "1px solid #ddd",
-                      borderRadius: "10px",
+                      background: '#fff',
+                      borderRadius: "16px",
+                      border: "1px solid #eeeeee",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
                       width: '100%',
-                      margin: '0 auto',
                       display: 'flex',
                       flexDirection: 'column',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       boxSizing: 'border-box',
-                      background: '#fff',
+                      overflow: 'hidden',
+                      transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                      cursor: 'default',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.transform = 'translateY(-6px)';
+                      e.currentTarget.style.boxShadow = '0 12px 32px rgba(255,102,0,0.15)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)';
                     }}
                   >
-                    <h5 style={{ textAlign: 'center', width: '100%', fontFamily:"var(--font-poppins)"}}>{item.title}</h5>
-                    <p style={{ textAlign: 'center', width: '100%', fontFamily:"var(--font-poppins)" }}>{item.description}</p>
-                    <button
-                      style={{
-                        padding: "8px 15px",
-                        backgroundColor: "#ff6600",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        margin: '0 auto',
-                        display: 'block',
-                      }}
-                      onClick={() => openModal(item.title)}
-                    >
-                      View Details
-                    </button>
+                    {/* Top accent bar */}
+                    <div style={{ width: '100%', height: '5px', background: 'linear-gradient(90deg, #ff6600, #ff9900)' }} />
+
+                    <div style={{ padding: "24px", display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, width: '100%', boxSizing: 'border-box' }}>
+                      {/* Badge */}
+                      <span style={{
+                        display: 'inline-block',
+                        background: 'rgba(255,102,0,0.1)',
+                        color: '#ff6600',
+                        borderRadius: '20px',
+                        padding: '3px 12px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase',
+                        marginBottom: '14px',
+                      }}>
+                        {selectedOption === "job" ? "Full Time" : "Internship"}
+                      </span>
+
+                      {/* Title */}
+                      <h5 style={{
+                        textAlign: 'left',
+                        width: '100%',
+                        fontFamily: "var(--font-poppins)",
+                        fontSize: '17px',
+                        fontWeight: 700,
+                        color: '#1a1a2e',
+                        margin: '0 0 10px 0',
+                        lineHeight: 1.35,
+                      }}>{item.title}</h5>
+
+                      {/* Description */}
+                      <p style={{
+                        textAlign: 'left',
+                        width: '100%',
+                        fontFamily: "var(--font-poppins)",
+                        fontSize: '13.5px',
+                        color: '#666',
+                        lineHeight: 1.6,
+                        flexGrow: 1,
+                        margin: '0 0 24px 0',
+                      }}>{item.description}</p>
+
+                      {/* Apply Button */}
+                      <button
+                        style={{
+                          padding: "10px 24px",
+                          background: "linear-gradient(135deg, #ff6600, #ff9900)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          fontFamily: "var(--font-poppins)",
+                          letterSpacing: '0.5px',
+                          boxShadow: '0 4px 12px rgba(255,102,0,0.3)',
+                          transition: 'opacity 0.2s ease, transform 0.2s ease',
+                          width: '100%',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.opacity = '0.9';
+                          e.currentTarget.style.transform = 'scale(1.02)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.opacity = '1';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                        onClick={() => openModal(item.title)}
+                      >
+                        Apply Now →
+                      </button>
+                    </div>
                   </div>
                 </div>
               )
@@ -207,14 +284,14 @@ export default function CareerPage() {
                 flex-direction: column !important;
                 gap: 16px !important;
               }
-              .career-card {
-                min-width: 0 !important;
+              .career-card-wrapper {
                 max-width: 100% !important;
-                width: 100% !important;
+                flex: 1 1 100% !important;
               }
             }
           `}</style>
         </div>
+
 
         {/* TMS Work Culture Section */}
         <div
@@ -421,7 +498,7 @@ export default function CareerPage() {
           </div>
         </div>
 
-        <ContactFormModal
+        <JobApplicationModal
           open={isModalOpen}
           onClose={closeModal}
           buttonText={modalButtonText}
