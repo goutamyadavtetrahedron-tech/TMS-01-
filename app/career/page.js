@@ -25,11 +25,14 @@ export default function CareerPage() {
     ];
 
     const jobData = [
-        { title: "Business Development Executive | Interns", description: "Business Development Intern" }
+        { title: "Business Development Executive", description: "Drive growth by identifying new business opportunities, building client relationships, and closing deals." },
+        { title: "Senior HR (Human Resources)", description: "Lead recruitment, employee relations, and organizational development to foster a positive workplace culture." },
+        { title: "Manager", description: "Oversee daily operations, manage team performance, and ensure strategic goals are met efficiently." },
+        { title: "Lean Layout Consultant", description: "Optimize facility layouts, improve process flow, and implement lean manufacturing principles." }
     ];
     const internshipData = [
-        { title: "Business Development Executive", description: "General Roles and Responsibilities of Business Development Trainee / Executive" },
-        { title: "ROS Engineer (Robotics)", description: "Responsible for engineering solutions to automation problems" }
+        { title: "Digital Marketing Intern", description: "Assist with SEO, performance marketing campaigns, and social media management." },
+        { title: "Graphic Designer Intern", description: "Create compelling visual concepts, assist with marketing materials, and support brand design initiatives." }
     ];
 
     return (
