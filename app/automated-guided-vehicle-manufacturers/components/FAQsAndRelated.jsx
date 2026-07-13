@@ -67,12 +67,44 @@ export default function FAQsAndRelated() {
           </h2>
 
           <div className={styles.relatedGrid}>
+            {/* 
             {relatedPosts.map((post, index) => (
               <Link href={`/${post.slug || post._id}`} key={post._id || index} className={`${styles.postCard} wow animate__animated animate__fadeInUp`} data-wow-delay={`${0.1 * index}s`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className={styles.postImageWrapper}>
                   <img src={post.image?.url || '/assets/images/blog/default-blog.jpg'}
                     onError={(e) => { e.target.src = `https://placehold.co/300x200?text=${post.title.split(' ').join('+')}`; }}
                     alt={post.title} className={styles.postImage} />
+                </div>
+                <div className={styles.postTitle}>{post.title}</div>
+              </Link>
+            ))}
+            */}
+
+            {[
+              {
+                url: "https://www.tetrahedron.in/advantages-disadvantages-automated-guided-vehicles-agv",
+                title: "Advantages & Disadvantages of Automated Guided vehicles",
+                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/v1774523179/blog_uploads/bdudlnphleg1hooqzqwv.jpg"
+              },
+              {
+                url: "https://www.tetrahedron.in/agv-forklifts-types-guidance-systems-uses",
+                title: "AGV Forklifts: Types, Guidance Systems, Uses, and Benefits",
+                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/v1776076463/blog_uploads/gfxpoomijmxxnqn5xmtr.jpg"
+              },
+              {
+                url: "https://www.tetrahedron.in/autonomous-mobile-robot-amr-meaning-types",
+                title: "Autonomous Mobile Robot (AMR) Meaning & Types",
+                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/v1773213503/blog_uploads/afisjzpxgdwqetyexhpt.png"
+              },
+              {
+                url: "https://www.tetrahedron.in/agv-manufacturers-in-india",
+                title: "AGV Manufacturers in India – Automatic Guided Vehicles Transforming Manufacturing",
+                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/e_trim/v1771837790/blog_uploads/wb9iovkzud5vvcgy6b8l.png"
+              }
+            ].map((post, index) => (
+              <Link href={post.url} key={index} className={`${styles.postCard} wow animate__animated animate__fadeInUp`} data-wow-delay={`${0.1 * index}s`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className={styles.postImageWrapper}>
+                  <img src={post.image} alt={post.title} className={styles.postImage} />
                 </div>
                 <div className={styles.postTitle}>{post.title}</div>
               </Link>
