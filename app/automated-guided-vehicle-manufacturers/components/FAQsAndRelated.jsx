@@ -99,7 +99,7 @@ export default function FAQsAndRelated() {
               {
                 url: "https://www.tetrahedron.in/agv-manufacturers-in-india",
                 title: "AGV Manufacturers in India – Automatic Guided Vehicles Transforming Manufacturing",
-                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/e_trim/v1771837790/blog_uploads/wb9iovkzud5vvcgy6b8l.png"
+                image: "https://res.cloudinary.com/dn8xrw47u/image/upload/e_trim,c_fill,ar_16:9,g_south/v1783922124/blog_uploads/hrxfft0tnn0fsglrrhs2.png"
               }
             ].map((post, index) => (
               <Link href={post.url} key={index} className={`${styles.postCard} wow animate__animated animate__fadeInUp`} data-wow-delay={`${0.1 * index}s`} style={{ textDecoration: 'none', color: 'inherit' }}>
