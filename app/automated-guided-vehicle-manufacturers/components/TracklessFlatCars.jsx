@@ -11,7 +11,9 @@ import {
   BatteryFull, 
   Settings, 
   Move, 
-  Gamepad2
+  Gamepad2,
+  Sparkle,
+  Sparkles
 } from "lucide-react";
 
 export default function TracklessFlatCars() {
@@ -63,6 +65,23 @@ export default function TracklessFlatCars() {
            <img src="/assets/images/amr-agv-rgv/trackless-flat-car.png" 
                 onError={(e) => { e.target.src = "https://placehold.co/800x400?text=Trackless+Flat+Car"; }}
                 alt="Trackless Flat Car" className={styles.carImage} />
+
+           <div className={`${styles.priceTagRed} wow animate__animated animate__zoomIn`} data-wow-delay="0.6s">
+             <div className={styles.priceTagRedTop}>
+               <span className={styles.priceTagText}>Starting from</span>
+               <div className={styles.decorLeft}>
+                 <Sparkle size={18} fill="currentColor" />
+               </div>
+               <div className={styles.decorRight}>
+                 <Sparkles size={20} fill="currentColor" />
+               </div>
+             </div>
+             <div className={styles.priceTagRedBottom}>
+               <span className={styles.priceTagText}>₹15 Lakh</span>
+             </div>
+             <div className={styles.priceTagRedUnderline1}></div>
+             <div className={styles.priceTagRedUnderline2}></div>
+           </div>
            
            <div className={styles.loadBadge}>
               <Weight size={32} />

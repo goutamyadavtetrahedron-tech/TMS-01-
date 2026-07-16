@@ -106,7 +106,6 @@
   position: relative;
   height: 450px;
   border-radius: 12px;
-  overflow: hidden;
 }
 
 .agvImage {
@@ -304,6 +303,146 @@
 
 .sloganArrows {
   letter-spacing: -2px;
+}
+
+.priceTagYellow {
+  position: absolute;
+  bottom: -50px;
+  right: -30px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transform: rotate(-4deg);
+  font-family: var(--font-outfit), sans-serif !important;
+  letter-spacing: -0.02em !important;
+}
+
+.priceTagYellowTop {
+  color: white;
+  padding: 0.3rem 0.8rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  position: relative;
+  z-index: 2;
+  margin-bottom: -4px;
+  margin-right: 25px;
+  width: 180px;
+  text-align: center;
+  box-sizing: border-box;
+  transform: skewX(-12deg);
+}
+
+.priceTagYellowTop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: 6px;
+  bottom: 8px;
+  border: 2px solid #dca315;
+  z-index: 1;
+}
+
+.priceTagYellowTop::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(110deg, #ab8013 0%, #d1a01b 35%, #ffd54f 50%, #d1a01b 65%, #946c10 100%);
+  border: 2px solid white;
+  z-index: 2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.priceTagYellowBottom {
+  color: white;
+  padding: 0.4rem 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+  width: 230px;
+  text-align: center;
+  box-sizing: border-box;
+  transform: skewX(-12deg);
+}
+
+.priceTagYellowBottom::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: -6px;
+  bottom: -5px;
+  border: 2px solid #c08d0e;
+  z-index: 1;
+}
+
+.priceTagYellowBottom::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(110deg, #87620a 0%, #ad8217 35%, #f2c230 50%, #ad8217 65%, #6e4f07 100%);
+  border: 2px solid white;
+  z-index: 2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.priceTagText {
+  display: inline-block;
+  transform: skewX(12deg);
+  text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.45);
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-outfit), sans-serif !important;
+}
+
+.priceTagYellowUnderline1 {
+  width: 150px;
+  height: 3px;
+  background-color: #dca315;
+  margin-top: 5px;
+  margin-right: 10px;
+  transform: skewX(-35deg);
+}
+
+.priceTagYellowUnderline2 {
+  width: 150px;
+  height: 3px;
+  background-color: #dca315;
+  margin-top: 5px;
+  margin-right: 80px;
+  transform: skewX(-35deg);
+}
+
+.decorLeft {
+  position: absolute;
+  top: 8px;
+  left: -20px;
+  color: #dca315;
+  transform: skewX(12deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+}
+
+.decorRight {
+  position: absolute;
+  top: -4px;
+  right: -30px;
+  color: #dca315;
+  transform: skewX(12deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
 }
 
 @media (max-width: 1024px) {

@@ -197,3 +197,143 @@
     gap: 2rem;
   }
 }
+
+.priceTagRed {
+  position: absolute;
+  bottom: -40px;
+  right: -35px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transform: rotate(-4deg);
+  font-family: var(--font-outfit), sans-serif !important;
+  letter-spacing: -0.02em !important;
+}
+
+.priceTagRedTop {
+  color: white;
+  padding: 0.3rem 0.8rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  position: relative;
+  z-index: 2;
+  margin-bottom: -4px;
+  margin-right: 25px;
+  width: 180px;
+  text-align: center;
+  box-sizing: border-box;
+  transform: skewX(-12deg);
+}
+
+.priceTagRedTop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 6px;
+  right: -8px;
+  bottom: 8px;
+  border: 2px solid #ff0f0f;
+  z-index: 1;
+}
+
+.priceTagRedTop::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(110deg, #b80000 0%, #e60000 35%, #ff4d4d 50%, #e60000 65%, #990000 100%);
+  border: 2px solid white;
+  z-index: 2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.priceTagRedBottom {
+  color: white;
+  padding: 0.4rem 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+  width: 230px;
+  text-align: center;
+  box-sizing: border-box;
+  transform: skewX(-12deg);
+}
+
+.priceTagRedBottom::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 4px;
+  right: -10px;
+  bottom: 3px;
+  border: 2px solid #e60000;
+  z-index: 1;
+}
+
+.priceTagRedBottom::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(110deg, #990000 0%, #cc0000 35%, #ff3333 50%, #cc0000 65%, #7a0000 100%);
+  border: 2px solid white;
+  z-index: 2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.priceTagText {
+  display: inline-block;
+  transform: skewX(12deg);
+  text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.45);
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-outfit), sans-serif !important;
+}
+
+.priceTagRedUnderline1 {
+  width: 150px;
+  height: 3px;
+  background-color: #ff0f0f;
+  margin-top: 5px;
+  margin-right: 10px;
+  transform: skewX(-35deg);
+}
+
+.priceTagRedUnderline2 {
+  width: 150px;
+  height: 3px;
+  background-color: #ff0f0f;
+  margin-top: 5px;
+  margin-right: 80px;
+  transform: skewX(-35deg);
+}
+
+.decorLeft {
+  position: absolute;
+  top: 8px;
+  left: -20px;
+  color: #ff0f0f;
+  transform: skewX(12deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+}
+
+.decorRight {
+  position: absolute;
+  top: -4px;
+  right: -30px;
+  color: #ff0f0f;
+  transform: skewX(12deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+}

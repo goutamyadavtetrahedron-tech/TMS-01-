@@ -8,7 +8,9 @@ import {
   ShieldCheck,
   BatteryCharging,
   TrendingUp,
-  Leaf
+  Leaf,
+  Sparkle,
+  Sparkles
 } from "lucide-react";
 
 export default function CleaningRobot() {
@@ -71,6 +73,23 @@ export default function CleaningRobot() {
           <img src="/assets/images/amr-agv-rgv/cleaning-robot.png"
             onError={(e) => { e.target.src = "https://placehold.co/600x600?text=Cleaning+Robot"; }}
             alt="Autonomous Cleaning Robot" className={styles.robotImage} />
+
+          <div className={`${styles.priceTagGreen} wow animate__animated animate__zoomIn`} data-wow-delay="0.6s">
+            <div className={styles.priceTagGreenTop}>
+              <span className={styles.priceTagText}>Starting from</span>
+              <div className={styles.decorLeft}>
+                <Sparkle size={18} fill="currentColor" />
+              </div>
+              <div className={styles.decorRight}>
+                <Sparkles size={20} fill="currentColor" />
+              </div>
+            </div>
+            <div className={styles.priceTagGreenBottom}>
+              <span className={styles.priceTagText}>₹7 Lakh</span>
+            </div>
+            <div className={styles.priceTagGreenUnderline1}></div>
+            <div className={styles.priceTagGreenUnderline2}></div>
+          </div>
         </div>
       </div>
     </section>

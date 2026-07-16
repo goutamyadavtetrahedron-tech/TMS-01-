@@ -20,7 +20,9 @@ import {
   HardHat,
   Car,
   Zap,
-  Train
+  Train,
+  Sparkle,
+  Sparkles
 } from "lucide-react";
 import ReactPlaceholder from 'react-placeholder';
 import "react-placeholder/lib/reactPlaceholder.css";
@@ -90,6 +92,23 @@ export default function HeavyDutyAGV() {
               className={`${styles.agvImage} ${index === currentImageIndex ? styles.activeImage : styles.inactiveImage}`}
             />
           ))}
+          
+          <div className={`${styles.priceTagYellow} wow animate__animated animate__zoomIn`} data-wow-delay="0.6s">
+            <div className={styles.priceTagYellowTop}>
+              <span className={styles.priceTagText}>Starting from</span>
+              <div className={styles.decorLeft}>
+                <Sparkle size={18} fill="currentColor" />
+              </div>
+              <div className={styles.decorRight}>
+                <Sparkles size={20} fill="currentColor" />
+              </div>
+            </div>
+            <div className={styles.priceTagYellowBottom}>
+              <span className={styles.priceTagText}>₹25 Lakh</span>
+            </div>
+            <div className={styles.priceTagYellowUnderline1}></div>
+            <div className={styles.priceTagYellowUnderline2}></div>
+          </div>
         </div>
       </div>
 

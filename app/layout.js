@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import "./global.css";
-import { Poppins } from "next/font/google";
+import { Poppins, Outfit } from "next/font/google";
 import Script from "next/script";
 import ReduxProvider from "./providers/ReduxProvider";
 import FloatingButton from "@/components/layout/floating-button";
@@ -15,6 +15,13 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["700", "800", "900"],
+  display: "swap",
+});
+
 export const metadata = {
   title: "Tetrahedron",
   description: "Manufacturing Consulting Firm In India",
@@ -22,7 +29,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    <html lang="en" className={`${poppins.variable} ${outfit.variable}`}>
       <head>
         <link rel="stylesheet" href="/assets/css/elitecons.css" />
         <link rel="stylesheet" href="/assets/css/elitecons-responsive.css" />

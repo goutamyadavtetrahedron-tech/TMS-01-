@@ -5,7 +5,8 @@ import styles from "./TetrahedronAMRs.module.css";
 import {
   Crosshair, ShieldCheck, Activity, Zap, Settings,
   Clock, PieChart, Shield, Factory, Warehouse,
-  Truck, HardHat, TrendingUp, Weight, Leaf, Car, Train
+  Truck, HardHat, TrendingUp, Weight, Leaf, Car, Train,
+  Sparkle, Sparkles
 } from "lucide-react";
 
 export default function TetrahedronAMRs() {
@@ -56,6 +57,23 @@ export default function TetrahedronAMRs() {
         </div>
 
         <div className={`${styles.topImageContainer} wow animate__animated animate__fadeInRight`}>
+          <div className={`${styles.priceTagRed} wow animate__animated animate__zoomIn`} data-wow-delay="0.6s">
+            <div className={styles.priceTagRedTop}>
+              <span className={styles.priceTagText}>Starting from</span>
+              <div className={styles.decorLeft}>
+                <Sparkle size={18} fill="currentColor" />
+              </div>
+              <div className={styles.decorRight}>
+                <Sparkles size={20} fill="currentColor" />
+              </div>
+            </div>
+            <div className={styles.priceTagRedBottom}>
+              <span className={styles.priceTagText}>₹20 Lakh</span>
+            </div>
+            <div className={styles.priceTagRedUnderline1}></div>
+            <div className={styles.priceTagRedUnderline2}></div>
+          </div>
+
           <img src="/assets/images/amr-agv-rgv/amr.png"
             onError={(e) => { e.target.src = "https://placehold.co/600x400?text=AMR+Robots"; }}
             alt="Tetrahedron AMRs" className={styles.amrImage} />

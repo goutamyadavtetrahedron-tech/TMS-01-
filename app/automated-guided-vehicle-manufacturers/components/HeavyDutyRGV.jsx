@@ -18,7 +18,9 @@ import {
   HardHat,
   Car,
   Zap,
-  Train
+  Train,
+  Sparkle,
+  Sparkles
 } from "lucide-react";
 
 export default function HeavyDutyRGV() {
@@ -62,6 +64,23 @@ export default function HeavyDutyRGV() {
           <img src="/assets/images/amr-agv-rgv/heavy-duty-rgv.png"
             onError={(e) => { e.target.src = "https://placehold.co/800x500?text=Heavy+Duty+RGV"; }}
             alt="Heavy Duty RGV" className={styles.rgvImage} />
+
+          <div className={`${styles.priceTagYellow} wow animate__animated animate__zoomIn`} data-wow-delay="0.6s">
+            <div className={styles.priceTagYellowTop}>
+              <span className={styles.priceTagText}>Starting from</span>
+              <div className={styles.decorLeft}>
+                <Sparkle size={18} fill="currentColor" />
+              </div>
+              <div className={styles.decorRight}>
+                <Sparkles size={20} fill="currentColor" />
+              </div>
+            </div>
+            <div className={styles.priceTagYellowBottom}>
+              <span className={styles.priceTagText}>₹35 Lakh</span>
+            </div>
+            <div className={styles.priceTagYellowUnderline1}></div>
+            <div className={styles.priceTagYellowUnderline2}></div>
+          </div>
 
           <div className={styles.featuresListRight}>
             <div className={styles.featItem}><CheckCircle2 className={styles.iconCheck} /> BUILT FOR EXTREME LOADS</div>
