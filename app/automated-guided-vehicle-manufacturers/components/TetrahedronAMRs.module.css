@@ -98,17 +98,18 @@
   object-fit: contain;
 }
 
+.loadCapacityBox {
+  margin-top: 1.5rem;
+}
+
 .loadBadge {
-  position: absolute;
-  top: -20px;
-  right: -20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
   background-color: var(--dark-blue);
   color: var(--accent-yellow);
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
@@ -457,6 +458,27 @@
   }
 }
 
+@media (max-width: 992px) {
+  .topSection {
+    flex-direction: column;
+  }
+
+  .topImageContainer {
+    margin-top: 1.5rem;
+  }
+
+  .advantagesSection {
+    padding: 3rem 1.5rem;
+    border-radius: 0;
+  }
+
+  .bottomIndustries {
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2.2rem;
@@ -466,24 +488,69 @@
     font-size: 0.875rem !important;
   }
 
+  .headerTitle {
+    font-size: 1rem;
+  }
+
+  .headerLine {
+    width: 40px;
+  }
+
+  /* 2-column grid so cards are compact */
   .advantagesGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Smaller icon */
+  .advIcon {
+    font-size: 1.2rem;
+  }
+
+  /* Smaller card text */
+  .advContent h4 {
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .advContent p {
+    font-size: 0.65rem;
+    line-height: 1.35;
+  }
+
+  .advCard {
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* Price tag stays absolute on the image, just hide decor sparkles */
+  .priceTagRed {
+    left: 10px;
+    top: -10px;
+    right: auto;
+    bottom: auto;
+    transform: rotate(-4deg) scale(0.85);
+  }
+
+  .decorLeft,
+  .decorRight {
+    display: none;
   }
 
   .bottomLeft {
-    padding: 1rem;
+    padding: 0.5rem;
     flex-direction: column;
     align-items: flex-start;
   }
 
   .bottomIdealFor {
-    font-size: 0.9rem;
+    font-size: 0.65rem;
     margin-right: 0;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.3rem;
   }
 
   .bottomIndustries {
-    gap: 1rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
     flex-direction: row;
   }
@@ -493,17 +560,17 @@
   }
 
   .indIcon {
-    min-width: 20px;
-    width: 20px;
-    height: 20px;
+    min-width: 12px;
+    width: 12px;
+    height: 12px;
   }
 
   .indText {
-    font-size: 0.65rem;
+    font-size: 0.52rem;
   }
 
   .bottomRightSlogan {
-    padding: 1.2rem 1rem 1.2rem 3rem;
+    padding: 0.6rem 0.8rem 0.6rem 2rem;
   }
 
   .sloganBg {
@@ -513,7 +580,7 @@
   }
 
   .sloganContent {
-    font-size: 0.9rem;
+    font-size: 0.65rem;
   }
 
   .mainTitle {
@@ -537,32 +604,4 @@
   .advantagesSection {
     padding: 0 1rem 3rem 1rem;
   }
-}
-
-@media (max-width: 992px) {
-  .topSection {
-    flex-direction: column;
-  }
-
-  .loadBadge {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -40px;
-  }
-
-  .topImageContainer {
-    margin-top: 3rem;
-  }
-
-  .advantagesSection {
-    padding: 3rem 1.5rem;
-    border-radius: 0;
-  }
-
-  .bottomIndustries {
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: 1rem;
-  }
-}
+}

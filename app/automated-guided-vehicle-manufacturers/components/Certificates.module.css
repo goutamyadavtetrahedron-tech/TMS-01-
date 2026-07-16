@@ -20,8 +20,7 @@
 
 .imageContainer {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: block;
   padding: 1rem;
 }
 

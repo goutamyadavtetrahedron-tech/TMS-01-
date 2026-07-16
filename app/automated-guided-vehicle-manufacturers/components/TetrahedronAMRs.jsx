@@ -54,6 +54,16 @@ export default function TetrahedronAMRs() {
               </div>
             ))}
           </div>
+
+          <div className={`${styles.loadCapacityBox} wow animate__animated animate__fadeInUp`} data-wow-delay="0.3s">
+            <div className={styles.loadBadge}>
+              <Weight size={32} />
+              <div className={styles.loadText}>
+                <span className={styles.loadLabel}>LOAD CAPACITY</span>
+                <span className={styles.loadValue}>UPTO 30 TON</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className={`${styles.topImageContainer} wow animate__animated animate__fadeInRight`}>
@@ -77,14 +87,6 @@ export default function TetrahedronAMRs() {
           <img src="/assets/images/amr-agv-rgv/amr.png"
             onError={(e) => { e.target.src = "https://placehold.co/600x400?text=AMR+Robots"; }}
             alt="Tetrahedron AMRs" className={styles.amrImage} />
-
-          <div className={styles.loadBadge}>
-            <Weight size={32} />
-            <div className={styles.loadText}>
-              <span className={styles.loadLabel}>LOAD CAPACITY</span>
-              <span className={styles.loadValue}>UPTO 30 TON</span>
-            </div>
-          </div>
         </div>
       </div>
 

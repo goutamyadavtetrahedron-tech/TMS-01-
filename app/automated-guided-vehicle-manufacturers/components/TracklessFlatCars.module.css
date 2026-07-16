@@ -196,6 +196,19 @@
     flex-direction: column;
     gap: 2rem;
   }
+
+  .priceTagRed {
+    right: 10px;
+    bottom: -20px;
+    left: auto;
+    top: auto;
+    transform: rotate(-4deg) scale(0.85);
+  }
+
+  .decorLeft,
+  .decorRight {
+    display: none;
+  }
 }
 
 .priceTagRed {
@@ -336,4 +349,19 @@
   justify-content: center;
   align-items: center;
   z-index: 4;
+}
+
+@media (max-width: 768px) {
+  .priceTagRed {
+    right: 10px;
+    bottom: -20px;
+    left: auto;
+    top: auto;
+    transform: rotate(-4deg) scale(0.85);
+  }
+
+  .decorLeft,
+  .decorRight {
+    display: none;
+  }
 }
