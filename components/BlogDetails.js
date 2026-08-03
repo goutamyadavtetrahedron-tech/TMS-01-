@@ -272,8 +272,8 @@ export default function BlogDetails({ blog, recentBlogs }) {
                 section.content.forEach((para, i) => content.push(renderParagraph(para, `para-${idx}-${i}`)));
               }
             }
-            // Insert CTA after every 2 headings
-            if (blog.cta && headingCount > 0 && headingCount % 2 === 0) {
+            // Insert CTA after every 2 headings (except on the last section, where end CTA will render)
+            if (blog.cta && (blog.cta.text || blog.cta.buttonText) && headingCount > 0 && headingCount % 2 === 0 && idx < blog.sections.length - 1) {
               ctaToRender = (
                 <div key={`cta-${idx}`} style={{ margin: "40px 0", background: "#f5f7fa", padding: 24, borderRadius: 12, textAlign: "center" }}>
                   {blog.cta.text && (
@@ -303,7 +303,7 @@ export default function BlogDetails({ blog, recentBlogs }) {
             );
           })}
           {/* Always render CTA at the end */}
-          {blog.cta && (
+          {blog.cta && (blog.cta.text || blog.cta.buttonText) && (
             <div style={{ margin: "40px 0", background: "#f5f7fa", padding: 24, borderRadius: 12, textAlign: "center" }}>
               {blog.cta.text && (
                 <h3

@@ -21,10 +21,12 @@ coverage/
 
 # Local env files
 .env
+.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+!.env.example
 
 # OS files
 .DS_Store

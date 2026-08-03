@@ -186,7 +186,7 @@ export default function Menu() {
                     href="/mini-dojo-training-center/"
                     style={{ color: "var(--elitecons-black)" }}
                   >
-                    AR/VR in Dojo
+                    Mini DOJO
                   </Link>
                 </li>
               </ul>

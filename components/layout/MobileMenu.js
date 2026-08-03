@@ -109,7 +109,7 @@ const MobileMenu = ({ handleMobileMenu }) => {
                                     <ul style={{ display: isActive.key == 2 && isActive.subMenuKey == "sub2" ? "block" : "none" }}>
                                         <li><Link href="/dojo-training-center/" onClick={handleLinkClick}>DOJO Training Center</Link></li>
                                         <li><Link href="/dojo-2-0/" onClick={handleLinkClick}>DOJO 2.0</Link></li>
-                                        <li><Link href="/mini-dojo-training-center/" onClick={handleLinkClick}>AR/VR in Dojo</Link></li>
+                                        <li><Link href="/mini-dojo-training-center/" onClick={handleLinkClick}>Mini DOJO</Link></li>
                                     </ul>
                                 </li>
                                 <li><Link href="/digitization/" onClick={handleLinkClick}>Digitization</Link></li>
