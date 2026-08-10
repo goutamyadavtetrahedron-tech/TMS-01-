@@ -11,7 +11,7 @@ export async function POST(req) {
     }
 
     // Email content for admin
-    const adminTo = process.env.CONTACT_RECEIVER || process.env.SMTP_USER;
+    const adminTo = process.env.CAREER_RECEIVER || 'hrd@tetrahedron.in';
     const adminSubject = `New Job Application: ${role}`;
     const adminText = `
 Role: ${role}
