@@ -74,17 +74,22 @@ export default function IndustriesSection() {
 
   useEffect(() => {
     if (selectedIndustry) {
-      // When modal opens, disable body scroll
       document.body.style.overflow = 'hidden';
+
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+          setSelectedIndustry(null);
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = 'unset';
+      };
     } else {
-      // When modal closes, re-enable body scroll
       document.body.style.overflow = 'unset';
     }
-
-    // Cleanup function to re-enable scroll when component unmounts
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [selectedIndustry]);
 
   // Modal form submit handler

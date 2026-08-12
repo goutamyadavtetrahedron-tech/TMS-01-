@@ -1,52 +1,116 @@
 "use client";
+import { useEffect, useRef } from "react";
 import ContactForm from "./ContactForm";
 
 export default function ContactFormModal({ open, onClose, buttonText }) {
-  if (!open) return null;
-  return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      background: "rgba(0,0,0,0.7)",
-      zIndex: 9999,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}>
-      <div style={{
-        position: "relative",
-        background: "#fff",
-        borderRadius: "16px",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-        padding: "0",
-        minWidth: 320,
-        maxWidth: "60vw",
-        maxHeight: "95vh",
+  const backdropRef = useRef(null);
 
-        overflowY: "auto",
-      }}>
-        <span
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    // Prevent background scrolling when modal is open
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const handleBackdropClick = (e) => {
+    if (e.target === backdropRef.current) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      ref={backdropRef}
+      onClick={handleBackdropClick}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(15, 23, 42, 0.7)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        zIndex: 99999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+        boxSizing: "border-box",
+        animation: "fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          background: "#ffffff",
+          borderRadius: "20px",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          padding: "0",
+          width: "100%",
+          maxWidth: "520px",
+          maxHeight: "92vh",
+          overflowY: "auto",
+          boxSizing: "border-box",
+          animation: "scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
+        {/* Floating Close Button */}
+        <button
+          onClick={onClose}
+          aria-label="Close form"
           style={{
             position: "absolute",
-            top: 12,
-            right: 18,
-            cursor: "pointer",
-            fontSize: 28,
-            color: "#888",
-            zIndex: 2,
+            top: "14px",
+            right: "14px",
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            background: "#f1f5f9",
+            color: "#64748b",
+            border: "none",
+            fontSize: "20px",
             fontWeight: 700,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+            transition: "all 0.2s ease",
+            lineHeight: 1,
           }}
-          onClick={onClose}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#e2e8f0";
+            e.currentTarget.style.color = "#0f172a";
+            e.currentTarget.style.transform = "scale(1.08)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#f1f5f9";
+            e.currentTarget.style.color = "#64748b";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
         >
           ×
-        </span>
-        <div style={{ padding: 0, minWidth: 320 }}>
-          <ContactForm buttonText={buttonText} />
+        </button>
+
+        <div style={{ padding: 0 }}>
+          <ContactForm buttonText={buttonText} onSuccess={onClose} />
         </div>
       </div>
     </div>
   );
-} 
+}
