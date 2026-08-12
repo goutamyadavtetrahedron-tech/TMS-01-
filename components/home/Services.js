@@ -93,10 +93,18 @@ export default function IndustriesSection() {
     setLoading(true);
     console.log('Sending service modal form data:', formData);
     try {
+      const payload = {
+        ...formData,
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
+        pagePath: typeof window !== "undefined" ? window.location.pathname : "",
+        pageTitle: typeof window !== "undefined" ? document.title : "",
+        referrer: typeof window !== "undefined" ? document.referrer : "",
+        submissionTime: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " (IST)",
+      };
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         setModal({ open: true, message: 'Form submitted successfully!', success: true });

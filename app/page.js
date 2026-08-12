@@ -58,7 +58,15 @@ export default function Home() {
         e.preventDefault();
         console.log('Sending form data:', formData);
         try {
-            const res = await axios.post('/api/contact', formData);
+            const payload = {
+                ...formData,
+                pageUrl: typeof window !== "undefined" ? window.location.href : "",
+                pagePath: typeof window !== "undefined" ? window.location.pathname : "",
+                pageTitle: typeof window !== "undefined" ? document.title : "",
+                referrer: typeof window !== "undefined" ? document.referrer : "",
+                submissionTime: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " (IST)",
+            };
+            const res = await axios.post('/api/contact', payload);
             if (res.status === 200) {
                 setModal({ open: true, message: 'Form submitted successfully!', success: true });
                 handleCloseForm();
