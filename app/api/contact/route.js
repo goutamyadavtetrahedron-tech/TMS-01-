@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { getDynamicEmailSubject, formatAdminEmailHtml, formatAdminEmailText } from '@/lib/emailHelper';
+import { getDynamicEmailSubject, getDynamicSenderName, formatAdminEmailHtml, formatAdminEmailText } from '@/lib/emailHelper';
 
 export async function POST(req) {
   try {
@@ -36,9 +36,13 @@ export async function POST(req) {
       },
     });
 
+    const senderName = getDynamicSenderName(payload);
+    const rawFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
+    const fromHeader = rawFrom && !rawFrom.includes('<') ? `"${senderName}" <${rawFrom}>` : rawFrom;
+
     // Send to admin
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from: fromHeader,
       to: adminTo,
       subject: adminSubject,
       text: adminText,
@@ -47,7 +51,7 @@ export async function POST(req) {
 
     // Send confirmation to user
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from: fromHeader,
       to: userTo,
       subject: userSubject,
       text: userText,

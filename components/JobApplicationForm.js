@@ -57,7 +57,7 @@ export default function JobApplicationForm({ onSuccess, onError, buttonText = "A
         pagePath: typeof window !== "undefined" ? window.location.pathname : "",
         pageTitle: typeof window !== "undefined" ? document.title : "",
         referrer: typeof window !== "undefined" ? document.referrer : "",
-        submissionTime: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " (IST)",
+        submissionTime: new Date().toISOString(),
       };
 
       const res = await fetch("/api/apply", {
