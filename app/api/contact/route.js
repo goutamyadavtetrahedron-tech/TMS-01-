@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { getDynamicEmailSubject, formatAdminEmailHtml, formatAdminEmailText } from '@/lib/emailHelper';
 
 export async function POST(req) {
   try {
@@ -11,24 +12,13 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
+    const payload = { ...data, requirements };
+
     // Email content for admin
     const adminTo = process.env.CONTACT_RECEIVER || process.env.SMTP_USER;
-    const adminSubject = 'New Contact Form Submission';
-    const adminText = `
-Name: ${name}
-Company: ${company}
-Email: ${email}
-Mobile: ${mobile}
-Requirements: ${requirements}
-    `;
-    const adminHtml = `
-      <h2>New Contact Form Submission</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Company:</strong> ${company}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Mobile:</strong> ${mobile}</p>
-      <p><strong>Requirements:</strong> ${requirements}</p>
-    `;
+    const adminSubject = getDynamicEmailSubject(payload);
+    const adminText = formatAdminEmailText(payload);
+    const adminHtml = formatAdminEmailHtml(payload);
 
     // Email content for user confirmation
     const userTo = email;

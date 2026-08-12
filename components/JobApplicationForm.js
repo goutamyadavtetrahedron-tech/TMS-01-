@@ -54,10 +54,19 @@ export default function JobApplicationForm({ onSuccess, onError, buttonText = "A
     setErrors({});
     setLoading(true);
     try {
+      const payload = {
+        ...formData,
+        role: buttonText,
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
+        pagePath: typeof window !== "undefined" ? window.location.pathname : "",
+        pageTitle: typeof window !== "undefined" ? document.title : "",
+        referrer: typeof window !== "undefined" ? document.referrer : "",
+        submissionTime: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " (IST)",
+      };
       const res = await fetch("/api/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, role: buttonText }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setModal({ open: true, message: "Application submitted successfully!", success: true });

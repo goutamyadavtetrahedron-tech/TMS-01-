@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { getDynamicEmailSubject, formatAdminEmailHtml, formatAdminEmailText } from '@/lib/emailHelper';
 
 export async function POST(req) {
   try {
@@ -10,28 +11,13 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
-    // Email content for admin
-    const adminTo = process.env.CONTACT_RECEIVER || process.env.SMTP_USER;
-    const adminSubject = `New Job Application: ${role}`;
-    const adminText = `
-Role: ${role}
-Name: ${name}
-Email: ${email}
-Mobile: ${mobile}
-LinkedIn: ${linkedin || 'Not provided'}
+    const payload = { ...data, formType: 'apply' };
 
-Cover Letter:
-${coverLetter}
-    `;
-    const adminHtml = `
-      <h2>New Job Application for ${role}</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Mobile:</strong> ${mobile}</p>
-      <p><strong>LinkedIn:</strong> ${linkedin ? `<a href="${linkedin}">${linkedin}</a>` : 'Not provided'}</p>
-      <h3>Cover Letter:</h3>
-      <p>${coverLetter.replace(/\n/g, '<br/>')}</p>
-    `;
+    // Email content for admin
+    const adminTo = process.env.CAREER_RECEIVER || 'hrd@tetrahedron.in';
+    const adminSubject = getDynamicEmailSubject(payload);
+    const adminText = formatAdminEmailText(payload);
+    const adminHtml = formatAdminEmailHtml(payload);
 
     // Email content for user confirmation
     const userTo = email;
