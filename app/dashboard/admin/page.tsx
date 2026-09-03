@@ -1,5 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Lock, Mail, Eye, EyeOff, AlertCircle, ArrowLeft, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchBlogs,
@@ -11,8 +13,8 @@ import {
 } from '@/lib/store/blogSlice';
 import { AppDispatch } from '@/lib/store/store';
 
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+const ADMIN_EMAIL = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || '').trim();
+const ADMIN_PASSWORD = (process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '').trim();
 
 const styles = {
   container: {
@@ -634,6 +636,9 @@ export default function AdminBlogDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loginEmail, setLoginEmail] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<string>('');
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editBlog, setEditBlog] = useState<any>(null);
   const [formLoading, setFormLoading] = useState<boolean>(false);
@@ -666,20 +671,39 @@ export default function AdminBlogDashboard() {
     // eslint-disable-next-line
   }, [dispatch]);
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (loginEmail === ADMIN_EMAIL && loginPassword === ADMIN_PASSWORD) {
+    setLoginError('');
+    setIsLoggingIn(true);
+
+    // Natural micro-delay for smooth tactile feedback
+    await new Promise((res) => setTimeout(res, 200));
+
+    const trimmedEmail = loginEmail.trim().toLowerCase();
+    const targetEmail = ADMIN_EMAIL.trim().toLowerCase();
+
+    if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+      setLoginError('Admin credentials are not configured in environment variables (.env.local).');
+      showToast('error', 'Credentials not configured');
+      setIsLoggingIn(false);
+      return;
+    }
+
+    if (trimmedEmail === targetEmail && loginPassword === ADMIN_PASSWORD) {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('tetra_admin_email', loginEmail);
-        localStorage.setItem('tetra_admin_pass', loginPassword);
+        localStorage.setItem('tetra_admin_email', ADMIN_EMAIL);
+        localStorage.setItem('tetra_admin_pass', ADMIN_PASSWORD);
       }
-      setSavedEmail(loginEmail);
-      setSavedPass(loginPassword);
+      setSavedEmail(ADMIN_EMAIL);
+      setSavedPass(ADMIN_PASSWORD);
       setIsLoggedIn(true);
+      showToast('success', 'Logged in successfully! Welcome back.');
       dispatch(fetchBlogs({}));
     } else {
+      setLoginError('Invalid email or password. Please verify your credentials.');
       showToast('error', 'Invalid credentials');
     }
+    setIsLoggingIn(false);
   };
 
   // Logout
@@ -892,27 +916,365 @@ export default function AdminBlogDashboard() {
 
   if (!isLoggedIn) {
     return (
-      <div style={styles.loginBox}>
-        <h2 style={{marginBottom: 18}}>Admin Login</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={loginEmail}
-            onChange={e => setLoginEmail(e.target.value)}
-            required
-          />
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={loginPassword}
-            onChange={e => setLoginPassword(e.target.value)}
-            required
-          />
-          <button type="submit" style={styles.button}>Login</button>
-        </form>
+      <div id="admin-auth-root">
+        <Toasts toasts={toasts} remove={(id) => setToasts(prev => prev.filter(t => t.id !== id))} />
+
+        <div id="admin-auth-card">
+          {/* Logo */}
+          <div style={{ textAlign: 'center', marginBottom: 14 }}>
+            <img
+              src="/assets/images/Tetrahedron Logo.png"
+              alt="Tetrahedron"
+              style={{
+                height: '48px',
+                width: 'auto',
+                maxWidth: '200px',
+                objectFit: 'contain',
+                display: 'inline-block'
+              }}
+            />
+          </div>
+
+          {/* Badge */}
+          <div style={{ textAlign: 'center', marginBottom: 8 }}>
+            <span className="adm-badge">
+              <ShieldCheck size={13} strokeWidth={2.5} />
+              <span>CMS Portal</span>
+            </span>
+          </div>
+
+          <h2 className="adm-heading">Admin Sign In</h2>
+          <p className="adm-subtext">Sign in to manage blog posts and media</p>
+
+          {/* Error Banner */}
+          {loginError && (
+            <div className="adm-error-box">
+              <AlertCircle size={16} style={{ flexShrink: 0 }} />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label className="adm-label" htmlFor="admin-email">Email Address</label>
+              <div className={`adm-input-box ${loginError ? 'adm-input-error' : ''}`}>
+                <Mail size={16} className="adm-input-icon" />
+                <input
+                  id="admin-email"
+                  type="email"
+                  autoFocus
+                  autoComplete="email"
+                  placeholder="Enter your email"
+                  value={loginEmail}
+                  onChange={e => {
+                    setLoginEmail(e.target.value);
+                    if (loginError) setLoginError('');
+                  }}
+                  required
+                  className="adm-input-control"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="adm-label" htmlFor="admin-password">Password</label>
+              <div className={`adm-input-box ${loginError ? 'adm-input-error' : ''}`}>
+                <Lock size={16} className="adm-input-icon" />
+                <input
+                  id="admin-password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  value={loginPassword}
+                  onChange={e => {
+                    setLoginPassword(e.target.value);
+                    if (loginError) setLoginError('');
+                  }}
+                  required
+                  className="adm-input-control"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="adm-toggle-pw"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+              className="adm-submit-btn"
+            >
+              {isLoggingIn ? (
+                <>
+                  <Loader2 size={16} className="adm-spin" />
+                  <span>Signing in...</span>
+                </>
+              ) : (
+                <span>Sign In to Dashboard</span>
+              )}
+            </button>
+          </form>
+
+          {/* Footer Back Link */}
+          <div style={{ marginTop: 22, paddingTop: 14, borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
+            <Link href="/" className="adm-back-link" style={{ color: '#64748b', fontSize: '13px' }}>
+              <ArrowLeft size={14} style={{ color: 'inherit', display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }} />
+              <span style={{ color: 'inherit', fontSize: '13px' }}>Back to Tetrahedron website</span>
+            </Link>
+          </div>
+        </div>
+
+        <style jsx>{`
+          #admin-auth-root {
+            min-height: 100vh !important;
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background-color: #f8fafc !important;
+            background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px) !important;
+            background-size: 24px 24px !important;
+            padding: 32px 16px !important;
+            box-sizing: border-box !important;
+            font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+          }
+
+          #admin-auth-card {
+            width: 100% !important;
+            max-width: 400px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            padding: 32px 28px !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03) !important;
+            margin: auto !important;
+            box-sizing: border-box !important;
+          }
+
+          #admin-auth-card .adm-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            padding: 3px 10px !important;
+            border-radius: 9999px !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            color: #1d4ed8 !important;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+            line-height: 1.4 !important;
+          }
+
+          #admin-auth-card .adm-heading {
+            font-family: var(--font-poppins), sans-serif !important;
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            margin: 8px 0 4px 0 !important;
+            text-align: center !important;
+            line-height: 1.3 !important;
+            letter-spacing: -0.2px !important;
+            text-transform: none !important;
+          }
+
+          #admin-auth-card .adm-subtext {
+            font-family: var(--font-poppins), sans-serif !important;
+            font-size: 13px !important;
+            color: #64748b !important;
+            margin: 0 0 18px 0 !important;
+            text-align: center !important;
+            line-height: 1.4 !important;
+            font-weight: 400 !important;
+          }
+
+          #admin-auth-card .adm-error-box {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: #fef2f2 !important;
+            border: 1px solid #fecaca !important;
+            color: #991b1b !important;
+            padding: 9px 12px !important;
+            border-radius: 8px !important;
+            font-size: 12.5px !important;
+            margin-bottom: 16px !important;
+            text-align: left !important;
+            line-height: 1.4 !important;
+          }
+
+          #admin-auth-card .adm-label {
+            font-family: var(--font-poppins), sans-serif !important;
+            display: block !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            color: #334155 !important;
+            margin-bottom: 6px !important;
+            letter-spacing: 0.3px !important;
+            text-transform: uppercase !important;
+            text-align: left !important;
+            line-height: 1.2 !important;
+          }
+
+          #admin-auth-card .adm-input-box {
+            display: flex !important;
+            align-items: center !important;
+            background: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            height: 42px !important;
+            padding: 0 10px 0 12px !important;
+            gap: 10px !important;
+            box-sizing: border-box !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+          }
+
+          #admin-auth-card .adm-input-box:focus-within {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+          }
+
+          #admin-auth-card .adm-input-box.adm-input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+          }
+
+          #admin-auth-card .adm-input-icon {
+            color: #94a3b8 !important;
+            flex-shrink: 0 !important;
+            display: block !important;
+            pointer-events: none !important;
+            margin: 0 !important;
+          }
+
+          #admin-auth-card .adm-input-box:focus-within .adm-input-icon {
+            color: #2563eb !important;
+          }
+
+          #admin-auth-card .adm-input-box.adm-input-error .adm-input-icon {
+            color: #ef4444 !important;
+          }
+
+          #admin-auth-card .adm-input-control {
+            font-family: var(--font-poppins), sans-serif !important;
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            height: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            font-size: 13.5px !important;
+            color: #0f172a !important;
+            outline: none !important;
+            box-shadow: none !important;
+            box-sizing: border-box !important;
+          }
+
+          #admin-auth-card .adm-input-control::placeholder {
+            color: #94a3b8 !important;
+          }
+
+          #admin-auth-card .adm-toggle-pw {
+            background: transparent !important;
+            border: none !important;
+            padding: 4px !important;
+            margin: 0 !important;
+            color: #94a3b8 !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            transition: color 0.15s ease !important;
+            outline: none !important;
+          }
+
+          #admin-auth-card .adm-toggle-pw:hover {
+            color: #334155 !important;
+          }
+
+          #admin-auth-card .adm-toggle-pw svg {
+            display: block !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+          }
+
+          #admin-auth-card .adm-submit-btn {
+            font-family: var(--font-poppins), sans-serif !important;
+            width: 100% !important;
+            height: 42px !important;
+            background: #0f172a !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            margin-top: 4px !important;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15) !important;
+            transition: background 0.15s ease, transform 0.1s ease !important;
+            text-transform: none !important;
+          }
+
+          #admin-auth-card .adm-submit-btn:hover:not(:disabled) {
+            background: #1e293b !important;
+            transform: translateY(-1px) !important;
+          }
+
+          #admin-auth-card .adm-submit-btn:active:not(:disabled) {
+            transform: translateY(0) !important;
+          }
+
+          #admin-auth-card .adm-submit-btn:disabled {
+            opacity: 0.7 !important;
+            cursor: not-allowed !important;
+          }
+
+          #admin-auth-root #admin-auth-card a,
+          #admin-auth-root #admin-auth-card a.adm-back-link,
+          #admin-auth-root #admin-auth-card .adm-back-link {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            color: #64748b !important;
+            text-decoration: none !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            transition: color 0.15s ease !important;
+            font-family: var(--font-poppins), sans-serif !important;
+            line-height: 1 !important;
+          }
+
+          #admin-auth-root #admin-auth-card a:hover,
+          #admin-auth-root #admin-auth-card a.adm-back-link:hover,
+          #admin-auth-root #admin-auth-card .adm-back-link:hover {
+            color: #1d4ed8 !important;
+            text-decoration: none !important;
+          }
+
+          .adm-spin {
+            animation: admSpinKey 0.8s linear infinite !important;
+          }
+
+          @keyframes admSpinKey {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }
