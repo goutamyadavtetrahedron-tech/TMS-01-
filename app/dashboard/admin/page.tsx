@@ -33,6 +33,12 @@ import {
   Tag,
   Folder,
   Search,
+  LogOut,
+  Edit3,
+  Heart,
+  SlidersHorizontal,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -2083,7 +2089,8 @@ export default function AdminBlogDashboard() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string>('');
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [search, setSearch] = useState<string>('');
-  // filters removed
+  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'archived' | 'featured'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
 
@@ -2275,7 +2282,7 @@ export default function AdminBlogDashboard() {
             await dispatch(createBlog(fd)).unwrap();
             setShowForm(false);
             setEditBlog(null);
-            // Do NOT refresh blogs here
+            dispatch(fetchBlogs({}));
             showToast('success', 'Blog created successfully');
           }
         }
@@ -2284,7 +2291,7 @@ export default function AdminBlogDashboard() {
         await dispatch(createBlog(formData)).unwrap();
         setShowForm(false);
         setEditBlog(null);
-        // Do NOT refresh blogs here
+        dispatch(fetchBlogs({}));
         showToast('success', 'Blog created successfully');
       }
     } catch (err) {
@@ -2319,19 +2326,49 @@ export default function AdminBlogDashboard() {
     }
   };
 
-  // Edit button: ask for admin credentials again
+  // Edit button
   const handleEditPrompt = (blog: any) => {
-    if (savedEmail === ADMIN_EMAIL && savedPass === ADMIN_PASSWORD) {
-      setEditBlog(blog);
-      setShowForm(true);
-    } else {
-      showToast('error', 'Invalid credentials');
-    }
+    setEditBlog(blog);
+    setShowForm(true);
   };
+
+  // Metrics & Category Aggregations
+  const stats = React.useMemo(() => {
+    const list = Array.isArray(blogs) ? blogs : [];
+    const total = list.length;
+    const published = list.filter((b: any) => b.status === 'published').length;
+    const drafts = list.filter((b: any) => b.status === 'draft').length;
+    const featured = list.filter((b: any) => Boolean(b.featured)).length;
+    const totalViews = list.reduce((acc: number, b: any) => acc + (b.views || 0), 0);
+    return { total, published, drafts, featured, totalViews };
+  }, [blogs]);
+
+  const uniqueCategories = React.useMemo(() => {
+    const list = Array.isArray(blogs) ? blogs : [];
+    const set = new Set<string>();
+    list.forEach((b: any) => {
+      if (b.category && b.category.trim()) set.add(b.category.trim());
+    });
+    return Array.from(set);
+  }, [blogs]);
 
   // Derived filtered and paginated data
   const filteredBlogs = React.useMemo(() => {
     let data = Array.isArray(blogs) ? blogs : [];
+    if (statusFilter === 'published') {
+      data = data.filter((b: any) => b.status === 'published');
+    } else if (statusFilter === 'draft') {
+      data = data.filter((b: any) => b.status === 'draft');
+    } else if (statusFilter === 'archived') {
+      data = data.filter((b: any) => b.status === 'archived');
+    } else if (statusFilter === 'featured') {
+      data = data.filter((b: any) => Boolean(b.featured));
+    }
+
+    if (categoryFilter !== 'all') {
+      data = data.filter((b: any) => (b.category || '').toLowerCase() === categoryFilter.toLowerCase());
+    }
+
     if (search.trim()) {
       const q = search.toLowerCase();
       data = data.filter((b: any) =>
@@ -2341,7 +2378,7 @@ export default function AdminBlogDashboard() {
       );
     }
     return data;
-  }, [blogs, search]);
+  }, [blogs, statusFilter, categoryFilter, search]);
 
   const totalPages = Math.max(1, Math.ceil((filteredBlogs?.length || 0) / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -2717,154 +2754,1078 @@ export default function AdminBlogDashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      <button style={styles.logoutBtn} onClick={handleLogout}>Logout</button>
-      <h1 style={{marginBottom: 10}}>Blog Admin Dashboard</h1>
-      <div style={styles.toolbar}>
-        {!showForm && (
-          <button
-            style={{...styles.button, ...styles.primaryCTA}}
-            onClick={() => { setShowForm(true); setEditBlog(null); }}
-          >
-            + Create New Blog
-          </button>
-        )}
-        <div style={styles.toolbarRight}>
-          <input
-            placeholder="Search title, slug, category"
-            value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            style={{...styles.inputSm, minWidth: 320, maxWidth: 420, width: '100%'}}
+    <div id="admin-cms-dashboard-root">
+      {/* Modern Top Header / Navbar */}
+      <header className="adm-nav-header">
+        <div className="adm-nav-left">
+          <img
+            src="/assets/images/Tetrahedron Logo.png"
+            alt="Tetrahedron"
+            className="adm-nav-logo"
           />
+          <div className="adm-nav-divider" />
+          <div className="adm-nav-badge">
+            <ShieldCheck size={13} strokeWidth={2.5} />
+            <span>Blog Studio CMS</span>
+          </div>
         </div>
-      </div>
-      {/* Filters removed as requested */}
+
+        <div className="adm-nav-right">
+          <a
+            href="/blogs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="adm-nav-site-btn"
+            title="Open live blogs directory on website"
+          >
+            <Globe size={14} />
+            <span>View Live Site</span>
+            <ExternalLink size={12} />
+          </a>
+
+          <div className="adm-nav-user-pill">
+            <div className="adm-user-avatar">A</div>
+            <span className="adm-user-email">{savedEmail || ADMIN_EMAIL || 'Admin'}</span>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="adm-nav-logout-btn"
+            title="Sign out of Admin Dashboard"
+          >
+            <LogOut size={14} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="adm-main-container">
+        {/* Title & Quick CTA Row */}
+        <div className="adm-title-row">
+          <div>
+            <h1 className="adm-title-heading">Blog Management</h1>
+            <p className="adm-title-subtext">Create, edit, optimize, and publish technical manufacturing articles</p>
+          </div>
+
+          <button
+            onClick={() => { setShowForm(true); setEditBlog(null); }}
+            className="adm-btn-create-top"
+          >
+            <Plus size={16} strokeWidth={2.5} />
+            <span>Create New Blog</span>
+          </button>
+        </div>
+
+        {/* Executive KPI Stats Grid */}
+        <div className="adm-kpi-grid">
+          <div className="adm-kpi-card">
+            <div className="adm-kpi-icon" style={{ background: '#eff6ff', color: '#2563eb' }}>
+              <FileText size={20} />
+            </div>
+            <div>
+              <span className="adm-kpi-val">{stats.total}</span>
+              <span className="adm-kpi-name">Total Articles</span>
+            </div>
+          </div>
+
+          <div className="adm-kpi-card">
+            <div className="adm-kpi-icon" style={{ background: '#f0fdf4', color: '#16a34a' }}>
+              <CheckCircle2 size={20} />
+            </div>
+            <div>
+              <span className="adm-kpi-val">{stats.published}</span>
+              <span className="adm-kpi-name">Published</span>
+            </div>
+          </div>
+
+          <div className="adm-kpi-card">
+            <div className="adm-kpi-icon" style={{ background: '#fef3c7', color: '#d97706' }}>
+              <Clock size={20} />
+            </div>
+            <div>
+              <span className="adm-kpi-val">{stats.drafts}</span>
+              <span className="adm-kpi-name">Drafts</span>
+            </div>
+          </div>
+
+          <div className="adm-kpi-card">
+            <div className="adm-kpi-icon" style={{ background: '#faf5ff', color: '#9333ea' }}>
+              <Eye size={20} />
+            </div>
+            <div>
+              <span className="adm-kpi-val">{stats.totalViews.toLocaleString()}</span>
+              <span className="adm-kpi-name">Total Views</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Table Panel */}
+        <div className="adm-table-panel">
+          {/* Filter & Search Toolbar */}
+          <div className="adm-table-toolbar">
+            <div className="adm-filter-tabs">
+              <button
+                onClick={() => { setStatusFilter('all'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'all' ? 'active' : ''}`}
+              >
+                All <span className="adm-filter-count">{stats.total}</span>
+              </button>
+              <button
+                onClick={() => { setStatusFilter('published'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'published' ? 'active' : ''}`}
+              >
+                Published <span className="adm-filter-count">{stats.published}</span>
+              </button>
+              <button
+                onClick={() => { setStatusFilter('draft'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'draft' ? 'active' : ''}`}
+              >
+                Drafts <span className="adm-filter-count">{stats.drafts}</span>
+              </button>
+              <button
+                onClick={() => { setStatusFilter('featured'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'featured' ? 'active' : ''}`}
+              >
+                ⭐ Featured <span className="adm-filter-count">{stats.featured}</span>
+              </button>
+            </div>
+
+            <div className="adm-toolbar-right-box">
+              <div className="adm-search-container">
+                <Search size={15} className="adm-search-svg" />
+                <input
+                  placeholder="Search title, slug, category..."
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                  className="adm-search-input-field"
+                />
+                {search && (
+                  <button onClick={() => setSearch('')} className="adm-search-clear-btn" title="Clear search">
+                    <X size={13} />
+                  </button>
+                )}
+              </div>
+
+              {uniqueCategories.length > 0 && (
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => { setCategoryFilter(e.target.value); setPage(1); }}
+                  className="adm-cat-dropdown"
+                >
+                  <option value="all">All Categories</option>
+                  {uniqueCategories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </div>
+
+          {/* Data Table */}
+          <div className="adm-table-responsive">
+            <table className="adm-data-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '38%' }}>Article</th>
+                  <th style={{ width: '18%' }}>Category</th>
+                  <th style={{ width: '11%' }}>Status</th>
+                  <th style={{ width: '10%' }}>Featured</th>
+                  <th style={{ width: '9%' }}>Views</th>
+                  <th style={{ width: '14%', textAlign: 'right' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="adm-empty-cell">
+                      <Loader2 size={24} className="adm-spin" style={{ margin: '0 auto 8px auto', color: '#2563eb' }} />
+                      <div>Loading blogs...</div>
+                    </td>
+                  </tr>
+                ) : filteredBlogs.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="adm-empty-cell">
+                      <FileText size={32} style={{ margin: '0 auto 8px auto', color: '#94a3b8' }} />
+                      <div style={{ fontWeight: 600, color: '#334155' }}>No blog articles found</div>
+                      <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>
+                        {search || statusFilter !== 'all' ? 'Try clearing your search or filters.' : 'Click "+ Create New Blog" to get started.'}
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedBlogs.map((blog: any) => (
+                    <tr key={blog._id} className="adm-table-data-row">
+                      {/* Article: Thumbnail + Title + Live Link */}
+                      <td>
+                        <div className="adm-article-group">
+                          {blog.image?.url ? (
+                            <img src={blog.image.url} alt={blog.title} className="adm-thumb-img" />
+                          ) : (
+                            <div className="adm-thumb-fallback">
+                              <ImageIcon size={18} />
+                            </div>
+                          )}
+                          <div className="adm-article-info">
+                            <span className="adm-article-name" title={blog.title}>
+                              {blog.title}
+                            </span>
+                            <a
+                              href={`/blogs/${blog.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="adm-article-link"
+                              title="Preview live article"
+                            >
+                              <span>/blogs/{blog.slug}</span>
+                              <ExternalLink size={10} />
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Category */}
+                      <td>
+                        {blog.category ? (
+                          <span className="adm-category-pill">
+                            {blog.category}
+                          </span>
+                        ) : (
+                          <span style={{ color: '#94a3b8', fontSize: 12 }}>—</span>
+                        )}
+                      </td>
+
+                      {/* Status */}
+                      <td>
+                        <span className={`adm-status-pill pill-${blog.status || 'draft'}`}>
+                          <span className="adm-status-circle" />
+                          <span style={{ textTransform: 'capitalize' }}>{blog.status || 'draft'}</span>
+                        </span>
+                      </td>
+
+                      {/* Featured */}
+                      <td>
+                        {blog.featured ? (
+                          <span className="adm-featured-badge">
+                            ⭐ Featured
+                          </span>
+                        ) : (
+                          <span style={{ color: '#94a3b8', fontSize: 12 }}>—</span>
+                        )}
+                      </td>
+
+                      {/* Views */}
+                      <td>
+                        <div className="adm-views-wrap">
+                          <Eye size={13} style={{ color: '#64748b' }} />
+                          <span>{(blog.views || 0).toLocaleString()}</span>
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td>
+                        <div className="adm-row-actions">
+                          <button
+                            onClick={() => handleEditPrompt(blog)}
+                            className="adm-btn-edit-row"
+                            title="Edit Blog in CMS Studio"
+                          >
+                            <Edit3 size={13} />
+                            <span>Edit</span>
+                          </button>
+
+                          <a
+                            href={`/blogs/${blog.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="adm-btn-view-row"
+                            title="Open live post in new tab"
+                          >
+                            <ExternalLink size={13} />
+                          </a>
+
+                          <button
+                            onClick={() => { setConfirmDeleteId(blog._id); setConfirmOpen(true); }}
+                            className="adm-btn-delete-row"
+                            title="Delete Blog"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Footer */}
+          <div className="adm-table-footer">
+            <div className="adm-footer-info">
+              Showing <strong>{filteredBlogs.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, filteredBlogs.length)}</strong> of <strong>{filteredBlogs.length}</strong> articles
+            </div>
+
+            <div className="adm-footer-controls">
+              <div className="adm-per-page">
+                <span>Per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
+                  className="adm-select-page-size"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+
+              <div className="adm-pagination-btns">
+                <button
+                  disabled={currentPage <= 1}
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  className="adm-page-nav-btn"
+                  title="Previous Page"
+                >
+                  <ChevronLeft size={15} />
+                  <span>Prev</span>
+                </button>
+
+                <span className="adm-page-label">
+                  Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+                </span>
+
+                <button
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  className="adm-page-nav-btn"
+                  title="Next Page"
+                >
+                  <span>Next</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Create / Edit Blog Modal */}
       <Modal
         isOpen={showForm}
-        title={editBlog ? 'Edit Blog' : 'Create Blog'}
+        title={editBlog ? `Edit Blog: ${editBlog.title}` : 'Create New Blog'}
         onClose={() => { setShowForm(false); setEditBlog(null); }}
-        width={1100}
+        width={1180}
       >
         <BlogForm
+          key={editBlog?._id || 'new-blog'}
           onSubmit={editBlog ? handleEditBlog : handleCreateBlog}
           initial={editBlog}
           loading={formLoading}
           onCancel={() => { setShowForm(false); setEditBlog(null); }}
         />
       </Modal>
-      <h2 style={{marginTop: 30, marginBottom: 10}}>All Blogs</h2>
-      <div style={{...styles.tableWrap, overflowX: 'auto'}}>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>Title</th>
-              <th style={styles.th}>Slug</th>
-              <th style={styles.th}>Category</th>
-              <th style={styles.th}>Status</th>
-              <th style={styles.th}>Featured</th>
-              <th style={styles.th}>Views</th>
-              <th style={styles.th}>Likes</th>
-              <th style={styles.th}>Created</th>
-              <th style={styles.th}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={9} style={{ ...styles.td, textAlign: 'center' }}>Loading...</td>
-              </tr>
-            ) : filteredBlogs.length === 0 ? (
-              <tr>
-                <td colSpan={9} style={styles.td}>No blogs found.</td>
-              </tr>
-            ) : (
-              paginatedBlogs.map((blog: any) => (
-                <tr key={blog._id}>
-                  <td style={styles.td}>{blog.title}</td>
-                  <td style={styles.td}>{blog.slug}</td>
-                  <td style={styles.td}>{blog.category}</td>
-                  <td style={styles.td}>{blog.status}</td>
-                  <td style={styles.td}>{blog.featured ? 'Yes' : 'No'}</td>
-                  <td style={styles.td}>{blog.views}</td>
-                  <td style={styles.td}>{blog.likes}</td>
-                  <td style={styles.td}>{blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : ''}</td>
-                  <td style={styles.td}>
-                    <div style={styles.actionsRow}>
-                      <button
-                        style={{...styles.actionBtn, ...styles.editBtn}}
-                        onClick={() => handleEditPrompt(blog)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        style={{...styles.actionBtn, ...styles.deleteBtn}}
-                        onClick={() => { setConfirmDeleteId(blog._id); setConfirmOpen(true); }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-      {/* Pagination */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 14 }}>
-        <div>
-          <button
-            style={{ ...styles.button, background: '#e0e0e0', color: '#333', padding: '8px 14px' }}
-            disabled={currentPage <= 1}
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-          >
-            Prev
-          </button>
-          <button
-            style={{ ...styles.button, background: '#e0e0e0', color: '#333', padding: '8px 14px', marginLeft: 8 }}
-            disabled={currentPage >= totalPages}
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-          >
-            Next
-          </button>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
-          <select
-            value={pageSize}
-            onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
-            style={styles.select}
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-        </div>
-      </div>
+
+      {/* Confirm Delete Modal */}
       <Modal
         isOpen={confirmOpen}
         title="Confirm Delete"
         onClose={() => { setConfirmOpen(false); setConfirmDeleteId(''); }}
         width={420}
       >
-        <p style={{ marginTop: 8 }}>Are you sure you want to delete this blog? This action cannot be undone.</p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 16 }}>
-          <button
-            style={{ ...styles.button, background: '#9e9e9e' }}
-            onClick={() => { setConfirmOpen(false); setConfirmDeleteId(''); }}
-          >
-            Cancel
-          </button>
-          <button
-            style={{ ...styles.button, background: '#e53935' }}
-            onClick={() => { const id = confirmDeleteId; setConfirmOpen(false); setConfirmDeleteId(''); handleDeleteBlog(id); }}
-          >
-            Delete
-          </button>
+        <div style={{ padding: '8px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#b91c1c', marginBottom: 12 }}>
+            <AlertCircle size={22} />
+            <strong style={{ fontSize: 15 }}>Are you sure you want to delete this blog?</strong>
+          </div>
+          <p style={{ margin: 0, fontSize: 13.5, color: '#475569', lineHeight: 1.5 }}>
+            This will permanently remove the blog article and delete its associated media from Cloudinary. This action cannot be undone.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
+            <button
+              type="button"
+              className="adm-btn-subtle"
+              style={{ padding: '8px 16px', fontSize: 13 }}
+              onClick={() => { setConfirmOpen(false); setConfirmDeleteId(''); }}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="adm-btn-primary"
+              style={{ background: '#dc2626', padding: '8px 18px', fontSize: 13 }}
+              onClick={() => { const id = confirmDeleteId; setConfirmOpen(false); setConfirmDeleteId(''); handleDeleteBlog(id); }}
+            >
+              Yes, Delete Post
+            </button>
+          </div>
         </div>
       </Modal>
+
       <Toasts toasts={toasts} remove={(id) => setToasts(prev => prev.filter(t => t.id !== id))} />
+
+      {/* Scoped Styles for Admin Dashboard */}
+      <style jsx>{`
+        #admin-cms-dashboard-root {
+          min-height: 100vh !important;
+          background: #f8fafc !important;
+          font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+          color: #0f172a !important;
+        }
+
+        /* Top Navigation */
+        .adm-nav-header {
+          background: #ffffff !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          height: 64px !important;
+          padding: 0 28px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          position: sticky !important;
+          top: 0 !important;
+          z-index: 100 !important;
+        }
+
+        .adm-nav-left {
+          display: flex !important;
+          align-items: center !important;
+          gap: 12px !important;
+        }
+
+        .adm-nav-logo {
+          height: 38px !important;
+          width: auto !important;
+          object-fit: contain !important;
+        }
+
+        .adm-nav-divider {
+          width: 1px !important;
+          height: 24px !important;
+          background: #e2e8f0 !important;
+        }
+
+        .adm-nav-badge {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          background: #eff6ff !important;
+          border: 1px solid #bfdbfe !important;
+          color: #1d4ed8 !important;
+          padding: 3px 9px !important;
+          border-radius: 6px !important;
+          font-size: 11.5px !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.3px !important;
+        }
+
+        .adm-nav-right {
+          display: flex !important;
+          align-items: center !important;
+          gap: 12px !important;
+        }
+
+        .adm-nav-site-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          padding: 6px 12px !important;
+          background: #f1f5f9 !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 8px !important;
+          color: #475569 !important;
+          font-size: 12.5px !important;
+          font-weight: 500 !important;
+          text-decoration: none !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-nav-site-btn:hover {
+          background: #e2e8f0 !important;
+          color: #0f172a !important;
+        }
+
+        .adm-nav-user-pill {
+          display: flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          padding: 4px 10px 4px 4px !important;
+          background: #f8fafc !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 9999px !important;
+        }
+
+        .adm-user-avatar {
+          width: 26px !important;
+          height: 26px !important;
+          border-radius: 50% !important;
+          background: #0f172a !important;
+          color: #ffffff !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+
+        .adm-user-email {
+          font-size: 12px !important;
+          font-weight: 500 !important;
+          color: #334155 !important;
+        }
+
+        .adm-nav-logout-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          padding: 6px 12px !important;
+          background: #fee2e2 !important;
+          color: #dc2626 !important;
+          border: 1px solid #fecaca !important;
+          border-radius: 8px !important;
+          font-size: 12.5px !important;
+          font-weight: 600 !important;
+          cursor: pointer !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-nav-logout-btn:hover {
+          background: #fecaca !important;
+        }
+
+        /* Main Container */
+        .adm-main-container {
+          max-width: 1280px !important;
+          margin: 0 auto !important;
+          padding: 28px 24px !important;
+        }
+
+        /* Title Row */
+        .adm-title-row {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          margin-bottom: 24px !important;
+          gap: 16px !important;
+          flex-wrap: wrap !important;
+        }
+
+        .adm-title-heading {
+          font-size: 24px !important;
+          font-weight: 800 !important;
+          color: #0f172a !important;
+          margin: 0 0 4px 0 !important;
+          line-height: 1.2 !important;
+          letter-spacing: -0.3px !important;
+        }
+
+        .adm-title-subtext {
+          font-size: 13.5px !important;
+          color: #64748b !important;
+          margin: 0 !important;
+        }
+
+        .adm-btn-create-top {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          padding: 10px 20px !important;
+          background: #0f172a !important;
+          color: #ffffff !important;
+          border: none !important;
+          border-radius: 10px !important;
+          font-size: 13.5px !important;
+          font-weight: 600 !important;
+          cursor: pointer !important;
+          box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18) !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-btn-create-top:hover {
+          background: #1e293b !important;
+          transform: translateY(-1px) !important;
+        }
+
+        /* KPI Stats Grid */
+        .adm-kpi-grid {
+          display: grid !important;
+          grid-template-columns: repeat(4, 1fr) !important;
+          gap: 16px !important;
+          margin-bottom: 24px !important;
+        }
+
+        @media (max-width: 900px) {
+          .adm-kpi-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+
+        .adm-kpi-card {
+          background: #ffffff !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 12px !important;
+          padding: 16px !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 14px !important;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
+        }
+
+        .adm-kpi-icon {
+          width: 44px !important;
+          height: 44px !important;
+          border-radius: 10px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex-shrink: 0 !important;
+        }
+
+        .adm-kpi-val {
+          font-size: 20px !important;
+          font-weight: 800 !important;
+          color: #0f172a !important;
+          display: block !important;
+          line-height: 1.2 !important;
+        }
+
+        .adm-kpi-name {
+          font-size: 12px !important;
+          font-weight: 500 !important;
+          color: #64748b !important;
+        }
+
+        /* Table Panel */
+        .adm-table-panel {
+          background: #ffffff !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 14px !important;
+          box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
+          overflow: hidden !important;
+        }
+
+        .adm-table-toolbar {
+          padding: 16px 20px !important;
+          border-bottom: 1px solid #f1f5f9 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 14px !important;
+          flex-wrap: wrap !important;
+        }
+
+        .adm-filter-tabs {
+          display: flex !important;
+          gap: 6px !important;
+          background: #f1f5f9 !important;
+          padding: 3px !important;
+          border-radius: 9px !important;
+        }
+
+        .adm-filter-tab {
+          border: none !important;
+          background: transparent !important;
+          padding: 6px 12px !important;
+          border-radius: 7px !important;
+          font-size: 12.5px !important;
+          font-weight: 600 !important;
+          color: #475569 !important;
+          cursor: pointer !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-filter-tab.active {
+          background: #ffffff !important;
+          color: #0f172a !important;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+        }
+
+        .adm-filter-count {
+          background: #e2e8f0 !important;
+          padding: 1px 6px !important;
+          border-radius: 9999px !important;
+          font-size: 11px !important;
+        }
+
+        .adm-toolbar-right-box {
+          display: flex !important;
+          align-items: center !important;
+          gap: 10px !important;
+        }
+
+        .adm-search-container {
+          position: relative !important;
+          display: flex !important;
+          align-items: center !important;
+        }
+
+        .adm-search-svg {
+          position: absolute !important;
+          left: 10px !important;
+          color: #94a3b8 !important;
+          pointer-events: none !important;
+        }
+
+        .adm-search-input-field {
+          height: 36px !important;
+          padding: 0 30px 0 32px !important;
+          border: 1.5px solid #cbd5e1 !important;
+          border-radius: 8px !important;
+          font-size: 13px !important;
+          font-family: var(--font-poppins), sans-serif !important;
+          color: #0f172a !important;
+          background: #ffffff !important;
+          outline: none !important;
+          width: 260px !important;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+
+        .adm-search-input-field:focus {
+          border-color: #2563eb !important;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .adm-search-clear-btn {
+          position: absolute !important;
+          right: 8px !important;
+          background: transparent !important;
+          border: none !important;
+          color: #94a3b8 !important;
+          cursor: pointer !important;
+          padding: 2px !important;
+          display: flex !important;
+          align-items: center !important;
+        }
+
+        .adm-cat-dropdown {
+          height: 36px !important;
+          padding: 0 10px !important;
+          border: 1.5px solid #cbd5e1 !important;
+          border-radius: 8px !important;
+          font-size: 13px !important;
+          color: #0f172a !important;
+          background: #ffffff !important;
+          outline: none !important;
+          cursor: pointer !important;
+        }
+
+        /* Table */
+        .adm-table-responsive {
+          width: 100% !important;
+          overflow-x: auto !important;
+        }
+
+        .adm-data-table {
+          width: 100% !important;
+          border-collapse: collapse !important;
+          text-align: left !important;
+        }
+
+        .adm-data-table thead th {
+          background: #f8fafc !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          padding: 12px 18px !important;
+          font-size: 11px !important;
+          font-weight: 700 !important;
+          color: #64748b !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.4px !important;
+        }
+
+        .adm-table-data-row {
+          border-bottom: 1px solid #f1f5f9 !important;
+          transition: background 0.1s ease !important;
+        }
+
+        .adm-table-data-row:hover {
+          background: #f8fafc !important;
+        }
+
+        .adm-table-data-row td {
+          padding: 12px 18px !important;
+          vertical-align: middle !important;
+          font-size: 13.5px !important;
+          color: #0f172a !important;
+        }
+
+        /* Article Cell */
+        .adm-article-group {
+          display: flex !important;
+          align-items: center !important;
+          gap: 12px !important;
+        }
+
+        .adm-thumb-img {
+          width: 52px !important;
+          height: 36px !important;
+          border-radius: 6px !important;
+          object-fit: cover !important;
+          border: 1px solid #e2e8f0 !important;
+          flex-shrink: 0 !important;
+        }
+
+        .adm-thumb-fallback {
+          width: 52px !important;
+          height: 36px !important;
+          border-radius: 6px !important;
+          background: #f1f5f9 !important;
+          border: 1px solid #e2e8f0 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          color: #94a3b8 !important;
+          flex-shrink: 0 !important;
+        }
+
+        .adm-article-info {
+          display: flex !important;
+          flex-direction: column !important;
+          min-width: 0 !important;
+        }
+
+        .adm-article-name {
+          font-weight: 600 !important;
+          font-size: 13.5px !important;
+          color: #0f172a !important;
+          line-height: 1.3 !important;
+          display: -webkit-box !important;
+          -webkit-line-clamp: 2 !important;
+          -webkit-box-orient: vertical !important;
+          overflow: hidden !important;
+        }
+
+        .adm-article-link {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+          font-size: 11.5px !important;
+          color: #2563eb !important;
+          text-decoration: none !important;
+          margin-top: 3px !important;
+        }
+
+        .adm-article-link:hover {
+          text-decoration: underline !important;
+        }
+
+        /* Badges */
+        .adm-category-pill {
+          display: inline-block !important;
+          padding: 3px 8px !important;
+          border-radius: 6px !important;
+          background: #eff6ff !important;
+          border: 1px solid #bfdbfe !important;
+          color: #1d4ed8 !important;
+          font-size: 11.5px !important;
+          font-weight: 600 !important;
+          white-space: nowrap !important;
+        }
+
+        .adm-status-pill {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          padding: 3px 9px !important;
+          border-radius: 9999px !important;
+          font-size: 11.5px !important;
+          font-weight: 600 !important;
+        }
+
+        .adm-status-circle {
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 50% !important;
+        }
+
+        .pill-published {
+          background: #f0fdf4 !important;
+          color: #15803d !important;
+          border: 1px solid #bbf7d0 !important;
+        }
+        .pill-published .adm-status-circle { background: #22c55e !important; }
+
+        .pill-draft {
+          background: #f1f5f9 !important;
+          color: #475569 !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .pill-draft .adm-status-circle { background: #64748b !important; }
+
+        .pill-archived {
+          background: #fffbeb !important;
+          color: #b45309 !important;
+          border: 1px solid #fde68a !important;
+        }
+        .pill-archived .adm-status-circle { background: #f59e0b !important; }
+
+        .adm-featured-badge {
+          display: inline-block !important;
+          background: #fefce8 !important;
+          border: 1px solid #fef08a !important;
+          color: #a16207 !important;
+          padding: 2px 7px !important;
+          border-radius: 4px !important;
+          font-size: 11px !important;
+          font-weight: 700 !important;
+        }
+
+        .adm-views-wrap {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          font-size: 12.5px !important;
+          font-weight: 600 !important;
+          color: #475569 !important;
+        }
+
+        /* Actions */
+        .adm-row-actions {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-end !important;
+          gap: 6px !important;
+        }
+
+        .adm-btn-edit-row {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          padding: 5px 10px !important;
+          background: #eff6ff !important;
+          border: 1px solid #bfdbfe !important;
+          color: #1d4ed8 !important;
+          border-radius: 6px !important;
+          font-size: 12px !important;
+          font-weight: 600 !important;
+          cursor: pointer !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-btn-edit-row:hover {
+          background: #dbeafe !important;
+        }
+
+        .adm-btn-view-row {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 28px !important;
+          height: 28px !important;
+          border-radius: 6px !important;
+          background: #f1f5f9 !important;
+          border: 1px solid #e2e8f0 !important;
+          color: #475569 !important;
+          text-decoration: none !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-btn-view-row:hover {
+          background: #e2e8f0 !important;
+          color: #0f172a !important;
+        }
+
+        .adm-btn-delete-row {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 28px !important;
+          height: 28px !important;
+          border-radius: 6px !important;
+          background: #fee2e2 !important;
+          border: 1px solid #fecaca !important;
+          color: #dc2626 !important;
+          cursor: pointer !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-btn-delete-row:hover {
+          background: #fecaca !important;
+        }
+
+        .adm-empty-cell {
+          text-align: center !important;
+          padding: 48px 16px !important;
+        }
+
+        /* Footer Pagination */
+        .adm-table-footer {
+          padding: 14px 20px !important;
+          background: #f8fafc !important;
+          border-top: 1px solid #e2e8f0 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 12px !important;
+          flex-wrap: wrap !important;
+        }
+
+        .adm-footer-info {
+          font-size: 13px !important;
+          color: #64748b !important;
+        }
+
+        .adm-footer-controls {
+          display: flex !important;
+          align-items: center !important;
+          gap: 16px !important;
+        }
+
+        .adm-per-page {
+          display: flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          font-size: 12.5px !important;
+          color: #64748b !important;
+        }
+
+        .adm-select-page-size {
+          height: 30px !important;
+          padding: 0 6px !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 6px !important;
+          background: #ffffff !important;
+          font-size: 12.5px !important;
+          color: #0f172a !important;
+        }
+
+        .adm-pagination-btns {
+          display: flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+        }
+
+        .adm-page-nav-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+          padding: 4px 10px !important;
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 6px !important;
+          color: #334155 !important;
+          font-size: 12.5px !important;
+          font-weight: 600 !important;
+          cursor: pointer !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-page-nav-btn:hover:not(:disabled) {
+          background: #f1f5f9 !important;
+        }
+
+        .adm-page-nav-btn:disabled {
+          opacity: 0.5 !important;
+          cursor: not-allowed !important;
+        }
+
+        .adm-page-label {
+          font-size: 12.5px !important;
+          color: #475569 !important;
+        }
+      `}</style>
     </div>
   );
 }
