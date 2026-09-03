@@ -443,15 +443,15 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
   const [sections, setSections] = useState<BlogSection[]>(
     initial?.sections?.length
       ? initial.sections.map((sec: any) => ({
-          heading: sec.heading || '',
-          content: Array.isArray(sec.content) ? sec.content.join('\n') : (sec.content || ''),
-          image: null,
-          imagePreview: sec.image?.url || '',
-          existingImageUrl: sec.image?.url || '',
-        }))
+        heading: sec.heading || '',
+        content: Array.isArray(sec.content) ? sec.content.join('\n') : (sec.content || ''),
+        image: null,
+        imagePreview: sec.image?.url || '',
+        existingImageUrl: sec.image?.url || '',
+      }))
       : [
-          { heading: '', content: '', image: null, imagePreview: '', existingImageUrl: '' }
-        ]
+        { heading: '', content: '', image: null, imagePreview: '', existingImageUrl: '' }
+      ]
   );
   const [ctaButtonText, setCtaButtonText] = useState<string>(initial?.cta?.buttonText || '');
   const [ctaText, setCtaText] = useState<string>(initial?.cta?.text || '');
@@ -490,7 +490,8 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
   // Copy URL Helper
   const handleCopyUrl = () => {
     if (typeof window !== 'undefined' && slug) {
-      navigator.clipboard.writeText(`https://tetrahedron.in/blogs/${slug}`);
+      const cleanSlug = slug.replace(/^\/+/, '');
+      navigator.clipboard.writeText(`https://tetrahedron.in/blog/${cleanSlug}`);
       setCopiedSlug(true);
       setTimeout(() => setCopiedSlug(false), 2000);
     }
@@ -511,10 +512,10 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
       secs.map((sec, i) =>
         i === idx
           ? {
-              ...sec,
-              image: file,
-              imagePreview: file ? URL.createObjectURL(file) : sec.imagePreview,
-            }
+            ...sec,
+            image: file,
+            imagePreview: file ? URL.createObjectURL(file) : sec.imagePreview,
+          }
           : sec
       )
     );
@@ -701,10 +702,10 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
                   {activeTab === 'json'
                     ? 'Import JSON Blogs'
                     : initial
-                    ? 'Update Blog'
-                    : status === 'published'
-                    ? 'Publish Blog'
-                    : 'Create Blog'}
+                      ? 'Update Blog'
+                      : status === 'published'
+                        ? 'Publish Blog'
+                        : 'Create Blog'}
                 </span>
               </>
             )}
@@ -735,7 +736,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
               <div className="adm-permalink-box">
                 <div className="adm-permalink-left">
                   <Globe size={14} className="adm-permalink-icon" />
-                  <span className="adm-permalink-prefix">https://tetrahedron.in/blogs/</span>
+                  <span className="adm-permalink-prefix">https://tetrahedron.in/blog/</span>
                   <input
                     className="adm-permalink-input"
                     placeholder="article-slug"
@@ -1113,7 +1114,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
                   <div className="adm-serp-fav">T</div>
                   <div className="adm-serp-meta">
                     <span className="adm-serp-site">Tetrahedron</span>
-                    <span className="adm-serp-link">https://tetrahedron.in › blogs › {slug || 'article-slug'}</span>
+                    <span className="adm-serp-link">https://tetrahedron.in › blog › {(slug || 'article-slug').replace(/^\/+/, '')}</span>
                   </div>
                 </div>
                 <h5 className="adm-serp-heading">
@@ -1136,10 +1137,10 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
                     color: metaDescription.length === 0
                       ? '#64748b'
                       : metaDescription.length > 160
-                      ? '#ef4444'
-                      : metaDescription.length >= 120
-                      ? '#16a34a'
-                      : '#d97706'
+                        ? '#ef4444'
+                        : metaDescription.length >= 120
+                          ? '#16a34a'
+                          : '#d97706'
                   }}>
                     {metaDescription.length} / 160
                     {metaDescription.length >= 120 && metaDescription.length <= 160 && ' · ✓ Ideal'}
@@ -2772,7 +2773,7 @@ export default function AdminBlogDashboard() {
 
         <div className="adm-nav-right">
           <a
-            href="/blogs"
+            href="/blog"
             target="_blank"
             rel="noopener noreferrer"
             className="adm-nav-site-btn"
@@ -2954,7 +2955,9 @@ export default function AdminBlogDashboard() {
                     </td>
                   </tr>
                 ) : (
-                  paginatedBlogs.map((blog: any) => (
+                  paginatedBlogs.map((blog: any) => {
+                    const cleanSlug = (blog.slug || '').replace(/^\/+/, '');
+                    return (
                     <tr key={blog._id} className="adm-table-data-row">
                       {/* Article: Thumbnail + Title + Live Link */}
                       <td>
@@ -2971,13 +2974,13 @@ export default function AdminBlogDashboard() {
                               {blog.title}
                             </span>
                             <a
-                              href={`/blogs/${blog.slug}`}
+                              href={`/blog/${cleanSlug}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="adm-article-link"
                               title="Preview live article"
                             >
-                              <span>/blogs/{blog.slug}</span>
+                              <span>/blog/{cleanSlug}</span>
                               <ExternalLink size={10} />
                             </a>
                           </div>
@@ -3035,7 +3038,7 @@ export default function AdminBlogDashboard() {
                           </button>
 
                           <a
-                            href={`/blogs/${blog.slug}`}
+                            href={`/blog/${cleanSlug}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="adm-btn-view-row"
@@ -3054,7 +3057,8 @@ export default function AdminBlogDashboard() {
                         </div>
                       </td>
                     </tr>
-                  ))
+                    );
+                  })
                 )}
               </tbody>
             </table>
