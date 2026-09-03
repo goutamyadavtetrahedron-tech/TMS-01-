@@ -36,5 +36,6 @@ export const blogValidationSchema = Joi.object({
   featured: Joi.boolean().default(false),
   tags: Joi.array().items(Joi.string().allow('')),
   category: Joi.string().allow('').optional(),
-  metaDescription: Joi.string().allow('').optional()
-});
+  metaDescription: Joi.string().allow('').optional(),
+  imageAlt: Joi.string().allow('').optional(),
+}).unknown(true);
