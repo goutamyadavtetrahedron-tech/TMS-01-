@@ -19,6 +19,8 @@ import {
   Compass,
   Network,
   Users,
+  Shield,
+  LayoutGrid,
 } from "lucide-react";
 import { navigationData, contactInfo } from "./navigationData";
 import MobileDrawer from "./MobileDrawer";
@@ -64,9 +66,9 @@ export default function Navbar() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [modalButtonText, setModalButtonText] = useState("Quick Support");
 
-  const timeoutRef = useRef(null);
+  const navbarRef = useRef(null);
 
-  // Scroll detection for sticky navigation
+  // Scroll detection for sticky navigation (Requirement 6)
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
@@ -78,18 +80,37 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Dropdown Open/Close interaction (Requirement 5):
+  // - Opens when mouse touches it (hover)
+  // - Opens or toggles when clicked
+  // - Stays open even if mouse moves away (so people can read slowly)
+  // - Closes when clicking the active menu item again, clicking outside, or pressing Escape
   const handleMouseEnter = (title) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
     setActiveDropdown(title);
   };
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 180);
+  const toggleDropdown = (title) => {
+    setActiveDropdown((prev) => (prev === title ? null : title));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navbarRef.current && !navbarRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const openContactModal = (buttonText = "Quick Support") => {
     setModalButtonText(buttonText);
@@ -98,8 +119,16 @@ export default function Navbar() {
 
   return (
     <>
-      {/* SCOPED CSS RULES: Guarantees 100% uniform font size, weight, and colors */}
+      {/* SCOPED CSS RULES: Guarantees modern aesthetics, refined font sizes, clean scrollbars, and zero truncation */}
       <style jsx global>{`
+        .page-wrapper {
+          overflow: clip !important;
+        }
+        .tetra-navbar {
+          position: sticky !important;
+          top: 0 !important;
+          z-index: 1000 !important;
+        }
         .tetra-navbar a,
         .tetra-navbar button {
           font-family: var(--font-poppins), Poppins, sans-serif !important;
@@ -111,16 +140,11 @@ export default function Navbar() {
           letter-spacing: 0.1px !important;
           line-height: 1.2 !important;
           text-decoration: none !important;
-          transition: color 0.2s ease !important;
+          transition: color 0.15s ease !important;
         }
         @media (min-width: 1400px) {
           .tetra-navbar .nav-link-item {
             font-size: 14px !important;
-          }
-        }
-        @media (min-width: 1600px) {
-          .tetra-navbar .nav-link-item {
-            font-size: 14.5px !important;
           }
         }
         .tetra-navbar .nav-link-item:hover,
@@ -131,11 +155,6 @@ export default function Navbar() {
           color: #001659 !important;
           text-decoration: none !important;
           font-size: 13px !important;
-        }
-        @media (min-width: 1280px) {
-          .tetra-navbar .top-link {
-            font-size: 13.5px !important;
-          }
         }
         .tetra-navbar .top-link:hover {
           color: #FF5E14 !important;
@@ -150,96 +169,6 @@ export default function Navbar() {
           }
         }
 
-        /* MEGA-MENU EXACT STYLES (Strictly overrides any Bootstrap or global.css collision) */
-        .tetra-navbar .mega-card-title {
-          font-size: 16px !important;
-          font-weight: 700 !important;
-          color: #001659 !important;
-          line-height: 1.3 !important;
-          margin: 0 !important;
-        }
-        .tetra-navbar .mega-card-desc {
-          font-size: 12px !important;
-          color: #475569 !important;
-          line-height: 1.5 !important;
-          margin: 0 !important;
-        }
-        .tetra-navbar .mega-card-cta {
-          font-size: 12.5px !important;
-          font-weight: 700 !important;
-          color: #FF5E14 !important;
-          text-decoration: none !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 4px !important;
-        }
-        .tetra-navbar .mega-col-header {
-          height: 48px !important;
-          min-height: 48px !important;
-          max-height: 48px !important;
-          display: flex !important;
-          align-items: center !important;
-          gap: 7px !important;
-          border-bottom: 1px solid #f1f5f9 !important;
-          padding-bottom: 8px !important;
-          margin-bottom: 10px !important;
-        }
-        .tetra-navbar .mega-col-title {
-          font-size: 11.5px !important;
-          font-weight: 700 !important;
-          text-transform: uppercase !important;
-          letter-spacing: 0.3px !important;
-          color: #001659 !important;
-          line-height: 1.3 !important;
-          margin: 0 !important;
-          text-decoration: none !important;
-          display: -webkit-box !important;
-          -webkit-line-clamp: 2 !important;
-          -webkit-box-orient: vertical !important;
-          overflow: hidden !important;
-        }
-        .tetra-navbar .mega-item-title {
-          font-size: 13px !important;
-          font-weight: 600 !important;
-          color: #001659 !important;
-          line-height: 1.3 !important;
-        }
-        .tetra-navbar .mega-item-desc {
-          font-size: 11px !important;
-          font-weight: 400 !important;
-          color: #64748B !important;
-          line-height: 1.3 !important;
-        }
-        .tetra-navbar .mega-course-title {
-          font-size: 12px !important;
-          font-weight: 500 !important;
-          color: #001659 !important;
-          line-height: 1.3 !important;
-        }
-        .tetra-navbar .mega-action-btn {
-          font-size: 12.5px !important;
-          font-weight: 700 !important;
-          color: #FF5E14 !important;
-          background: transparent !important;
-          border: none !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          cursor: pointer !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 4px !important;
-          line-height: 1 !important;
-          transition: color 0.15s ease !important;
-        }
-        .tetra-navbar .mega-action-btn:hover {
-          color: #c2410c !important;
-        }
-        .tetra-navbar .mega-footer-note {
-          font-size: 12px !important;
-          color: #475569 !important;
-          font-weight: 500 !important;
-          line-height: 1.3 !important;
-        }
         /* ABOUT US DROPDOWN STYLES */
         .tetra-navbar .about-dropdown-container {
           position: absolute !important;
@@ -251,36 +180,14 @@ export default function Navbar() {
         .tetra-navbar .about-dropdown-container.is-open {
           transform: translateX(-50%) translateY(0px) !important;
         }
-        .tetra-navbar .about-dropdown-title {
-          font-size: 13px !important;
-          font-weight: 700 !important;
-          color: #001659 !important;
-          line-height: 1.2 !important;
-          text-decoration: none !important;
-          transition: color 0.15s ease !important;
-        }
-        .tetra-navbar .about-dropdown-desc {
-          font-size: 11px !important;
-          color: #64748B !important;
-          line-height: 1.35 !important;
-          font-weight: 400 !important;
-          margin: 0 !important;
-        }
-        .tetra-navbar .about-sub-link {
-          font-size: 12px !important;
-          font-weight: 500 !important;
-          color: #475569 !important;
-          text-decoration: none !important;
-          transition: color 0.15s ease !important;
-        }
-        .tetra-navbar .about-sub-link:hover {
-          color: #FF5E14 !important;
-        }
+
+        /* CUSTOM MODERN SCROLLBAR FOR SKILL TRAINING COLUMNS */
         .custom-menu-scrollbar::-webkit-scrollbar {
           width: 3.5px !important;
         }
         .custom-menu-scrollbar::-webkit-scrollbar-track {
-          background: transparent !important;
+          background: #f1f5f9 !important;
+          border-radius: 4px !important;
         }
         .custom-menu-scrollbar::-webkit-scrollbar-thumb {
           background: #cbd5e1 !important;
@@ -289,11 +196,129 @@ export default function Navbar() {
         .custom-menu-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #94a3b8 !important;
         }
+
+        /* MEGA MENU - LEFT HERO CARD STYLES */
+        .tetra-navbar .mega-hero-tag {
+          font-size: 11px !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.8px !important;
+          text-transform: uppercase !important;
+          color: #FF7A3D !important;
+          display: block !important;
+          margin-bottom: 6px !important;
+          line-height: 1.2 !important;
+        }
+        .tetra-navbar .mega-hero-title {
+          font-size: 17.5px !important;
+          font-weight: 700 !important;
+          color: #ffffff !important;
+          line-height: 1.25 !important;
+          margin-bottom: 8px !important;
+        }
+        .tetra-navbar .mega-hero-desc {
+          font-size: 13px !important;
+          font-weight: 400 !important;
+          color: #cbd5e1 !important;
+          line-height: 1.45 !important;
+          margin-bottom: 12px !important;
+        }
+        .tetra-navbar .mega-hero-cta {
+          font-size: 13.5px !important;
+          font-weight: 700 !important;
+          color: #ffffff !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          text-decoration: none !important;
+          transition: color 0.15s ease !important;
+        }
+        .tetra-navbar .mega-hero-cta:hover {
+          color: #FF7A3D !important;
+        }
+
+        /* MEGA MENU - BOTTOM ACTION BAR */
+        .tetra-navbar .mega-bottom-text {
+          font-size: 12.5px !important;
+          font-weight: 400 !important;
+          color: #64748b !important;
+          line-height: 1.2 !important;
+        }
+        .tetra-navbar .mega-bottom-cta {
+          font-size: 13.5px !important;
+          font-weight: 700 !important;
+          color: #FF5E14 !important;
+          line-height: 1.2 !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          background: transparent !important;
+          border: none !important;
+          padding: 0 !important;
+          cursor: pointer !important;
+          transition: color 0.15s ease !important;
+        }
+        .tetra-navbar .mega-bottom-cta:hover {
+          color: #c2410c !important;
+        }
+
+        /* MEGA MENU - COLUMN HEADERS */
+        .tetra-navbar .mega-col-title {
+          font-size: 15.5px !important;
+          font-weight: 700 !important;
+          color: #001659 !important;
+          line-height: 1.25 !important;
+          text-decoration: none !important;
+          white-space: normal !important;
+          word-break: normal !important;
+          overflow: visible !important;
+          text-overflow: clip !important;
+          display: inline-block !important;
+          transition: color 0.15s ease !important;
+        }
+        .tetra-navbar .mega-col-title:hover {
+          color: #FF5E14 !important;
+        }
+
+        /* MEGA MENU - CONSULTING SERVICE ITEM TITLES & DESCRIPTIONS */
+        .tetra-navbar .mega-item-title {
+          font-size: 15px !important;
+          font-weight: 600 !important;
+          color: #001659 !important;
+          line-height: 1.3 !important;
+          transition: color 0.15s ease !important;
+        }
+        .tetra-navbar a:hover .mega-item-title,
+        .tetra-navbar .group\/sub:hover .mega-item-title {
+          color: #FF5E14 !important;
+        }
+        .tetra-navbar .mega-item-desc {
+          font-size: 12px !important;
+          font-weight: 400 !important;
+          color: #64748b !important;
+          line-height: 1.35 !important;
+          margin-top: 2px !important;
+        }
+
+        /* MEGA MENU - SKILL TRAINING COURSE TITLES */
+        .tetra-navbar .mega-course-title {
+          font-size: 14.5px !important;
+          font-weight: 500 !important;
+          color: #0f172a !important;
+          line-height: 1.4 !important;
+          transition: color 0.15s ease !important;
+        }
+        .tetra-navbar a:hover .mega-course-title,
+        .tetra-navbar .group\/sub:hover .mega-course-title {
+          color: #FF5E14 !important;
+          font-weight: 600 !important;
+        }
       `}</style>
 
       <header
-        className={`tetra-navbar w-full sticky top-0 z-[1000] bg-white transition-all duration-300 ${isScrolled ? "shadow-md" : "border-b border-slate-200/90 shadow-2xs"
-          }`}
+        ref={navbarRef}
+        className={`tetra-navbar w-full sticky top-0 z-[1000] bg-white transition-all duration-300 ${
+          isScrolled ? "shadow-md" : "border-b border-slate-200/90 shadow-2xs"
+        }`}
       >
         <div className="w-full flex items-stretch">
           {/* BRAND LOGOS: Zero padding so images take up the complete space */}
@@ -302,24 +327,27 @@ export default function Navbar() {
               <img
                 src="/assets/images/Tetrahedron Logo.png"
                 alt="Tetrahedron Logo"
-                className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] ${isScrolled ? "h-10 md:h-11" : "h-[68px] sm:h-[72px] lg:h-[76px]"
-                  }`}
+                className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] ${
+                  isScrolled ? "h-10 md:h-11" : "h-[68px] sm:h-[72px] lg:h-[76px]"
+                }`}
               />
               <img
                 src="/assets/images/logocertified.jpeg"
                 alt="Incredible Workplaces Certified Badge"
-                className={`w-auto object-contain rounded shadow-2xs transition-all duration-300 ${isScrolled ? "h-7 md:h-8" : "h-[50px] sm:h-[54px] lg:h-[58px]"
-                  }`}
+                className={`w-auto object-contain rounded shadow-2xs transition-all duration-300 ${
+                  isScrolled ? "h-7 md:h-8" : "h-[50px] sm:h-[54px] lg:h-[58px]"
+                }`}
               />
             </Link>
           </div>
 
           {/* RIGHT SIDE: TWO ROWS (TOP UTILITY BAR + MAIN MENU BAR) */}
           <div className="flex-1 flex flex-col justify-between min-w-0">
-            {/* TOP UTILITY ROW (Compact, clean) */}
+            {/* TOP UTILITY ROW (Hides smoothly on scroll - Requirement 6) */}
             <div
-              className={`w-full flex items-center justify-between pl-2 sm:pl-3 pr-3 sm:pr-4 lg:pr-5 transition-all duration-300 ${isScrolled ? "hidden" : "hidden md:flex py-1 border-b border-slate-100"
-                }`}
+              className={`w-full flex items-center justify-between pl-2 sm:pl-3 pr-3 sm:pr-4 lg:pr-5 transition-all duration-300 ${
+                isScrolled ? "hidden" : "hidden md:flex py-1 border-b border-slate-100"
+              }`}
             >
               {/* Contact list with prominent orange icons */}
               <div className="flex items-center gap-4 lg:gap-6">
@@ -343,7 +371,7 @@ export default function Navbar() {
                 </a>
               </div>
 
-              {/* Social media icons with "Follow Us On:" - Perfectly aligned & spaced */}
+              {/* Social media icons with "Follow Us On:" */}
               <div className="flex items-center gap-3">
                 <span className="text-[12.5px] lg:text-[13px] font-semibold text-[#001659] leading-none select-none">
                   Follow Us On:
@@ -408,6 +436,7 @@ export default function Navbar() {
                       <Link
                         key={item.title}
                         href={item.href}
+                        onClick={() => setActiveDropdown(null)}
                         className="nav-link-item px-2 lg:px-2.5 2xl:px-3 py-2.5 whitespace-nowrap flex items-center cursor-pointer"
                       >
                         {item.title}
@@ -420,527 +449,334 @@ export default function Navbar() {
                       key={item.title}
                       className="group/nav relative flex items-stretch"
                       onMouseEnter={() => handleMouseEnter(item.title)}
-                      onMouseLeave={handleMouseLeave}
                     >
                       <button
-                        className={`nav-link-item flex items-center gap-1 px-2 lg:px-2.5 2xl:px-3 py-2.5 focus:outline-none whitespace-nowrap cursor-pointer ${isOpen ? "nav-link-active" : ""
-                          }`}
+                        className={`nav-link-item flex items-center gap-1 px-2 lg:px-2.5 2xl:px-3 py-2.5 focus:outline-none whitespace-nowrap cursor-pointer ${
+                          isOpen ? "nav-link-active" : ""
+                        }`}
                         aria-expanded={isOpen}
-                        onClick={() =>
-                          setActiveDropdown(isOpen ? null : item.title)
-                        }
+                        onClick={() => toggleDropdown(item.title)}
                       >
                         <span>{item.title}</span>
                         <ChevronDown
-                          className={`w-3 h-3 transition-all duration-200 shrink-0 ${isOpen
+                          className={`w-3 h-3 transition-all duration-200 shrink-0 ${
+                            isOpen
                               ? "rotate-180 text-[#FF5E14]"
                               : "text-[#001659] group-hover/nav:text-[#FF5E14]"
-                            }`}
+                          }`}
                         />
                       </button>
 
-                      {/* COMPACT MINIMAL DROPDOWN: ABOUT US */}
+                      {/* 2. ABOUT US DROPDOWN (Narrow, clean, 3 items + 2 policy links - Requirement 2) */}
                       {hasChildren && !isMega && (
                         <div
-                          className={`about-dropdown-container top-full pt-1.5 w-[280px] z-[1001] ${isOpen
+                          className={`about-dropdown-container top-full pt-1.5 w-[280px] z-[1001] ${
+                            isOpen
                               ? "is-open opacity-100 visible pointer-events-auto"
                               : "opacity-0 invisible pointer-events-none"
-                            }`}
-                          onMouseEnter={() => handleMouseEnter(item.title)}
-                          onMouseLeave={handleMouseLeave}
+                          }`}
                         >
-                          <div className="bg-white rounded-xl shadow-[0_12px_36px_-6px_rgba(0,22,89,0.18)] border border-slate-200/90 overflow-hidden">
-                            <div className="p-1.5 space-y-0.5">
-                            {item.children.map((child, idx) => {
-                              const aboutIcons = [
-                                // Who We Are
-                                <svg key="icon0" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
-                                // Our Leaders
-                                <svg key="icon1" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
-                                // Policies
-                                <svg key="icon2" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
-                              ];
-                              const iconBg = [
-                                "bg-blue-50 text-[#001659]",
-                                "bg-amber-50 text-[#FF5E14]",
-                                "bg-emerald-50 text-emerald-700",
-                              ];
-                              return (
-                                <div key={child.title} className="group/item">
-                                  <Link
-                                    href={child.href}
-                                    onClick={() => setActiveDropdown(null)}
-                                    className="flex items-start gap-2.5 p-1.5 rounded-lg hover:bg-slate-50 transition-colors"
-                                  >
-                                    <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${iconBg[idx]}`}>
-                                      {aboutIcons[idx]}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="about-dropdown-title group-hover/item:text-[#FF5E14]">
-                                        {child.title}
-                                      </div>
-                                      {child.description && (
-                                        <p className="about-dropdown-desc mt-0.5">
-                                          {child.description}
-                                        </p>
-                                      )}
-                                    </div>
-                                    <svg className="w-3 h-3 text-slate-300 group-hover/item:text-[#FF5E14] mt-1 shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6" /></svg>
-                                  </Link>
-
-                                  {/* Policies sub-items */}
-                                  {child.subChildren && (
-                                    <div className="ml-9 space-y-0.5 py-0.5">
-                                      {child.subChildren.map((sub) => (
-                                        <Link
-                                          key={sub.title}
-                                          href={sub.href}
-                                          onClick={() => setActiveDropdown(null)}
-                                          className="about-sub-link flex items-center gap-1.5 px-1.5 py-0.5 rounded hover:bg-slate-50"
-                                        >
-                                          <span className="w-1 h-1 rounded-full bg-[#FF5E14] inline-block shrink-0" />
-                                          {sub.title}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  )}
+                          <div className="bg-white rounded-xl shadow-[0_12px_36px_-6px_rgba(0,22,89,0.18)] border border-slate-200/90 overflow-hidden p-2.5">
+                            <div className="space-y-1">
+                              {/* 1. Who We Are */}
+                              <Link
+                                href="/about-us/"
+                                onClick={() => setActiveDropdown(null)}
+                                className="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors group/item"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#001659] flex items-center justify-center shrink-0">
+                                  <Users className="w-4 h-4" />
                                 </div>
-                              );
-                            })}
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-[14px] font-bold text-[#001659] group-hover/item:text-[#FF5E14] transition-colors leading-tight">
+                                    Who We Are
+                                  </div>
+                                  <div className="text-[11.5px] text-slate-500 leading-tight mt-0.5">
+                                    Manufacturing & operational consulting
+                                  </div>
+                                </div>
+                              </Link>
+
+                              {/* 2. Our Leaders */}
+                              <Link
+                                href="/our-team/"
+                                onClick={() => setActiveDropdown(null)}
+                                className="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors group/item"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-amber-50 text-[#FF5E14] flex items-center justify-center shrink-0">
+                                  <Award className="w-4 h-4" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-[14px] font-bold text-[#001659] group-hover/item:text-[#FF5E14] transition-colors leading-tight">
+                                    Our Leaders
+                                  </div>
+                                  <div className="text-[11.5px] text-slate-500 leading-tight mt-0.5">
+                                    Executive leadership & transformation
+                                  </div>
+                                </div>
+                              </Link>
+
+                              {/* 3. Policies */}
+                              <Link
+                                href="/privacy-policy/"
+                                onClick={() => setActiveDropdown(null)}
+                                className="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors group/item"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                                  <Shield className="w-4 h-4" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-[14px] font-bold text-[#001659] group-hover/item:text-[#FF5E14] transition-colors leading-tight">
+                                    Policies
+                                  </div>
+                                  <div className="text-[11.5px] text-slate-500 leading-tight mt-0.5">
+                                    Governance & compliance standards
+                                  </div>
+                                </div>
+                              </Link>
+                            </div>
+
+                            {/* Sub-links: Privacy Policy & Terms of Service */}
+                            <div className="mt-2.5 pt-2.5 border-t border-slate-100 flex items-center justify-between px-2.5 text-[11.5px]">
+                              <Link
+                                href="/privacy-policy/"
+                                onClick={() => setActiveDropdown(null)}
+                                className="text-slate-500 hover:text-[#FF5E14] transition-colors font-medium"
+                              >
+                                Privacy Policy
+                              </Link>
+                              <span className="text-slate-300">•</span>
+                              <Link
+                                href="/terms-of-service/"
+                                onClick={() => setActiveDropdown(null)}
+                                className="text-slate-500 hover:text-[#FF5E14] transition-colors font-medium"
+                              >
+                                Terms of Service
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                      {/* COMPACT CONSULTING MEGA MENU: 4 Balanced Columns (Zero Duplicate Links, Equal Prominence) */}
+                      {/* 3. CONSULTING MEGA MENU (Matching Image 1 & Requirement 3) */}
                       {isMega && item.title === "Consulting" && (
                         <div
-                          className={`absolute left-[-240px] top-full pt-1.5 z-[1001] w-[1180px] 2xl:w-[1240px] transition-all duration-200 ${isOpen
+                          className={`absolute left-[-235px] 2xl:left-[-255px] top-full pt-1.5 z-[1001] w-[1220px] 2xl:w-[1280px] transition-all duration-200 ${
+                            isOpen
                               ? "opacity-100 translate-y-0 visible pointer-events-auto"
                               : "opacity-0 translate-y-2 invisible pointer-events-none"
-                            }`}
-                          onMouseEnter={() => handleMouseEnter(item.title)}
-                          onMouseLeave={handleMouseLeave}
+                          }`}
                         >
-                          <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,22,89,0.16)] border border-slate-200/90 overflow-hidden">
+                          <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,22,89,0.18)] border border-slate-200/90 overflow-hidden">
                             <div className="flex items-stretch">
-                              {/* Left Flagship Highlight Card */}
-                              <div className="w-[200px] shrink-0 bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-slate-50 p-4 flex flex-col justify-between border-r border-amber-100/70">
+                              {/* Left Hero Card - Dark Navy */}
+                              <div className="w-[235px] shrink-0 bg-[#0B1A30] p-4 flex flex-col justify-between">
                                 <div>
-                                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FF5E14]/10 text-[#FF5E14] text-[9.5px] font-bold tracking-wider uppercase mb-2.5">
-                                    <Sparkles className="w-3 h-3 text-[#FF5E14]" />
-                                    <span>FLAGSHIP PROGRAM</span>
-                                  </div>
-                                  <h4 className="mega-card-title">
+                                  <span className="mega-hero-tag">
+                                    Flagship program
+                                  </span>
+                                  <div className="mega-hero-title">
                                     Manufacturing Operational Excellence
-                                  </h4>
-                                  <p className="mega-card-desc mt-1.5">
-                                    Proven end-to-end methodology to maximize throughput, eliminate operational bottlenecks, and reduce manufacturing costs.
+                                  </div>
+                                  <p className="mega-hero-desc">
+                                    End-to-end methodology to raise throughput and cut manufacturing cost.
                                   </p>
+
+                                  <div className="rounded-lg overflow-hidden border border-white/10 shadow-sm aspect-video mb-3 relative">
+                                    <img
+                                      src="/assets/images/services/consulting-hero.jpg"
+                                      alt="Manufacturing Operational Excellence"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
                                 </div>
 
                                 <Link
                                   href="/manufacturing-operational-excellence-consulting/"
                                   onClick={() => setActiveDropdown(null)}
-                                  className="mega-card-cta mt-3 hover:translate-x-0.5 transition-transform"
+                                  className="mega-hero-cta group/cta"
                                 >
-                                  <span>Explore Methodology</span>
-                                  <ArrowRight className="w-3.5 h-3.5" />
+                                  <span>Explore methodology</span>
+                                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform text-[#FF7A3D]" />
                                 </Link>
                               </div>
 
-                              {/* Right 4 Balanced Columns: All 19 Unique Capabilities */}
-                              <div className="flex-1 p-3.5 sm:p-4 grid grid-cols-4 gap-3.5">
-                                {/* Column 1: Manufacturing Excellence Services */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-orange-50 border border-orange-100/80 flex items-center justify-center shrink-0 text-[#FF5E14]">
-                                      <Factory className="w-3.5 h-3.5" />
-                                    </div>
-                                    <Link
-                                      href={item.categories[0].href}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                      title={item.categories[0].title}
+                              {/* Right 4 Category Columns - Prominent, readable font sizes, zero truncation */}
+                              <div className="flex-1 p-3.5 grid grid-cols-4 gap-3">
+                                {item.categories.map((cat, catIdx) => {
+                                  const colIcons = [
+                                    <LayoutGrid key="c0" className="w-4 h-4 text-[#FF5E14]" />,
+                                    <Compass key="c1" className="w-4 h-4 text-blue-600" />,
+                                    <Cpu key="c2" className="w-4 h-4 text-purple-600" />,
+                                    <Shield key="c3" className="w-4 h-4 text-emerald-600" />,
+                                  ];
+                                  return (
+                                    <div
+                                      key={cat.title}
+                                      className="pr-2.5 border-r border-slate-100 last:border-r-0 last:pr-0"
                                     >
-                                      {item.categories[0].title}
-                                    </Link>
-                                  </div>
-                                  <div className="space-y-1">
-                                    {item.categories[0].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-orange-50/60 transition-colors group/sub"
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
+                                      <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-slate-100">
+                                        <div className="shrink-0">
+                                          {colIcons[catIdx] || <Factory className="w-4 h-4 text-[#FF5E14]" />}
                                         </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
+                                        <Link
+                                          href={cat.href}
+                                          onClick={() => setActiveDropdown(null)}
+                                          className="mega-col-title"
+                                        >
+                                          {cat.title}
+                                        </Link>
+                                      </div>
 
-                                {/* Column 2: Plant Engineering & DOJO Centers */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-blue-50 border border-blue-100/80 flex items-center justify-center shrink-0 text-blue-600">
-                                      <Compass className="w-3.5 h-3.5" />
+                                      <div className="space-y-1">
+                                        {cat.items.map((subItem) => (
+                                          <Link
+                                            key={subItem.title}
+                                            href={subItem.href}
+                                            onClick={() => setActiveDropdown(null)}
+                                            className="block px-1.5 py-1 rounded-md hover:bg-slate-50 transition-colors group/sub"
+                                          >
+                                            <div className="mega-item-title">
+                                              {subItem.title}
+                                            </div>
+                                            {subItem.description && (
+                                              <div className="mega-item-desc">
+                                                {subItem.description}
+                                              </div>
+                                            )}
+                                          </Link>
+                                        ))}
+                                      </div>
                                     </div>
-                                    <Link
-                                      href={item.categories[1].href}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                      title={item.categories[1].title}
-                                    >
-                                      {item.categories[1].title}
-                                    </Link>
-                                  </div>
-                                  <div className="space-y-1">
-                                    {item.categories[1].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-blue-50/60 transition-colors group/sub"
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Column 3: Digitization & Smart Factory */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-purple-50 border border-purple-100/80 flex items-center justify-center shrink-0 text-purple-600">
-                                      <Cpu className="w-3.5 h-3.5" />
-                                    </div>
-                                    <Link
-                                      href={item.categories[2].href}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                      title={item.categories[2].title}
-                                    >
-                                      {item.categories[2].title}
-                                    </Link>
-                                  </div>
-                                  <div className="space-y-1">
-                                    {item.categories[2].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-purple-50/60 transition-colors group/sub"
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Column 4: ISO Standards & Certifications */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-emerald-50 border border-emerald-100/80 flex items-center justify-center shrink-0 text-emerald-600">
-                                      <Award className="w-3.5 h-3.5" />
-                                    </div>
-                                    <Link
-                                      href={item.categories[3].href}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                      title={item.categories[3].title}
-                                    >
-                                      {item.categories[3].title}
-                                    </Link>
-                                  </div>
-                                  <div className="space-y-1">
-                                    {item.categories[3].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-emerald-50/60 transition-colors group/sub"
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
+                                  );
+                                })}
                               </div>
                             </div>
 
                             {/* Bottom Consultation Bar */}
-                            <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                              <span className="mega-footer-note">
-                                Looking for custom shopfloor turnaround or lean diagnostic?
+                            <div className="px-4 py-2.5 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between">
+                              <span className="mega-bottom-text">
+                                Looking for a custom shopfloor diagnostic?
                               </span>
                               <button
                                 onClick={() => {
                                   setActiveDropdown(null);
                                   openContactModal("Consulting Inquiry");
                                 }}
-                                className="mega-action-btn"
+                                className="mega-bottom-cta group/cta"
                               >
-                                <span>Talk to Senior Consultants</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
+                                <span>Talk to senior consultants</span>
+                                <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform" />
                               </button>
                             </div>
                           </div>
                         </div>
                       )}
 
-                      {/* COMPACT SKILL TRAINING MEGA MENU: All 4 Categories + Corporate Card */}
+                      {/* 4. SKILL TRAINING MEGA MENU (Matching Image 2 & Requirement 4) */}
                       {isMega && item.title === "Skill Training" && (
                         <div
-                          className={`absolute left-[-260px] top-full pt-1.5 z-[1001] w-[1180px] 2xl:w-[1240px] transition-all duration-200 ${isOpen
+                          className={`absolute left-[-280px] 2xl:left-[-300px] top-full pt-1.5 z-[1001] w-[1220px] 2xl:w-[1280px] transition-all duration-200 ${
+                            isOpen
                               ? "opacity-100 translate-y-0 visible pointer-events-auto"
                               : "opacity-0 translate-y-2 invisible pointer-events-none"
-                            }`}
-                          onMouseEnter={() => handleMouseEnter(item.title)}
-                          onMouseLeave={handleMouseLeave}
+                          }`}
                         >
-                          <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,22,89,0.16)] border border-slate-200/90 overflow-hidden">
+                          <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,22,89,0.18)] border border-slate-200/90 overflow-hidden">
                             <div className="flex items-stretch">
-                              {/* Left Corporate Training Highlight Card */}
-                              <div className="w-[200px] shrink-0 bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-slate-50 p-4 flex flex-col justify-between border-r border-amber-100/70">
+                              {/* Left Hero Card - Dark Navy */}
+                              <div className="w-[235px] shrink-0 bg-[#0B1A30] p-4 flex flex-col justify-between">
                                 <div>
-                                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FF5E14]/10 text-[#FF5E14] text-[10px] font-bold tracking-wider uppercase mb-2.5">
-                                    <GraduationCap className="w-3 h-3 text-[#FF5E14]" />
-                                    <span>CORPORATE TRAINING</span>
+                                  <span className="mega-hero-tag">
+                                    Corporate training
+                                  </span>
+                                  <div className="mega-hero-title">
+                                    Certified courses across 300+ manufacturers
                                   </div>
-                                  <h4 className="mega-card-title">
-                                    Corporate Training Course In India
-                                  </h4>
-                                  <p className="mega-card-desc mt-1.5">
-                                    Certified, hands-on industrial and executive training programs delivering measurable capability building across 300+ manufacturers.
+                                  <p className="mega-hero-desc">
+                                    Hands-on industrial and executive programs for measurable capability building.
                                   </p>
                                 </div>
 
                                 <Link
                                   href="/corporate-training-companies/"
                                   onClick={() => setActiveDropdown(null)}
-                                  className="mega-card-cta mt-4 hover:translate-x-0.5 transition-transform"
+                                  className="mega-hero-cta group/cta mt-auto"
                                 >
-                                  <span>View Training Catalogue</span>
-                                  <ArrowRight className="w-3.5 h-3.5" />
+                                  <span>View full catalogue</span>
+                                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform text-[#FF7A3D]" />
                                 </Link>
                               </div>
 
-                              {/* Right 4 Columns: All 48 Verified Courses with Exact Headings & Count Badges */}
-                              <div className="flex-1 p-3.5 sm:p-4 grid grid-cols-4 gap-3">
-                                {/* Column 1: Technical Training Courses */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-orange-50 border border-orange-100/80 flex items-center justify-center shrink-0 text-[#FF5E14]">
-                                      <Wrench className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-between gap-1 min-w-0">
-                                      <Link
-                                        href={item.categories[0].href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                        title={item.categories[0].title}
-                                      >
-                                        {item.categories[0].title}
-                                      </Link>
-                                      <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100/80 text-[#FF5E14] shrink-0">
-                                        {item.categories[0].items.length}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-1 max-h-[310px] overflow-y-auto pr-1.5 custom-menu-scrollbar">
-                                    {item.categories[0].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-orange-50/60 transition-colors group/sub"
-                                        title={subItem.title}
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
+                              {/* Right 4 Category Columns - Scrollable up and down with count badges, zero truncation */}
+                              <div className="flex-1 p-3.5 grid grid-cols-4 gap-3">
+                                {item.categories.map((cat, catIdx) => {
+                                  const skillIcons = [
+                                    <Wrench key="s0" className="w-4 h-4 text-[#FF5E14]" />,
+                                    <TrendingUp key="s1" className="w-4 h-4 text-blue-600" />,
+                                    <Target key="s2" className="w-4 h-4 text-purple-600" />,
+                                    <Users key="s3" className="w-4 h-4 text-emerald-600" />,
+                                  ];
+                                  return (
+                                    <div
+                                      key={cat.title}
+                                      className="pr-2.5 border-r border-slate-100 last:border-r-0 last:pr-0 flex flex-col"
+                                    >
+                                      <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 gap-1.5">
+                                        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                          <div className="shrink-0">
+                                            {skillIcons[catIdx] || <GraduationCap className="w-4 h-4 text-[#FF5E14]" />}
                                           </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
+                                          <Link
+                                            href={cat.href}
+                                            onClick={() => setActiveDropdown(null)}
+                                            className="mega-col-title"
+                                            title={cat.title}
+                                          >
+                                            {cat.title.replace(" Courses", "").replace(" and Training Consultants", "")}
+                                          </Link>
+                                        </div>
+                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 shrink-0">
+                                          {cat.items.length} courses
+                                        </span>
+                                      </div>
 
-                                {/* Column 2: Process Improvement Training Courses */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-blue-50 border border-blue-100/80 flex items-center justify-center shrink-0 text-blue-600">
-                                      <TrendingUp className="w-3.5 h-3.5" />
+                                      {/* Scrollable Column Container - Allows scrolling up/down inside dropdown without making it too tall */}
+                                      <div className="max-h-[320px] overflow-y-auto pr-1.5 space-y-0.5 custom-menu-scrollbar">
+                                        {cat.items.map((subItem) => (
+                                          <Link
+                                            key={subItem.title}
+                                            href={subItem.href}
+                                            onClick={() => setActiveDropdown(null)}
+                                            className="block px-2 py-1 rounded hover:bg-slate-50 transition-colors group/sub"
+                                            title={subItem.title}
+                                          >
+                                            <div className="mega-course-title">
+                                              {subItem.title}
+                                            </div>
+                                          </Link>
+                                        ))}
+                                      </div>
                                     </div>
-                                    <div className="flex-1 flex items-center justify-between gap-1 min-w-0">
-                                      <Link
-                                        href={item.categories[1].href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                        title={item.categories[1].title}
-                                      >
-                                        {item.categories[1].title}
-                                      </Link>
-                                      <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100/80 text-blue-600 shrink-0">
-                                        {item.categories[1].items.length}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-1 max-h-[310px] overflow-y-auto pr-1.5 custom-menu-scrollbar">
-                                    {item.categories[1].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-blue-50/60 transition-colors group/sub"
-                                        title={subItem.title}
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Column 3: Strategic Management and Training Consultants */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-purple-50 border border-purple-100/80 flex items-center justify-center shrink-0 text-purple-600">
-                                      <Target className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-between gap-1 min-w-0">
-                                      <Link
-                                        href={item.categories[2].href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                        title={item.categories[2].title}
-                                      >
-                                        {item.categories[2].title}
-                                      </Link>
-                                      <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-purple-100/80 text-purple-600 shrink-0">
-                                        {item.categories[2].items.length}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-1 max-h-[310px] overflow-y-auto pr-1.5 custom-menu-scrollbar">
-                                    {item.categories[2].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-purple-50/60 transition-colors group/sub"
-                                        title={subItem.title}
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Column 4: Behavioural Training */}
-                                <div>
-                                  <div className="mega-col-header">
-                                    <div className="w-6 h-6 rounded-md bg-emerald-50 border border-emerald-100/80 flex items-center justify-center shrink-0 text-emerald-600">
-                                      <Users className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-between gap-1 min-w-0">
-                                      <Link
-                                        href={item.categories[3].href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="mega-col-title hover:text-[#FF5E14] transition-colors"
-                                        title={item.categories[3].title}
-                                      >
-                                        {item.categories[3].title}
-                                      </Link>
-                                      <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-600 shrink-0">
-                                        {item.categories[3].items.length}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-1 max-h-[310px] overflow-y-auto pr-1.5 custom-menu-scrollbar">
-                                    {item.categories[3].items.map((subItem) => (
-                                      <Link
-                                        key={subItem.title}
-                                        href={subItem.href}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="block px-2 py-1 rounded-lg hover:bg-emerald-50/60 transition-colors group/sub"
-                                        title={subItem.title}
-                                      >
-                                        <div className="mega-item-title group-hover/sub:text-[#FF5E14] truncate">
-                                          {subItem.title}
-                                        </div>
-                                        {subItem.description && (
-                                          <div className="mega-item-desc truncate mt-0.5">
-                                            {subItem.description}
-                                          </div>
-                                        )}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
+                                  );
+                                })}
                               </div>
                             </div>
 
                             {/* Bottom Corporate Inquiry Bar */}
-                            <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                              <span className="mega-footer-note flex items-center gap-1.5">
-                                <GraduationCap className="w-4 h-4 text-[#FF5E14]" />
-                                <span>Inquire for customized on-site corporate training batches & workshops</span>
+                            <div className="px-4 py-2.5 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between">
+                              <span className="mega-bottom-text">
+                                Inquire for customized on-site corporate batches
                               </span>
                               <button
                                 onClick={() => {
                                   setActiveDropdown(null);
                                   openContactModal("Corporate Training Inquiry");
                                 }}
-                                className="mega-action-btn"
+                                className="mega-bottom-cta group/cta"
                               >
-                                <span>Inquire Now</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
+                                <span>Inquire now</span>
+                                <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform" />
                               </button>
                             </div>
                           </div>
