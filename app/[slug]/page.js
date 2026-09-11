@@ -18,6 +18,7 @@ import {
 import * as Icons from "lucide-react";
 import ContactFormModal from "@/components/ContactFormModal";
 import ContactForm from "@/components/ContactForm";
+import { renderRichText } from "@/lib/richTextRenderer";
 
 // Internal CSS styles (keep the styles object as it is)
 const styles = {
@@ -791,7 +792,7 @@ export default function ServiceOrBlogPage({ params }) {
     if (!text || typeof text !== "string") return null;
     return text.split("\n").map((paragraph, index) => (
       <p key={index} className="mb-3" style={style}>
-        {paragraph.trim()}
+        {renderRichText(paragraph.trim())}
       </p>
     ));
   };

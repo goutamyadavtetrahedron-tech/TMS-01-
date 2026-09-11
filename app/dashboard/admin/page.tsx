@@ -39,6 +39,10 @@ import {
   SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
+  Star,
+  ArrowUpDown,
+  Calendar,
+  BookOpen,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -50,6 +54,8 @@ import {
   selectBlogsLoading,
 } from '@/lib/store/blogSlice';
 import { AppDispatch } from '@/lib/store/store';
+import SectionRichEditor from '@/components/admin/SectionRichEditor';
+import { stripHtmlAndMarkdown } from '@/lib/richTextRenderer';
 
 const ADMIN_EMAIL = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || '').trim();
 const ADMIN_PASSWORD = (process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '').trim();
@@ -466,7 +472,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
   const totalWords = React.useMemo(() => {
     let text = (title || '') + ' ' + (metaDescription || '');
     sections.forEach(s => {
-      text += ' ' + (s.heading || '') + ' ' + (s.content || '');
+      text += ' ' + (s.heading || '') + ' ' + stripHtmlAndMarkdown(s.content || '');
     });
     return text.trim().split(/\s+/).filter(Boolean).length;
   }, [title, metaDescription, sections]);
@@ -491,7 +497,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
   const handleCopyUrl = () => {
     if (typeof window !== 'undefined' && slug) {
       const cleanSlug = slug.replace(/^\/+/, '');
-      navigator.clipboard.writeText(`https://tetrahedron.in/blog/${cleanSlug}`);
+      navigator.clipboard.writeText(`https://tetrahedron.in/${cleanSlug}`);
       setCopiedSlug(true);
       setTimeout(() => setCopiedSlug(false), 2000);
     }
@@ -736,7 +742,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
               <div className="adm-permalink-box">
                 <div className="adm-permalink-left">
                   <Globe size={14} className="adm-permalink-icon" />
-                  <span className="adm-permalink-prefix">https://tetrahedron.in/blog/</span>
+                  <span className="adm-permalink-prefix">https://tetrahedron.in/</span>
                   <input
                     className="adm-permalink-input"
                     placeholder="article-slug"
@@ -905,15 +911,13 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
                         <label className="adm-field-label" style={{ marginBottom: 0 }}>
                           Section Body Content <span className="adm-req">*</span>
                         </label>
-                        <span className="adm-hint">Press Enter between paragraphs</span>
+                        <span className="adm-hint">Highlight words and press Ctrl+K to add link</span>
                       </div>
-                      <textarea
-                        className="adm-textarea"
-                        rows={5}
-                        placeholder="Write the explanation, case study details, or step-by-step guidance for this chapter..."
+                      <SectionRichEditor
                         value={sec.content}
-                        onChange={e => handleSectionChange(idx, 'content', e.target.value)}
-                        required
+                        onChange={val => handleSectionChange(idx, 'content', val)}
+                        sectionIndex={idx}
+                        placeholder="Write the explanation, case study details, or step-by-step guidance. Highlight words and press Ctrl+K to add hyperlinks..."
                       />
                     </div>
 
@@ -1114,7 +1118,7 @@ function BlogForm({ onSubmit, initial, loading, onCancel }: BlogFormProps) {
                   <div className="adm-serp-fav">T</div>
                   <div className="adm-serp-meta">
                     <span className="adm-serp-site">Tetrahedron</span>
-                    <span className="adm-serp-link">https://tetrahedron.in › blog › {(slug || 'article-slug').replace(/^\/+/, '')}</span>
+                    <span className="adm-serp-link">https://tetrahedron.in › {(slug || 'article-slug').replace(/^\/+/, '')}</span>
                   </div>
                 </div>
                 <h5 className="adm-serp-heading">
@@ -2090,10 +2094,12 @@ export default function AdminBlogDashboard() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string>('');
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [search, setSearch] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'archived' | 'featured'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'review' | 'draft' | 'archived' | 'featured'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [sortBy, setSortBy] = useState<'date' | 'views' | 'title'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const dispatch = useDispatch<AppDispatch>();
   const blogs = useSelector(selectBlogs);
@@ -2102,6 +2108,60 @@ export default function AdminBlogDashboard() {
   // Use refs to persist savedEmail and savedPass across renders
   const [savedEmail, setSavedEmail] = useState<string>('');
   const [savedPass, setSavedPass] = useState<string>('');
+
+  const handleSort = (field: 'date' | 'views' | 'title') => {
+    if (sortBy === field) {
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('desc');
+    }
+  };
+
+  const formatArticleDate = (dateStr?: string) => {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return '—';
+      return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    } catch {
+      return '—';
+    }
+  };
+
+  const getArticleWordCount = (blog: any) => {
+    if (!blog.sections || !Array.isArray(blog.sections)) return 0;
+    return blog.sections.reduce((total: number, sec: any) => {
+      const contentText = Array.isArray(sec.content) ? sec.content.join(' ') : (sec.content || '');
+      const words = contentText.trim().split(/\s+/).filter(Boolean).length;
+      return total + words;
+    }, 0);
+  };
+
+  const handleToggleFeatured = async (blog: any) => {
+    try {
+      const newFeatured = !blog.featured;
+      const formData = new FormData();
+      const blogData = {
+        title: blog.title,
+        slug: blog.slug,
+        category: blog.category,
+        featured: newFeatured,
+        status: blog.status,
+      };
+      formData.append('json', JSON.stringify(blogData));
+      await dispatch(updateBlog({ id: blog._id || blog.id, formData })).unwrap();
+      showToast('success', newFeatured ? `⭐ Marked "${blog.title.slice(0, 24)}..." as Featured!` : `Removed from Featured.`);
+      dispatch(fetchBlogs({}));
+    } catch (err: any) {
+      showToast('error', err.message || 'Failed to update featured status');
+    }
+  };
+
 
   // Check localStorage for admin login
   useEffect(() => {
@@ -2338,10 +2398,12 @@ export default function AdminBlogDashboard() {
     const list = Array.isArray(blogs) ? blogs : [];
     const total = list.length;
     const published = list.filter((b: any) => b.status === 'published').length;
+    const inReview = list.filter((b: any) => b.status === 'review').length;
     const drafts = list.filter((b: any) => b.status === 'draft').length;
+    const archived = list.filter((b: any) => b.status === 'archived').length;
     const featured = list.filter((b: any) => Boolean(b.featured)).length;
     const totalViews = list.reduce((acc: number, b: any) => acc + (b.views || 0), 0);
-    return { total, published, drafts, featured, totalViews };
+    return { total, published, inReview, drafts, archived, featured, totalViews };
   }, [blogs]);
 
   const uniqueCategories = React.useMemo(() => {
@@ -2358,6 +2420,8 @@ export default function AdminBlogDashboard() {
     let data = Array.isArray(blogs) ? blogs : [];
     if (statusFilter === 'published') {
       data = data.filter((b: any) => b.status === 'published');
+    } else if (statusFilter === 'review') {
+      data = data.filter((b: any) => b.status === 'review');
     } else if (statusFilter === 'draft') {
       data = data.filter((b: any) => b.status === 'draft');
     } else if (statusFilter === 'archived') {
@@ -2371,15 +2435,33 @@ export default function AdminBlogDashboard() {
     }
 
     if (search.trim()) {
-      const q = search.toLowerCase();
+      const q = search.toLowerCase().trim();
       data = data.filter((b: any) =>
         (b.title || '').toLowerCase().includes(q) ||
         (b.slug || '').toLowerCase().includes(q) ||
-        (b.category || '').toLowerCase().includes(q)
+        (b.category || '').toLowerCase().includes(q) ||
+        (b.focusKeyword || '').toLowerCase().includes(q)
       );
     }
-    return data;
-  }, [blogs, statusFilter, categoryFilter, search]);
+
+    // Dynamic Multi-Column Sorting
+    return [...data].sort((a: any, b: any) => {
+      if (sortBy === 'views') {
+        const va = a.views || 0;
+        const vb = b.views || 0;
+        return sortOrder === 'asc' ? va - vb : vb - va;
+      }
+      if (sortBy === 'title') {
+        const ta = (a.title || '').toLowerCase();
+        const tb = (b.title || '').toLowerCase();
+        return sortOrder === 'asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
+      }
+      // Default: date (newest first)
+      const da = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const db = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return sortOrder === 'asc' ? da - db : db - da;
+    });
+  }, [blogs, statusFilter, categoryFilter, search, sortBy, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil((filteredBlogs?.length || 0) / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -2760,7 +2842,7 @@ export default function AdminBlogDashboard() {
       <header className="adm-nav-header">
         <div className="adm-nav-left">
           <img
-            src="/assets/images/Tetrahedron Logo.png"
+            src="/assets/images/resources/logo.png"
             alt="Tetrahedron"
             className="adm-nav-logo"
           />
@@ -2809,13 +2891,26 @@ export default function AdminBlogDashboard() {
             <p className="adm-title-subtext">Create, edit, optimize, and publish technical manufacturing articles</p>
           </div>
 
-          <button
-            onClick={() => { setShowForm(true); setEditBlog(null); }}
+          <Link
+            href="/dashboard/admin/editor"
             className="adm-btn-create-top"
+            style={{
+              textDecoration: 'none',
+              color: '#ffffff',
+              background: '#0f172a',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '10px 20px',
+              borderRadius: 10,
+              fontSize: '13.5px',
+              fontWeight: 600,
+              boxShadow: '0 2px 8px rgba(15, 23, 42, 0.18)',
+            }}
           >
             <Plus size={16} strokeWidth={2.5} />
-            <span>Create New Blog</span>
-          </button>
+            <span style={{ color: '#ffffff', fontSize: '13.5px', fontWeight: 600 }}>Create New Blog</span>
+          </Link>
         </div>
 
         {/* Executive KPI Stats Grid */}
@@ -2879,10 +2974,22 @@ export default function AdminBlogDashboard() {
                 Published <span className="adm-filter-count">{stats.published}</span>
               </button>
               <button
+                onClick={() => { setStatusFilter('review'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'review' ? 'active' : ''}`}
+              >
+                In Review <span className="adm-filter-count">{stats.inReview}</span>
+              </button>
+              <button
                 onClick={() => { setStatusFilter('draft'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'draft' ? 'active' : ''}`}
               >
                 Drafts <span className="adm-filter-count">{stats.drafts}</span>
+              </button>
+              <button
+                onClick={() => { setStatusFilter('archived'); setPage(1); }}
+                className={`adm-filter-tab ${statusFilter === 'archived' ? 'active' : ''}`}
+              >
+                Archived <span className="adm-filter-count">{stats.archived}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('featured'); setPage(1); }}
@@ -2893,13 +3000,13 @@ export default function AdminBlogDashboard() {
             </div>
 
             <div className="adm-toolbar-right-box">
-              <div className="adm-search-container">
-                <Search size={15} className="adm-search-svg" />
+              <div className="adm-search-box">
+                <Search size={15} className="adm-search-icon" />
                 <input
-                  placeholder="Search title, slug, category..."
+                  placeholder="Search title, slug, category, keyword..."
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  className="adm-search-input-field"
+                  className="adm-search-input"
                 />
                 {search && (
                   <button onClick={() => setSearch('')} className="adm-search-clear-btn" title="Clear search">
@@ -2928,25 +3035,41 @@ export default function AdminBlogDashboard() {
             <table className="adm-data-table">
               <thead>
                 <tr>
-                  <th style={{ width: '38%' }}>Article</th>
-                  <th style={{ width: '18%' }}>Category</th>
-                  <th style={{ width: '11%' }}>Status</th>
-                  <th style={{ width: '10%' }}>Featured</th>
-                  <th style={{ width: '9%' }}>Views</th>
-                  <th style={{ width: '14%', textAlign: 'right' }}>Actions</th>
+                  <th style={{ width: '32%', cursor: 'pointer' }} onClick={() => handleSort('title')} title="Click to sort by Title">
+                    <div className="adm-th-sortable">
+                      <span>Article</span>
+                      <ArrowUpDown size={11} color={sortBy === 'title' ? '#2563eb' : '#94a3b8'} />
+                    </div>
+                  </th>
+                  <th style={{ width: '13%' }}>Category</th>
+                  <th style={{ width: '10%' }}>Status</th>
+                  <th style={{ width: '11%' }}>Featured</th>
+                  <th style={{ width: '11%', cursor: 'pointer' }} onClick={() => handleSort('date')} title="Click to sort by Date">
+                    <div className="adm-th-sortable">
+                      <span>Date</span>
+                      <ArrowUpDown size={11} color={sortBy === 'date' ? '#2563eb' : '#94a3b8'} />
+                    </div>
+                  </th>
+                  <th style={{ width: '12%', cursor: 'pointer' }} onClick={() => handleSort('views')} title="Click to sort by Views">
+                    <div className="adm-th-sortable">
+                      <span>Engagement</span>
+                      <ArrowUpDown size={11} color={sortBy === 'views' ? '#2563eb' : '#94a3b8'} />
+                    </div>
+                  </th>
+                  <th style={{ width: '11%', textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="adm-empty-cell">
+                    <td colSpan={7} className="adm-empty-cell">
                       <Loader2 size={24} className="adm-spin" style={{ margin: '0 auto 8px auto', color: '#2563eb' }} />
                       <div>Loading blogs...</div>
                     </td>
                   </tr>
                 ) : filteredBlogs.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="adm-empty-cell">
+                    <td colSpan={7} className="adm-empty-cell">
                       <FileText size={32} style={{ margin: '0 auto 8px auto', color: '#94a3b8' }} />
                       <div style={{ fontWeight: 600, color: '#334155' }}>No blog articles found</div>
                       <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>
@@ -2957,9 +3080,12 @@ export default function AdminBlogDashboard() {
                 ) : (
                   paginatedBlogs.map((blog: any) => {
                     const cleanSlug = (blog.slug || '').replace(/^\/+/, '');
+                    const wordCount = getArticleWordCount(blog);
+                    const readTime = blog.readingTime || Math.max(1, Math.ceil(wordCount / 200));
+
                     return (
                     <tr key={blog._id} className="adm-table-data-row">
-                      {/* Article: Thumbnail + Title + Live Link */}
+                      {/* 1. Article: Thumbnail + Title + Live Link + SEO Keyword */}
                       <td>
                         <div className="adm-article-group">
                           {blog.image?.url ? (
@@ -2973,21 +3099,28 @@ export default function AdminBlogDashboard() {
                             <span className="adm-article-name" title={blog.title}>
                               {blog.title}
                             </span>
-                            <a
-                              href={`/blog/${cleanSlug}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="adm-article-link"
-                              title="Preview live article"
-                            >
-                              <span>/blog/{cleanSlug}</span>
-                              <ExternalLink size={10} />
-                            </a>
+                            <div className="adm-article-meta-row">
+                              <a
+                                href={`/${cleanSlug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="adm-article-link"
+                                title="Preview live article"
+                              >
+                                <span>/{cleanSlug}</span>
+                                <ExternalLink size={10} />
+                              </a>
+                              {blog.focusKeyword && (
+                                <span className="adm-kw-badge" title={`SEO Focus Keyword: ${blog.focusKeyword}`}>
+                                  🎯 {blog.focusKeyword}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>
 
-                      {/* Category */}
+                      {/* 2. Category */}
                       <td>
                         {blog.category ? (
                           <span className="adm-category-pill">
@@ -2998,61 +3131,80 @@ export default function AdminBlogDashboard() {
                         )}
                       </td>
 
-                      {/* Status */}
+                      {/* 3. Status */}
                       <td>
                         <span className={`adm-status-pill pill-${blog.status || 'draft'}`}>
                           <span className="adm-status-circle" />
-                          <span style={{ textTransform: 'capitalize' }}>{blog.status || 'draft'}</span>
+                          <span style={{ textTransform: 'capitalize' }}>
+                            {blog.status === 'review' ? 'In Review' : (blog.status || 'draft')}
+                          </span>
                         </span>
                       </td>
 
-                      {/* Featured */}
+                      {/* 4. Interactive 1-Click Featured Toggle */}
                       <td>
-                        {blog.featured ? (
-                          <span className="adm-featured-badge">
-                            ⭐ Featured
-                          </span>
-                        ) : (
-                          <span style={{ color: '#94a3b8', fontSize: 12 }}>—</span>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleToggleFeatured(blog)}
+                          className={`adm-star-btn ${blog.featured ? 'is-featured' : ''}`}
+                          title={blog.featured ? "Click to remove from Featured" : "Click to set as Featured on Homepage"}
+                        >
+                          <Star size={13} fill={blog.featured ? "#eab308" : "none"} color={blog.featured ? "#ca8a04" : "#94a3b8"} />
+                          <span>{blog.featured ? 'Featured' : 'Standard'}</span>
+                        </button>
                       </td>
 
-                      {/* Views */}
+                      {/* 5. Date */}
                       <td>
-                        <div className="adm-views-wrap">
-                          <Eye size={13} style={{ color: '#64748b' }} />
-                          <span>{(blog.views || 0).toLocaleString()}</span>
+                        <div className="adm-date-wrap" title={`Last updated: ${new Date(blog.updatedAt || blog.createdAt).toLocaleString()}`}>
+                          <Calendar size={12} className="adm-date-icon" />
+                          <span className="adm-date-val">{formatArticleDate(blog.updatedAt || blog.createdAt)}</span>
                         </div>
                       </td>
 
-                      {/* Actions */}
+                      {/* 6. Engagement: Views + Read Time & Words */}
+                      <td>
+                        <div className="adm-engagement-wrap">
+                          <div className="adm-views-wrap">
+                            <Eye size={12} style={{ color: '#2563eb' }} />
+                            <span>{(blog.views || 0).toLocaleString()} views</span>
+                          </div>
+                          <div className="adm-read-wrap">
+                            <Clock size={11} style={{ color: '#64748b' }} />
+                            <span>{readTime}m read · {wordCount.toLocaleString()}w</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* 7. Actions: Edit, View, Delete */}
                       <td>
                         <div className="adm-row-actions">
-                          <button
-                            onClick={() => handleEditPrompt(blog)}
+                          <Link
+                            href={`/dashboard/admin/editor?id=${blog._id || blog.id}`}
                             className="adm-btn-edit-row"
-                            title="Edit Blog in CMS Studio"
+                            title="Edit Blog in Dedicated Studio"
                           >
-                            <Edit3 size={13} />
+                            <Edit3 size={12} />
                             <span>Edit</span>
-                          </button>
+                          </Link>
 
                           <a
-                            href={`/blog/${cleanSlug}`}
+                            href={`/${cleanSlug}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="adm-btn-view-row"
                             title="Open live post in new tab"
                           >
-                            <ExternalLink size={13} />
+                            <ExternalLink size={12} />
                           </a>
 
                           <button
+                            type="button"
                             onClick={() => { setConfirmDeleteId(blog._id); setConfirmOpen(true); }}
                             className="adm-btn-delete-row"
                             title="Delete Blog"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={12} />
                           </button>
                         </div>
                       </td>
@@ -3181,7 +3333,7 @@ export default function AdminBlogDashboard() {
         .adm-nav-header {
           background: #ffffff !important;
           border-bottom: 1px solid #e2e8f0 !important;
-          height: 64px !important;
+          height: 68px !important;
           padding: 0 28px !important;
           display: flex !important;
           align-items: center !important;
@@ -3194,13 +3346,14 @@ export default function AdminBlogDashboard() {
         .adm-nav-left {
           display: flex !important;
           align-items: center !important;
-          gap: 12px !important;
+          gap: 14px !important;
         }
 
         .adm-nav-logo {
-          height: 38px !important;
+          height: 48px !important;
           width: auto !important;
           object-fit: contain !important;
+          display: block !important;
         }
 
         .adm-nav-divider {
@@ -3460,22 +3613,69 @@ export default function AdminBlogDashboard() {
           gap: 10px !important;
         }
 
-        .adm-search-container {
+        .adm-search-box {
           position: relative !important;
           display: flex !important;
           align-items: center !important;
+          background: #ffffff !important;
+          border: 1.5px solid #cbd5e1 !important;
+          border-radius: 8px !important;
+          padding: 0 12px !important;
+          height: 38px !important;
+          width: 290px !important;
+          transition: all 0.15s ease !important;
+          box-sizing: border-box !important;
         }
 
-        .adm-search-svg {
-          position: absolute !important;
-          left: 10px !important;
+        .adm-search-box:focus-within {
+          border-color: #2563eb !important;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .adm-search-icon {
           color: #94a3b8 !important;
-          pointer-events: none !important;
+          margin-right: 9px !important;
+          flex-shrink: 0 !important;
         }
 
-        .adm-search-input-field {
-          height: 36px !important;
-          padding: 0 30px 0 32px !important;
+        .adm-search-input {
+          border: none !important;
+          outline: none !important;
+          background: transparent !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          font-size: 13px !important;
+          font-family: var(--font-poppins), sans-serif !important;
+          color: #0f172a !important;
+          flex: 1 1 auto !important;
+          min-width: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        .adm-search-input::placeholder {
+          color: #94a3b8 !important;
+        }
+
+        .adm-search-clear-btn {
+          background: transparent !important;
+          border: none !important;
+          color: #94a3b8 !important;
+          cursor: pointer !important;
+          padding: 2px !important;
+          margin-left: 4px !important;
+          display: flex !important;
+          align-items: center !important;
+          flex-shrink: 0 !important;
+        }
+
+        .adm-search-clear-btn:hover {
+          color: #334155 !important;
+        }
+
+        .adm-cat-dropdown {
+          height: 38px !important;
+          padding: 0 12px !important;
           border: 1.5px solid #cbd5e1 !important;
           border-radius: 8px !important;
           font-size: 13px !important;
@@ -3483,37 +3683,114 @@ export default function AdminBlogDashboard() {
           color: #0f172a !important;
           background: #ffffff !important;
           outline: none !important;
-          width: 260px !important;
-          transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+          cursor: pointer !important;
+          transition: all 0.15s ease !important;
         }
 
-        .adm-search-input-field:focus {
+        .adm-cat-dropdown:focus {
           border-color: #2563eb !important;
           box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
         }
 
-        .adm-search-clear-btn {
-          position: absolute !important;
-          right: 8px !important;
-          background: transparent !important;
-          border: none !important;
-          color: #94a3b8 !important;
-          cursor: pointer !important;
-          padding: 2px !important;
-          display: flex !important;
+        /* Sortable Header */
+        .adm-th-sortable {
+          display: inline-flex !important;
           align-items: center !important;
+          gap: 5px !important;
+          cursor: pointer !important;
+          user-select: none !important;
+          transition: color 0.15s ease !important;
         }
 
-        .adm-cat-dropdown {
-          height: 36px !important;
-          padding: 0 10px !important;
-          border: 1.5px solid #cbd5e1 !important;
-          border-radius: 8px !important;
-          font-size: 13px !important;
-          color: #0f172a !important;
-          background: #ffffff !important;
-          outline: none !important;
+        .adm-th-sortable:hover {
+          color: #2563eb !important;
+        }
+
+        /* Interactive Star Button */
+        .adm-star-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          padding: 3px 8px !important;
+          border-radius: 6px !important;
+          font-size: 11px !important;
+          font-weight: 600 !important;
           cursor: pointer !important;
+          background: #f8fafc !important;
+          border: 1px solid #e2e8f0 !important;
+          color: #64748b !important;
+          transition: all 0.15s ease !important;
+        }
+
+        .adm-star-btn:hover {
+          border-color: #cbd5e1 !important;
+          background: #f1f5f9 !important;
+        }
+
+        .adm-star-btn.is-featured {
+          background: #fefce8 !important;
+          border-color: #fef08a !important;
+          color: #854d0e !important;
+        }
+
+        .adm-star-btn.is-featured:hover {
+          background: #fef9c3 !important;
+          border-color: #fde047 !important;
+        }
+
+        /* Keyword Badge */
+        .adm-article-meta-row {
+          display: flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          flex-wrap: wrap !important;
+          margin-top: 3px !important;
+        }
+
+        .adm-kw-badge {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 3px !important;
+          font-size: 10px !important;
+          font-weight: 600 !important;
+          color: #0369a1 !important;
+          background: #e0f2fe !important;
+          border: 1px solid #bae6fd !important;
+          padding: 1px 6px !important;
+          border-radius: 4px !important;
+          white-space: nowrap !important;
+        }
+
+        /* Date Cell */
+        .adm-date-wrap {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          font-size: 12px !important;
+          color: #475569 !important;
+          font-weight: 500 !important;
+          white-space: nowrap !important;
+        }
+
+        .adm-date-icon {
+          color: #94a3b8 !important;
+          flex-shrink: 0 !important;
+        }
+
+        /* Engagement Cell */
+        .adm-engagement-wrap {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 2px !important;
+          white-space: nowrap !important;
+        }
+
+        .adm-read-wrap {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+          font-size: 11px !important;
+          color: #64748b !important;
         }
 
         /* Table */
@@ -3650,6 +3927,13 @@ export default function AdminBlogDashboard() {
           border: 1px solid #bbf7d0 !important;
         }
         .pill-published .adm-status-circle { background: #22c55e !important; }
+
+        .pill-review {
+          background: #fef3c7 !important;
+          color: #92400e !important;
+          border: 1px solid #fcd34d !important;
+        }
+        .pill-review .adm-status-circle { background: #d97706 !important; }
 
         .pill-draft {
           background: #f1f5f9 !important;

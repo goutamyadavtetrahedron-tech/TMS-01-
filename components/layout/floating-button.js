@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { FaWhatsapp, FaArrowUp } from 'react-icons/fa';
 
 const FloatingButton = () => {
+    const pathname = usePathname();
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     // Show scroll to top button when user scrolls down
     useEffect(() => {
+        if (pathname && pathname.startsWith('/dashboard')) return;
+
         const handleScroll = () => {
             if (window.scrollY > 300) {
                 setShowScrollTop(true);
@@ -18,7 +22,12 @@ const FloatingButton = () => {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [pathname]);
+
+    // Do not show floating buttons anywhere inside /dashboard
+    if (pathname && pathname.startsWith('/dashboard')) {
+        return null;
+    }
 
     // Scroll to top function
     const scrollToTop = () => {

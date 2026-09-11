@@ -56,8 +56,15 @@ const blogSchema = new Schema<IBlog, BlogModel>({
   },
   status: {
     type: String,
-    enum: ['draft', 'published', 'archived'],
+    enum: ['draft', 'review', 'published', 'archived'],
     default: 'draft'
+  },
+  scheduledDate: {
+    type: Date,
+  },
+  focusKeyword: {
+    type: String,
+    trim: true,
   },
   featured: {
     type: Boolean,

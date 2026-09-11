@@ -32,7 +32,9 @@ export const blogValidationSchema = Joi.object({
     buttonText: Joi.string().allow('').optional(),
     text: Joi.string().allow('').optional()
   }).optional(),
-  status: Joi.string().valid('draft', 'published', 'archived').default('published'),
+  status: Joi.string().valid('draft', 'review', 'published', 'archived').default('draft'),
+  scheduledDate: Joi.alternatives().try(Joi.date(), Joi.string().allow('', null)).optional(),
+  focusKeyword: Joi.string().allow('').optional(),
   featured: Joi.boolean().default(false),
   tags: Joi.array().items(Joi.string().allow('')),
   category: Joi.string().allow('').optional(),
