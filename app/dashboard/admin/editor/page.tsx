@@ -119,7 +119,7 @@ export default function BlogEditorStudio() {
   // UI View Modes: 'edit' (standard), 'split' (side-by-side live preview), 'full-preview'
   const [viewMode, setViewMode] = useState<'edit' | 'split' | 'full-preview'>('edit');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
-  const [showPreviewSidebar, setShowPreviewSidebar] = useState<boolean>(false);
+  const [showPreviewSidebar, setShowPreviewSidebar] = useState<boolean>(true);
 
   // UI / Studio State
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -185,10 +185,10 @@ export default function BlogEditorStudio() {
           prev.map((sec, i) =>
             i === idx
               ? {
-                  ...sec,
-                  existingImageUrl: data.url,
-                  imagePreview: data.url,
-                }
+                ...sec,
+                existingImageUrl: data.url,
+                imagePreview: data.url,
+              }
               : sec
           )
         );
@@ -520,10 +520,10 @@ Before selecting a material transport platform, evaluate your plant floor stabil
       prev.map((sec, i) =>
         i === idx
           ? {
-              ...sec,
-              image: file,
-              imagePreview: file ? URL.createObjectURL(file) : sec.imagePreview,
-            }
+            ...sec,
+            image: file,
+            imagePreview: file ? URL.createObjectURL(file) : sec.imagePreview,
+          }
           : sec
       )
     );
@@ -1950,8 +1950,8 @@ Before selecting a material transport platform, evaluate your plant floor stabil
                         {seoAnalysis.density >= 0.8 && seoAnalysis.density <= 2.5
                           ? '✅ Optimal keyword density (0.8% - 2.5%)'
                           : seoAnalysis.density > 2.5
-                          ? '⚠️ Keyword density is high (over-optimization risk)'
-                          : 'ℹ️ Add a few more natural mentions in body text'}
+                            ? '⚠️ Keyword density is high (over-optimization risk)'
+                            : 'ℹ️ Add a few more natural mentions in body text'}
                       </span>
                     </div>
 
@@ -3243,55 +3243,109 @@ Before selecting a material transport platform, evaluate your plant floor stabil
         }
 
         /* FULL PREVIEW MODE */
+        .studio-full-preview-container,
         .studio-full-preview-mode {
-          max-width: 100%;
-          min-height: calc(100vh - 60px);
-          background: #f1f5f9;
-        }
-        .studio-preview-device-bar {
-          background: #ffffff;
-          border-bottom: 1px solid #e2e8f0;
-          padding: 8px 24px;
+          width: 100%;
+          min-height: calc(100vh - 58px);
+          background: #f8fafc;
           display: flex;
-          align-items: center;
-          justify-content: space-between;
+          flex-direction: column;
         }
+        .studio-full-preview-topbar,
+        .studio-preview-device-bar {
+          background: #ffffff !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          padding: 10px 24px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 16px !important;
+          position: sticky !important;
+          top: 0 !important;
+          z-index: 50 !important;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+          box-sizing: border-box !important;
+        }
+        .studio-device-toggle {
+          display: flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          flex-wrap: wrap !important;
+        }
+        .studio-toggle-label {
+          font-size: 12px !important;
+          font-weight: 600 !important;
+          color: #64748b !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.5px !important;
+          margin-right: 4px !important;
+          font-family: var(--font-poppins), sans-serif !important;
+        }
+        .studio-toggle-btn,
         .studio-device-btn {
           display: inline-flex !important;
           align-items: center !important;
-          gap: 5px !important;
-          padding: 4px 10px !important;
-          font-size: 12px !important;
+          justify-content: center !important;
+          gap: 6px !important;
+          padding: 6px 13px !important;
+          font-size: 12.5px !important;
           font-weight: 500 !important;
+          font-family: var(--font-poppins), sans-serif !important;
           border: 1px solid #cbd5e1 !important;
           background: #ffffff !important;
           color: #475569 !important;
-          border-radius: 5px !important;
+          border-radius: 7px !important;
           cursor: pointer !important;
+          transition: all 0.15s ease !important;
+          user-select: none !important;
+          line-height: 1 !important;
+          outline: none !important;
         }
+        .studio-toggle-btn:hover,
+        .studio-device-btn:hover {
+          background: #f8fafc !important;
+          border-color: #94a3b8 !important;
+          color: #0f172a !important;
+        }
+        .studio-toggle-btn.active,
         .studio-device-btn.active {
           background: #eff6ff !important;
           border-color: #2563eb !important;
           color: #2563eb !important;
           font-weight: 600 !important;
+          box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12) !important;
         }
         .studio-btn-exit-full {
           display: inline-flex !important;
           align-items: center !important;
-          gap: 5px !important;
-          padding: 5px 12px !important;
-          font-size: 12px !important;
+          justify-content: center !important;
+          gap: 6px !important;
+          padding: 6px 14px !important;
+          font-size: 12.5px !important;
           font-weight: 600 !important;
+          font-family: var(--font-poppins), sans-serif !important;
           color: #2563eb !important;
           background: #eff6ff !important;
           border: 1px solid #bfdbfe !important;
-          border-radius: 5px !important;
+          border-radius: 7px !important;
           cursor: pointer !important;
+          transition: all 0.15s ease !important;
+          line-height: 1 !important;
+          outline: none !important;
+          flex-shrink: 0 !important;
+        }
+        .studio-btn-exit-full:hover {
+          background: #dbeafe !important;
+          border-color: #93c5fd !important;
+          color: #1d4ed8 !important;
         }
         .studio-full-preview-canvas {
-          padding: 24px 16px;
-          display: flex;
-          justify-content: center;
+          flex: 1 1 auto !important;
+          padding: 24px 16px !important;
+          display: flex !important;
+          justify-content: center !important;
+          overflow-y: auto !important;
+          background: #f8fafc !important;
         }
 
         /* LIVE PREVIEW CONTAINER & REAL SITE SIMULATION */
@@ -3534,10 +3588,12 @@ Before selecting a material transport platform, evaluate your plant floor stabil
         }
 
         /* Complete Page Preview (1200px Layout Matching Live Blog) */
+        .studio-full-preview-container .studio-full-preview-canvas,
         .studio-full-preview-mode .studio-full-preview-canvas {
-          background: #ffffff !important;
+          background: #f8fafc !important;
           padding: 0 0 80px 0 !important;
         }
+        .studio-full-preview-container .desktop-viewport .live-preview-layout-wrap,
         .studio-full-preview-mode .desktop-viewport .live-preview-layout-wrap {
           display: flex !important;
           flex-direction: row !important;
@@ -3547,6 +3603,7 @@ Before selecting a material transport platform, evaluate your plant floor stabil
           align-items: flex-start !important;
           justify-content: center !important;
         }
+        .studio-full-preview-container .desktop-viewport .live-preview-paper,
         .studio-full-preview-mode .desktop-viewport .live-preview-paper {
           flex: 1 1 876px !important;
           width: 876px !important;

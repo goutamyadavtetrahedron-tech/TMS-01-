@@ -2920,7 +2920,11 @@ export default function AdminBlogDashboard() {
               <FileText size={20} />
             </div>
             <div>
-              <span className="adm-kpi-val">{stats.total}</span>
+              {loading ? (
+                <div className="adm-kpi-val-skeleton adm-shimmer" />
+              ) : (
+                <span className="adm-kpi-val">{stats.total}</span>
+              )}
               <span className="adm-kpi-name">Total Articles</span>
             </div>
           </div>
@@ -2930,7 +2934,11 @@ export default function AdminBlogDashboard() {
               <CheckCircle2 size={20} />
             </div>
             <div>
-              <span className="adm-kpi-val">{stats.published}</span>
+              {loading ? (
+                <div className="adm-kpi-val-skeleton adm-shimmer" />
+              ) : (
+                <span className="adm-kpi-val">{stats.published}</span>
+              )}
               <span className="adm-kpi-name">Published</span>
             </div>
           </div>
@@ -2940,7 +2948,11 @@ export default function AdminBlogDashboard() {
               <Clock size={20} />
             </div>
             <div>
-              <span className="adm-kpi-val">{stats.drafts}</span>
+              {loading ? (
+                <div className="adm-kpi-val-skeleton adm-shimmer" />
+              ) : (
+                <span className="adm-kpi-val">{stats.drafts}</span>
+              )}
               <span className="adm-kpi-name">Drafts</span>
             </div>
           </div>
@@ -2950,7 +2962,11 @@ export default function AdminBlogDashboard() {
               <Eye size={20} />
             </div>
             <div>
-              <span className="adm-kpi-val">{stats.totalViews.toLocaleString()}</span>
+              {loading ? (
+                <div className="adm-kpi-val-skeleton adm-shimmer" />
+              ) : (
+                <span className="adm-kpi-val">{stats.totalViews.toLocaleString()}</span>
+              )}
               <span className="adm-kpi-name">Total Views</span>
             </div>
           </div>
@@ -2958,6 +2974,7 @@ export default function AdminBlogDashboard() {
 
         {/* Table Panel */}
         <div className="adm-table-panel">
+          {loading && <div className="adm-table-loading-bar" />}
           {/* Filter & Search Toolbar */}
           <div className="adm-table-toolbar">
             <div className="adm-filter-tabs">
@@ -2965,37 +2982,37 @@ export default function AdminBlogDashboard() {
                 onClick={() => { setStatusFilter('all'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'all' ? 'active' : ''}`}
               >
-                All <span className="adm-filter-count">{stats.total}</span>
+                All <span className="adm-filter-count">{loading ? '—' : stats.total}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('published'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'published' ? 'active' : ''}`}
               >
-                Published <span className="adm-filter-count">{stats.published}</span>
+                Published <span className="adm-filter-count">{loading ? '—' : stats.published}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('review'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'review' ? 'active' : ''}`}
               >
-                In Review <span className="adm-filter-count">{stats.inReview}</span>
+                In Review <span className="adm-filter-count">{loading ? '—' : stats.inReview}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('draft'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'draft' ? 'active' : ''}`}
               >
-                Drafts <span className="adm-filter-count">{stats.drafts}</span>
+                Drafts <span className="adm-filter-count">{loading ? '—' : stats.drafts}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('archived'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'archived' ? 'active' : ''}`}
               >
-                Archived <span className="adm-filter-count">{stats.archived}</span>
+                Archived <span className="adm-filter-count">{loading ? '—' : stats.archived}</span>
               </button>
               <button
                 onClick={() => { setStatusFilter('featured'); setPage(1); }}
                 className={`adm-filter-tab ${statusFilter === 'featured' ? 'active' : ''}`}
               >
-                ⭐ Featured <span className="adm-filter-count">{stats.featured}</span>
+                ⭐ Featured <span className="adm-filter-count">{loading ? '—' : stats.featured}</span>
               </button>
             </div>
 
@@ -3061,12 +3078,63 @@ export default function AdminBlogDashboard() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr>
-                    <td colSpan={7} className="adm-empty-cell">
-                      <Loader2 size={24} className="adm-spin" style={{ margin: '0 auto 8px auto', color: '#2563eb' }} />
-                      <div>Loading blogs...</div>
-                    </td>
-                  </tr>
+                  Array.from({ length: 8 }).map((_, idx) => (
+                    <tr key={`adm-skeleton-${idx}`} className="adm-table-skeleton-row">
+                      {/* 1. Article: Thumbnail + Title line + Slug line */}
+                      <td>
+                        <div className="adm-article-group">
+                          <div className="adm-skel-thumb adm-shimmer" />
+                          <div className="adm-article-info" style={{ flex: 1 }}>
+                            <div
+                              className="adm-skel-line adm-shimmer"
+                              style={{ width: `${Math.min(95, 60 + ((idx * 17) % 35))}%`, height: 14, marginBottom: 8 }}
+                            />
+                            <div
+                              className="adm-skel-line adm-shimmer"
+                              style={{ width: `${Math.min(70, 35 + ((idx * 13) % 35))}%`, height: 11 }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* 2. Category pill skeleton */}
+                      <td>
+                        <div className="adm-skel-pill adm-shimmer" style={{ width: 85, height: 22 }} />
+                      </td>
+
+                      {/* 3. Status pill skeleton */}
+                      <td>
+                        <div className="adm-skel-pill adm-shimmer" style={{ width: 75, height: 22, borderRadius: 9999 }} />
+                      </td>
+
+                      {/* 4. Featured star skeleton */}
+                      <td>
+                        <div className="adm-skel-pill adm-shimmer" style={{ width: 78, height: 22 }} />
+                      </td>
+
+                      {/* 5. Date skeleton */}
+                      <td>
+                        <div className="adm-skel-line adm-shimmer" style={{ width: 75, height: 13 }} />
+                      </td>
+
+                      {/* 6. Engagement skeleton */}
+                      <td>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          <div className="adm-skel-line adm-shimmer" style={{ width: 65, height: 12 }} />
+                          <div className="adm-skel-line adm-shimmer" style={{ width: 85, height: 11 }} />
+                        </div>
+                      </td>
+
+                      {/* 7. Actions skeleton */}
+                      <td>
+                        <div className="adm-row-actions">
+                          <div className="adm-skel-btn adm-shimmer" style={{ width: 52, height: 26 }} />
+                          <div className="adm-skel-btn adm-shimmer" style={{ width: 28, height: 28 }} />
+                          <div className="adm-skel-btn adm-shimmer" style={{ width: 28, height: 28 }} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
                 ) : filteredBlogs.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="adm-empty-cell">
@@ -3219,7 +3287,13 @@ export default function AdminBlogDashboard() {
           {/* Pagination Footer */}
           <div className="adm-table-footer">
             <div className="adm-footer-info">
-              Showing <strong>{filteredBlogs.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, filteredBlogs.length)}</strong> of <strong>{filteredBlogs.length}</strong> articles
+              {loading ? (
+                <span className="adm-footer-loading-text">
+                  <span className="adm-pulse-dot" /> Loading articles and analytics...
+                </span>
+              ) : (
+                <>Showing <strong>{filteredBlogs.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, filteredBlogs.length)}</strong> of <strong>{filteredBlogs.length}</strong> articles</>
+              )}
             </div>
 
             <div className="adm-footer-controls">
@@ -3559,6 +3633,7 @@ export default function AdminBlogDashboard() {
           border-radius: 14px !important;
           box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
           overflow: hidden !important;
+          position: relative !important;
         }
 
         .adm-table-toolbar {
@@ -4036,6 +4111,93 @@ export default function AdminBlogDashboard() {
         .adm-empty-cell {
           text-align: center !important;
           padding: 48px 16px !important;
+        }
+
+        /* Skeleton & Shimmer Animations */
+        @keyframes admShimmerAnim {
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+
+        .adm-shimmer {
+          background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 45%, #cbd5e1 50%, #e2e8f0 55%, #f1f5f9 100%) !important;
+          background-size: 250% 100% !important;
+          animation: admShimmerAnim 1.8s ease-in-out infinite !important;
+        }
+
+        .adm-kpi-val-skeleton {
+          width: 68px;
+          height: 28px;
+          border-radius: 6px;
+          margin-bottom: 3px;
+        }
+
+        .adm-table-loading-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6);
+          background-size: 200% 100%;
+          animation: admShimmerAnim 1.2s linear infinite;
+          z-index: 10;
+        }
+
+        .adm-skel-thumb {
+          width: 52px;
+          height: 36px;
+          border-radius: 6px;
+          flex-shrink: 0;
+        }
+
+        .adm-skel-line {
+          border-radius: 4px;
+        }
+
+        .adm-skel-pill {
+          border-radius: 6px;
+        }
+
+        .adm-skel-btn {
+          border-radius: 6px;
+        }
+
+        .adm-table-skeleton-row td {
+          padding: 13px 14px !important;
+          border-bottom: 1px solid #f1f5f9 !important;
+          vertical-align: middle !important;
+        }
+
+        .adm-footer-loading-text {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #2563eb;
+          font-weight: 500;
+        }
+
+        .adm-pulse-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #2563eb;
+          animation: admPulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes admPulse {
+          0%, 100% {
+            transform: scale(0.85);
+            opacity: 0.4;
+          }
+          50% {
+            transform: scale(1.3);
+            opacity: 1;
+          }
         }
 
         /* Footer Pagination */

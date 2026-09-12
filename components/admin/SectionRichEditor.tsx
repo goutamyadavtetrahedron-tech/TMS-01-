@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
+  Undo2,
+  Redo2,
   Link as LinkIcon,
   Unlink,
   Bold,
@@ -78,6 +80,147 @@ export default function SectionRichEditor({
   const [youtubeUrlInput, setYoutubeUrlInput] = useState<string>('');
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
 
+  // Undo / Redo History State
+  const historyRef = useRef<{ items: Array<{ value: string; cursor: number }>; index: number }>({
+    items: [{ value: value || '', cursor: 0 }],
+    index: 0,
+  });
+  const [canUndo, setCanUndo] = useState<boolean>(false);
+  const [canRedo, setCanRedo] = useState<boolean>(false);
+  const isUndoingOrRedoingRef = useRef<boolean>(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSectionIndexRef = useRef<number>(sectionIndex);
+  const isInitialLoadDoneRef = useRef<boolean>(false);
+
+  // Sync only on section index change or initial API article load
+  useEffect(() => {
+    if (prevSectionIndexRef.current !== sectionIndex) {
+      prevSectionIndexRef.current = sectionIndex;
+      historyRef.current = {
+        items: [{ value: value || '', cursor: (value || '').length }],
+        index: 0,
+      };
+      setCanUndo(false);
+      setCanRedo(false);
+      return;
+    }
+
+    if (!isInitialLoadDoneRef.current && value) {
+      isInitialLoadDoneRef.current = true;
+      historyRef.current = {
+        items: [{ value, cursor: value.length }],
+        index: 0,
+      };
+      setCanUndo(false);
+      setCanRedo(false);
+    }
+  }, [sectionIndex, value]);
+
+  // Clean up typing timer on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const recordChange = useCallback((newVal: string, cursor?: number, immediate = false) => {
+    if (isUndoingOrRedoingRef.current) return;
+    const currentCursor = cursor ?? (textareaRef.current ? textareaRef.current.selectionStart : newVal.length);
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    const pushSnapshot = () => {
+      const h = historyRef.current;
+      if (h.items[h.index]?.value !== newVal) {
+        h.items = h.items.slice(0, h.index + 1);
+        h.items.push({ value: newVal, cursor: currentCursor });
+        if (h.items.length > 100) h.items.shift();
+        h.index = h.items.length - 1;
+        setCanUndo(h.index > 0);
+        setCanRedo(false);
+      }
+    };
+
+    if (immediate) {
+      pushSnapshot();
+    } else {
+      typingTimeoutRef.current = setTimeout(pushSnapshot, 300);
+    }
+  }, []);
+
+  const autoResizeTextarea = useCallback(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      const newHeight = Math.max(140, textareaRef.current.scrollHeight);
+      textareaRef.current.style.height = `${newHeight}px`;
+    }
+  }, []);
+
+  const performUndo = useCallback(() => {
+    const h = historyRef.current;
+    const textarea = textareaRef.current;
+    const currentVal = textarea ? textarea.value : value;
+    const currentCursor = textarea ? textarea.selectionStart : currentVal.length;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    // If editor has uncommitted typed text, commit it first as top of stack
+    if (!h.items[h.index] || h.items[h.index].value !== currentVal) {
+      h.items = h.items.slice(0, h.index + 1);
+      h.items.push({ value: currentVal, cursor: currentCursor });
+      h.index = h.items.length - 1;
+    }
+
+    if (h.index > 0) {
+      h.index -= 1;
+      const target = h.items[h.index];
+      isUndoingOrRedoingRef.current = true;
+      onChange(target.value);
+      setCanUndo(h.index > 0);
+      setCanRedo(true);
+
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          const pos = Math.min(target.cursor, target.value.length);
+          textareaRef.current.setSelectionRange(pos, pos);
+          autoResizeTextarea();
+        }
+        isUndoingOrRedoingRef.current = false;
+      }, 15);
+    }
+  }, [onChange, autoResizeTextarea, value]);
+
+  const performRedo = useCallback(() => {
+    const h = historyRef.current;
+    if (h.index < h.items.length - 1) {
+      h.index += 1;
+      const target = h.items[h.index];
+      isUndoingOrRedoingRef.current = true;
+      onChange(target.value);
+      setCanUndo(true);
+      setCanRedo(h.index < h.items.length - 1);
+
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          const pos = Math.min(target.cursor, target.value.length);
+          textareaRef.current.setSelectionRange(pos, pos);
+          autoResizeTextarea();
+        }
+        isUndoingOrRedoingRef.current = false;
+      }, 15);
+    }
+  }, [onChange, autoResizeTextarea]);
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement | null>(null);
   const blockMenuRef = useRef<HTMLDivElement | null>(null);
@@ -95,14 +238,7 @@ export default function SectionRichEditor({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isBlockMenuOpen]);
 
-  // Auto-resize textarea height to eliminate cramped inner scrollbars
-  const autoResizeTextarea = useCallback(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      const newHeight = Math.max(140, textareaRef.current.scrollHeight);
-      textareaRef.current.style.height = `${newHeight}px`;
-    }
-  }, []);
+
 
   useEffect(() => {
     if (activeTab === 'write') {
@@ -224,15 +360,16 @@ export default function SectionRichEditor({
     const before = value.slice(0, savedSelection.start);
     const after = value.slice(savedSelection.end);
     const newValue = `${before}${linkHtml}${after}`;
+    const newCursorPos = savedSelection.start + linkHtml.length;
 
     onChange(newValue);
+    recordChange(newValue, newCursorPos, true);
     setIsLinkModalOpen(false);
 
     // Refocus textarea and place cursor after inserted link
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
-        const newCursorPos = savedSelection.start + linkHtml.length;
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
         autoResizeTextarea();
       }
@@ -251,14 +388,15 @@ export default function SectionRichEditor({
       const before = value.slice(0, existingLink.matchStart);
       const after = value.slice(existingLink.matchEnd);
       const newValue = `${before}${existingLink.text}${after}`;
+      const newCursorPos = existingLink.matchStart + existingLink.text.length;
 
       onChange(newValue);
+      recordChange(newValue, newCursorPos, true);
       setIsLinkModalOpen(false);
 
       setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.focus();
-          const newCursorPos = existingLink.matchStart + existingLink.text.length;
           textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
           autoResizeTextarea();
         }
@@ -270,7 +408,9 @@ export default function SectionRichEditor({
         const before = value.slice(0, selStart);
         const after = value.slice(selEnd);
         const newValue = `${before}${unlinkedText}${after}`;
+        const newCursorPos = selStart + unlinkedText.length;
         onChange(newValue);
+        recordChange(newValue, newCursorPos, true);
       }
     }
   };
@@ -302,19 +442,23 @@ export default function SectionRichEditor({
       // Toggle off / unwrap
       const newBefore = before.slice(0, before.length - openTag.length);
       const newAfter = after.slice(closeTag.length);
-      onChange(`${newBefore}${selectedText}${newAfter}`);
+      const unwrappedValue = `${newBefore}${selectedText}${newAfter}`;
+      const newCursorPos = newBefore.length + selectedText.length;
+      onChange(unwrappedValue);
+      recordChange(unwrappedValue, newCursorPos, true);
       return;
     }
 
     const wrappedText = `${openTag}${selectedText || 'text'}${closeTag}`;
     const newValue = `${before}${wrappedText}${after}`;
+    const newCursorPos = selStart + wrappedText.length;
 
     onChange(newValue);
+    recordChange(newValue, newCursorPos, true);
 
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
-        const newCursorPos = selStart + wrappedText.length;
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
         autoResizeTextarea();
       }
@@ -339,8 +483,11 @@ export default function SectionRichEditor({
     const replacement = formattedLines.join('\n');
     const before = value.slice(0, selStart);
     const after = value.slice(selEnd);
+    const newValue = `${before}${replacement}${after}`;
+    const newCursorPos = selStart + replacement.length;
 
-    onChange(`${before}${replacement}${after}`);
+    onChange(newValue);
+    recordChange(newValue, newCursorPos, true);
   };
 
   // Insert Block Templates Helper
@@ -381,13 +528,14 @@ export default function SectionRichEditor({
     const before = value.slice(0, selStart);
     const after = value.slice(selEnd);
     const newValue = `${before}${snippet}${after}`;
+    const newCursorPos = selStart + snippet.length;
 
     onChange(newValue);
+    recordChange(newValue, newCursorPos, true);
 
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
-        const newCursorPos = selStart + snippet.length;
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
         autoResizeTextarea();
       }
@@ -425,7 +573,10 @@ export default function SectionRichEditor({
 
     const before = value.slice(0, selStart);
     const after = value.slice(selEnd);
-    onChange(`${before}${embedHtml}${after}`);
+    const newText = `${before}${embedHtml}${after}`;
+    const newCursorPos = selStart + embedHtml.length;
+    onChange(newText);
+    recordChange(newText, newCursorPos, true);
 
     setIsYoutubeModalOpen(false);
     setYoutubeUrlInput('');
@@ -440,6 +591,28 @@ export default function SectionRichEditor({
 
   // Keyboard Shortcuts & Smart Markdown List Continuation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 0. Ctrl+Z / Cmd+Z: Undo & Ctrl+Y / Cmd+Y / Ctrl+Shift+Z / Cmd+Shift+Z: Redo
+    const isZ = e.key === 'z' || e.key === 'Z' || e.code === 'KeyZ';
+    const isY = e.key === 'y' || e.key === 'Y' || e.code === 'KeyY';
+
+    if ((e.ctrlKey || e.metaKey) && isZ) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.shiftKey) {
+        performRedo();
+      } else {
+        performUndo();
+      }
+      return;
+    }
+
+    if ((e.ctrlKey || e.metaKey) && isY) {
+      e.preventDefault();
+      e.stopPropagation();
+      performRedo();
+      return;
+    }
+
     // 1. Ctrl+K or Cmd+K: Hyperlink
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
@@ -482,7 +655,9 @@ export default function SectionRichEditor({
           // Empty bullet item -> exit list (clear bullet from current line)
           const newBefore = currentText.slice(0, lineStart);
           const newAfter = currentText.slice(cursorPos);
-          onChange(`${newBefore}\n${newAfter}`);
+          const newText = `${newBefore}\n${newAfter}`;
+          onChange(newText);
+          recordChange(newText, lineStart + 1, true);
           setTimeout(() => {
             textarea.setSelectionRange(lineStart + 1, lineStart + 1);
             autoResizeTextarea();
@@ -492,7 +667,9 @@ export default function SectionRichEditor({
           const newBefore = currentText.slice(0, cursorPos);
           const newAfter = currentText.slice(cursorPos);
           const insert = '\n• ';
-          onChange(`${newBefore}${insert}${newAfter}`);
+          const newText = `${newBefore}${insert}${newAfter}`;
+          onChange(newText);
+          recordChange(newText, cursorPos + insert.length, true);
           setTimeout(() => {
             textarea.setSelectionRange(cursorPos + insert.length, cursorPos + insert.length);
             autoResizeTextarea();
@@ -511,7 +688,9 @@ export default function SectionRichEditor({
           // Empty item -> exit numbered list
           const newBefore = currentText.slice(0, lineStart);
           const newAfter = currentText.slice(cursorPos);
-          onChange(`${newBefore}\n${newAfter}`);
+          const newText = `${newBefore}\n${newAfter}`;
+          onChange(newText);
+          recordChange(newText, lineStart + 1, true);
           setTimeout(() => {
             textarea.setSelectionRange(lineStart + 1, lineStart + 1);
             autoResizeTextarea();
@@ -522,7 +701,9 @@ export default function SectionRichEditor({
           const insert = `\n${nextNum}. `;
           const newBefore = currentText.slice(0, cursorPos);
           const newAfter = currentText.slice(cursorPos);
-          onChange(`${newBefore}${insert}${newAfter}`);
+          const newText = `${newBefore}${insert}${newAfter}`;
+          onChange(newText);
+          recordChange(newText, cursorPos + insert.length, true);
           setTimeout(() => {
             textarea.setSelectionRange(cursorPos + insert.length, cursorPos + insert.length);
             autoResizeTextarea();
@@ -541,6 +722,7 @@ export default function SectionRichEditor({
         e.preventDefault();
         const newText = currentText.slice(0, lineStart) + '## ' + currentText.slice(cursorPos);
         onChange(newText);
+        recordChange(newText, lineStart + 3, true);
         setTimeout(() => {
           textarea.setSelectionRange(lineStart + 3, lineStart + 3);
           autoResizeTextarea();
@@ -552,6 +734,7 @@ export default function SectionRichEditor({
         e.preventDefault();
         const newText = currentText.slice(0, lineStart) + '• ' + currentText.slice(cursorPos);
         onChange(newText);
+        recordChange(newText, lineStart + 2, true);
         setTimeout(() => {
           textarea.setSelectionRange(lineStart + 2, lineStart + 2);
           autoResizeTextarea();
@@ -563,6 +746,7 @@ export default function SectionRichEditor({
         e.preventDefault();
         const newText = currentText.slice(0, lineStart) + '> ' + currentText.slice(cursorPos);
         onChange(newText);
+        recordChange(newText, lineStart + 2, true);
         setTimeout(() => {
           textarea.setSelectionRange(lineStart + 2, lineStart + 2);
           autoResizeTextarea();
@@ -675,8 +859,30 @@ export default function SectionRichEditor({
     <div className="section-rich-editor-root">
       {/* Editor Top Toolbar */}
       <div className="sre-toolbar">
-        {/* Left: WordPress Formatting Buttons */}
+        {/* Left: Formatting Buttons */}
         <div className="sre-tools-group">
+          {/* Undo / Redo Tools */}
+          <button
+            type="button"
+            onClick={performUndo}
+            disabled={!canUndo}
+            className={`sre-btn ${!canUndo ? 'sre-btn-disabled' : ''}`}
+            title="Undo changes (Ctrl+Z)"
+          >
+            <Undo2 size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={performRedo}
+            disabled={!canRedo}
+            className={`sre-btn ${!canRedo ? 'sre-btn-disabled' : ''}`}
+            title="Redo changes (Ctrl+Y or Ctrl+Shift+Z)"
+          >
+            <Redo2 size={14} />
+          </button>
+
+          <div className="sre-divider" />
+
           {/* Hyperlink Tool */}
           <button
             type="button"
@@ -886,7 +1092,12 @@ export default function SectionRichEditor({
             placeholder={placeholder}
             value={value}
             onChange={e => {
-              onChange(e.target.value);
+              const newVal = e.target.value;
+              const newCursor = e.target.selectionStart;
+              const lastChar = newVal.slice(newCursor - 1, newCursor);
+              const isBoundary = /[\s\n.,!?;:)]/.test(lastChar);
+              onChange(newVal);
+              recordChange(newVal, newCursor, isBoundary);
               autoResizeTextarea();
             }}
             onKeyDown={handleKeyDown}
@@ -921,6 +1132,8 @@ export default function SectionRichEditor({
         <div className="sre-footer-left">
           <span className="sre-shortcuts-label">💡 Shortcuts:</span>
           <div className="sre-shortcuts-badges">
+            <span className="sre-shortcut-pill"><kbd>Ctrl+Z</kbd> Undo</span>
+            <span className="sre-shortcut-pill"><kbd>Ctrl+Y</kbd> Redo</span>
             <span className="sre-shortcut-pill"><kbd>Ctrl+K</kbd> Link</span>
             <span className="sre-shortcut-pill"><kbd>Ctrl+B</kbd> Bold</span>
             <span className="sre-shortcut-pill"><kbd>#</kbd> H1</span>
@@ -1193,9 +1406,15 @@ export default function SectionRichEditor({
           cursor: pointer;
           transition: all 0.15s;
         }
-        .sre-btn:hover {
+        .sre-btn:hover:not(:disabled) {
           background: #e2e8f0;
           color: #0f172a;
+        }
+        .sre-btn:disabled,
+        .sre-btn-disabled {
+          opacity: 0.35 !important;
+          cursor: not-allowed !important;
+          pointer-events: none !important;
         }
         .sre-btn-link {
           background: #eff6ff;
@@ -1445,8 +1664,9 @@ export default function SectionRichEditor({
         }
         .sre-link-popover {
           width: 100%;
-          maxWidth: 480px;
+          max-width: 480px !important;
           background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 12px;
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
           overflow: hidden;
