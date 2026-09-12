@@ -65,7 +65,7 @@ export async function PUT(
     }
 
     // Handle main image update (file or string)
-    const mainImage = formData.get('mainImage');
+    const mainImage = formData.get('mainImage') || formData.get('mainImageUrl');
     if (mainImage) {
       // Delete old image if exists
       if (blog.image?.publicId) {
@@ -77,7 +77,7 @@ export async function PUT(
         blogData.image = {
           url: mainImage,
           publicId: '', // You may want to handle publicId if available
-          alt: blogData.title
+          alt: blogData.imageAlt || blogData.title
         };
       } else if (mainImage instanceof File) {
         const bytes = await mainImage.arrayBuffer();
@@ -99,7 +99,7 @@ export async function PUT(
         blogData.image = {
           url: (uploadResult as any).secure_url,
           publicId: (uploadResult as any).public_id,
-          alt: blogData.title
+          alt: blogData.imageAlt || blogData.title
         };
       }
     }
@@ -107,7 +107,7 @@ export async function PUT(
     // Handle section images (file or string) for each section, similar to POST in /api/blogs/route.ts
     if (Array.isArray(blogData.sections)) {
       for (let i = 0; i < blogData.sections.length; i++) {
-        const sectionImage = formData.get(`sectionImage_${i}`);
+        const sectionImage = formData.get(`sectionImage_${i}`) || formData.get(`sectionImageUrl_${i}`);
         if (sectionImage) {
           // Delete old section image if exists
           if (

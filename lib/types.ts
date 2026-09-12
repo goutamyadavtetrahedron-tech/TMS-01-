@@ -24,7 +24,9 @@ export interface IBlogSection {
       buttonText?: string;
       text?: string;
     };
-    status: 'draft' | 'published' | 'archived';
+    status: 'draft' | 'review' | 'published' | 'archived';
+    scheduledDate?: Date | string;
+    focusKeyword?: string;
     featured: boolean;
     tags: string[];
     category?: string;
@@ -49,7 +51,9 @@ export interface IBlogSection {
       buttonText?: string;
       text?: string;
     };
-    status: 'draft' | 'published' | 'archived';
+    status: 'draft' | 'review' | 'published' | 'archived';
+    scheduledDate?: Date | string;
+    focusKeyword?: string;
     featured: boolean;
     tags: string[];
     category?: string;

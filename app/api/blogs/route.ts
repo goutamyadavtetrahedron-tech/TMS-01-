@@ -63,14 +63,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle main image upload or string
-    const mainImage = formData.get('mainImage');
+    const mainImage = formData.get('mainImage') || formData.get('mainImageUrl');
     if (mainImage) {
       if (typeof mainImage === 'string') {
         // If it's a string, assume it's a URL or already uploaded image
         value.image = {
           url: mainImage,
           publicId: '', // You may want to handle publicId if available
-          alt: value.title
+          alt: value.imageAlt || value.title
         };
       } else if (mainImage instanceof File) {
         const bytes = await mainImage.arrayBuffer();
@@ -92,14 +92,14 @@ export async function POST(request: NextRequest) {
         value.image = {
           url: (uploadResult as any).secure_url,
           publicId: (uploadResult as any).public_id,
-          alt: value.title
+          alt: value.imageAlt || value.title
         };
       }
     }
 
     // Handle section images (File or string)
     for (let i = 0; i < value.sections.length; i++) {
-      const sectionImage = formData.get(`sectionImage_${i}`);
+      const sectionImage = formData.get(`sectionImage_${i}`) || formData.get(`sectionImageUrl_${i}`);
       if (sectionImage) {
         if (typeof sectionImage === 'string') {
           // If it's a string, assume it's a URL or already uploaded image

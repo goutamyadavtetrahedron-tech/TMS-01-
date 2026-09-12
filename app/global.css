@@ -39,7 +39,7 @@
   .main-heading,
   h1.section-title,
   h2.section-title,
-  [class*="title"]:not([class*="sub-title"]) {
+  [class*="title"]:not([class*="sub-title"]):not([class*="studio-"]):not([class*="adm-"]):not([class*="sre-"]) {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--heading-size) !important;
     font-weight: 700;
@@ -154,5 +154,10 @@
     margin-left: 60px;
     margin-top: 140px;
     transform: scale(1.5);
+  }
+
+  /* Allow sticky navbar to stick to viewport on scroll */
+  .page-wrapper {
+    overflow: clip !important;
   }
   
