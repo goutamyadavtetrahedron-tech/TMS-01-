@@ -4114,19 +4114,31 @@ export default function AdminBlogDashboard() {
         }
 
         /* Skeleton & Shimmer Animations */
-        @keyframes admShimmerAnim {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
+        .adm-shimmer {
+          position: relative !important;
+          overflow: hidden !important;
+          background-color: #e2e8f0 !important;
+          animation: admSkelPulse 1.8s ease-in-out infinite !important;
         }
 
-        .adm-shimmer {
-          background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 45%, #cbd5e1 50%, #e2e8f0 55%, #f1f5f9 100%) !important;
-          background-size: 250% 100% !important;
-          animation: admShimmerAnim 1.8s ease-in-out infinite !important;
+        .adm-shimmer::after {
+          content: '' !important;
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          transform: translateX(-100%);
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(255, 255, 255, 0) 100%
+          ) !important;
+          animation: admShimmerWave 1.6s ease-in-out infinite !important;
+          pointer-events: none !important;
         }
 
         .adm-kpi-val-skeleton {
@@ -4134,18 +4146,30 @@ export default function AdminBlogDashboard() {
           height: 28px;
           border-radius: 6px;
           margin-bottom: 3px;
+          display: block !important;
         }
 
         .adm-table-loading-bar {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 3px;
-          background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6);
-          background-size: 200% 100%;
-          animation: admShimmerAnim 1.2s linear infinite;
-          z-index: 10;
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          height: 3px !important;
+          background: #e2e8f0 !important;
+          overflow: hidden !important;
+          z-index: 10 !important;
+        }
+
+        .adm-table-loading-bar::after {
+          content: '' !important;
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          bottom: 0 !important;
+          width: 40% !important;
+          background: linear-gradient(90deg, #2563eb, #60a5fa, #93c5fd) !important;
+          border-radius: 3px !important;
+          animation: admTopBarIndeterminate 1.4s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite !important;
         }
 
         .adm-skel-thumb {
@@ -4153,18 +4177,22 @@ export default function AdminBlogDashboard() {
           height: 36px;
           border-radius: 6px;
           flex-shrink: 0;
+          display: block !important;
         }
 
         .adm-skel-line {
           border-radius: 4px;
+          display: block !important;
         }
 
         .adm-skel-pill {
           border-radius: 6px;
+          display: inline-block !important;
         }
 
         .adm-skel-btn {
           border-radius: 6px;
+          display: inline-block !important;
         }
 
         .adm-table-skeleton-row td {
@@ -4274,6 +4302,42 @@ export default function AdminBlogDashboard() {
         .adm-page-label {
           font-size: 12.5px !important;
           color: #475569 !important;
+        }
+      `}</style>
+
+      {/* Global un-scoped keyframes for 100% reliable hardware-accelerated animations */}
+      <style jsx global>{`
+        @keyframes admSkelPulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.45;
+          }
+        }
+
+        @keyframes admShimmerWave {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        @keyframes admTopBarIndeterminate {
+          0% {
+            left: -40%;
+            width: 40%;
+          }
+          50% {
+            left: 30%;
+            width: 60%;
+          }
+          100% {
+            left: 100%;
+            width: 40%;
+          }
         }
       `}</style>
     </div>

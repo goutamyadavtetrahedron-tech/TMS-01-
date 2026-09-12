@@ -68,17 +68,32 @@ export default function Navbar() {
 
   const navbarRef = useRef(null);
 
-  // Scroll detection for sticky navigation (Requirement 6)
+  const openedScrollYRef = useRef(0);
+
+  // Track the scroll position when a dropdown opens
+  useEffect(() => {
+    if (activeDropdown && typeof window !== "undefined") {
+      openedScrollYRef.current = window.scrollY;
+    }
+  }, [activeDropdown]);
+
+  // Scroll detection for sticky navigation and auto-closing dropdowns after scrolling
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 40);
+
+      // Close dropdown only after scrolling further (threshold: 70px from where it was opened)
+      if (activeDropdown && Math.abs(currentScrollY - openedScrollYRef.current) > 70) {
+        setActiveDropdown(null);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [activeDropdown]);
 
   // Dropdown Open/Close interaction (Requirement 5):
   // - Opens when mouse touches it (hover)
@@ -208,6 +223,7 @@ export default function Navbar() {
           margin-bottom: 6px !important;
           line-height: 1.2 !important;
         }
+        .tetra-navbar .mega-hero-heading,
         .tetra-navbar .mega-hero-title {
           font-size: 17.5px !important;
           font-weight: 700 !important;
@@ -262,6 +278,7 @@ export default function Navbar() {
         }
 
         /* MEGA MENU - COLUMN HEADERS */
+        .tetra-navbar .mega-col-heading,
         .tetra-navbar .mega-col-title {
           font-size: 15.5px !important;
           font-weight: 700 !important;
@@ -275,11 +292,13 @@ export default function Navbar() {
           display: inline-block !important;
           transition: color 0.15s ease !important;
         }
+        .tetra-navbar .mega-col-heading:hover,
         .tetra-navbar .mega-col-title:hover {
           color: #FF5E14 !important;
         }
 
         /* MEGA MENU - CONSULTING SERVICE ITEM TITLES & DESCRIPTIONS */
+        .tetra-navbar .mega-item-heading,
         .tetra-navbar .mega-item-title {
           font-size: 15px !important;
           font-weight: 600 !important;
@@ -287,7 +306,9 @@ export default function Navbar() {
           line-height: 1.3 !important;
           transition: color 0.15s ease !important;
         }
+        .tetra-navbar a:hover .mega-item-heading,
         .tetra-navbar a:hover .mega-item-title,
+        .tetra-navbar .group\/sub:hover .mega-item-heading,
         .tetra-navbar .group\/sub:hover .mega-item-title {
           color: #FF5E14 !important;
         }
@@ -300,14 +321,17 @@ export default function Navbar() {
         }
 
         /* MEGA MENU - SKILL TRAINING COURSE TITLES */
+        .tetra-navbar .mega-course-heading,
         .tetra-navbar .mega-course-title {
-          font-size: 14.5px !important;
+          font-size: 14px !important;
           font-weight: 500 !important;
           color: #0f172a !important;
           line-height: 1.4 !important;
           transition: color 0.15s ease !important;
         }
+        .tetra-navbar a:hover .mega-course-heading,
         .tetra-navbar a:hover .mega-course-title,
+        .tetra-navbar .group\/sub:hover .mega-course-heading,
         .tetra-navbar .group\/sub:hover .mega-course-title {
           color: #FF5E14 !important;
           font-weight: 600 !important;
@@ -575,7 +599,7 @@ export default function Navbar() {
                                   <span className="mega-hero-tag">
                                     Flagship program
                                   </span>
-                                  <div className="mega-hero-title">
+                                  <div className="mega-hero-heading">
                                     Manufacturing Operational Excellence
                                   </div>
                                   <p className="mega-hero-desc">
@@ -622,7 +646,7 @@ export default function Navbar() {
                                         <Link
                                           href={cat.href}
                                           onClick={() => setActiveDropdown(null)}
-                                          className="mega-col-title"
+                                          className="mega-col-heading"
                                         >
                                           {cat.title}
                                         </Link>
@@ -636,7 +660,7 @@ export default function Navbar() {
                                             onClick={() => setActiveDropdown(null)}
                                             className="block px-1.5 py-1 rounded-md hover:bg-slate-50 transition-colors group/sub"
                                           >
-                                            <div className="mega-item-title">
+                                            <div className="mega-item-heading">
                                               {subItem.title}
                                             </div>
                                             {subItem.description && (
@@ -690,7 +714,7 @@ export default function Navbar() {
                                   <span className="mega-hero-tag">
                                     Corporate training
                                   </span>
-                                  <div className="mega-hero-title">
+                                  <div className="mega-hero-heading">
                                     Certified courses across 300+ manufacturers
                                   </div>
                                   <p className="mega-hero-desc">
@@ -730,7 +754,7 @@ export default function Navbar() {
                                           <Link
                                             href={cat.href}
                                             onClick={() => setActiveDropdown(null)}
-                                            className="mega-col-title"
+                                            className="mega-col-heading"
                                             title={cat.title}
                                           >
                                             {cat.title.replace(" Courses", "").replace(" and Training Consultants", "")}
@@ -751,7 +775,7 @@ export default function Navbar() {
                                             className="block px-2 py-1 rounded hover:bg-slate-50 transition-colors group/sub"
                                             title={subItem.title}
                                           >
-                                            <div className="mega-course-title">
+                                            <div className="mega-course-heading">
                                               {subItem.title}
                                             </div>
                                           </Link>

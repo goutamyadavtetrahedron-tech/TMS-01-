@@ -24,8 +24,8 @@
   
   /* Global tagline styling */
   .section-title__tagline,
-  .tagline,
-  [class*="tagline"] {
+  .section-title span.tagline,
+  .tagline {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--tagline-size) !important;
     font-weight: 600;
@@ -36,14 +36,22 @@
   
   /* Global heading styling */
   .section-title__title,
+  .section-title h1,
+  .section-title h2,
+  .section-title h3,
   .main-heading,
   h1.section-title,
-  h2.section-title,
-  [class*="title"]:not([class*="sub-title"]):not([class*="studio-"]):not([class*="adm-"]):not([class*="sre-"]) {
+  h2.section-title {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--heading-size) !important;
     font-weight: 700;
     line-height: 1.1 !important;
+  }
+
+  /* Isolate Navigation component from any global typography bleed */
+  .tetra-navbar,
+  .tetra-navbar * {
+    box-sizing: border-box;
   }
   
   /* Services section specific styling */

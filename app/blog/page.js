@@ -91,58 +91,13 @@ export default function Home() {
                             {[1, 2, 3, 4, 5, 6].map((n) => (
                                 <div className="col-xl-4 col-lg-4" key={n}>
                                     <div className="blog-one__single" style={{ border: '1px solid #f1f5f9', borderRadius: 8, overflow: 'hidden', marginBottom: 30, background: '#ffffff' }}>
-                                        <div style={{
-                                            width: '100%',
-                                            height: 250,
-                                            background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                            backgroundSize: '200% 100%',
-                                            animation: 'blogSkelShimmer 1.6s ease-in-out infinite'
-                                        }} />
+                                        <div className="blog-skel-box" style={{ width: '100%', height: 250 }} />
                                         <div style={{ padding: '20px 24px' }}>
-                                            <div style={{
-                                                width: 110,
-                                                height: 14,
-                                                borderRadius: 4,
-                                                background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                                backgroundSize: '200% 100%',
-                                                animation: 'blogSkelShimmer 1.6s ease-in-out infinite',
-                                                marginBottom: 14
-                                            }} />
-                                            <div style={{
-                                                width: '90%',
-                                                height: 22,
-                                                borderRadius: 4,
-                                                background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                                backgroundSize: '200% 100%',
-                                                animation: 'blogSkelShimmer 1.6s ease-in-out infinite',
-                                                marginBottom: 10
-                                            }} />
-                                            <div style={{
-                                                width: '65%',
-                                                height: 22,
-                                                borderRadius: 4,
-                                                background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                                backgroundSize: '200% 100%',
-                                                animation: 'blogSkelShimmer 1.6s ease-in-out infinite',
-                                                marginBottom: 18
-                                            }} />
-                                            <div style={{
-                                                width: '100%',
-                                                height: 13,
-                                                borderRadius: 4,
-                                                background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                                backgroundSize: '200% 100%',
-                                                animation: 'blogSkelShimmer 1.6s ease-in-out infinite',
-                                                marginBottom: 8
-                                            }} />
-                                            <div style={{
-                                                width: '78%',
-                                                height: 13,
-                                                borderRadius: 4,
-                                                background: 'linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)',
-                                                backgroundSize: '200% 100%',
-                                                animation: 'blogSkelShimmer 1.6s ease-in-out infinite'
-                                            }} />
+                                            <div className="blog-skel-box" style={{ width: 110, height: 14, borderRadius: 4, marginBottom: 14 }} />
+                                            <div className="blog-skel-box" style={{ width: '90%', height: 22, borderRadius: 4, marginBottom: 10 }} />
+                                            <div className="blog-skel-box" style={{ width: '65%', height: 22, borderRadius: 4, marginBottom: 18 }} />
+                                            <div className="blog-skel-box" style={{ width: '100%', height: 13, borderRadius: 4, marginBottom: 8 }} />
+                                            <div className="blog-skel-box" style={{ width: '78%', height: 13, borderRadius: 4 }} />
                                         </div>
                                     </div>
                                 </div>
@@ -150,10 +105,39 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-                <style jsx>{`
-                    @keyframes blogSkelShimmer {
-                        0% { background-position: -200% 0; }
-                        100% { background-position: 200% 0; }
+                <style jsx global>{`
+                    .blog-skel-box {
+                        position: relative !important;
+                        overflow: hidden !important;
+                        background-color: #e2e8f0 !important;
+                        animation: blogSkelPulse 1.8s ease-in-out infinite !important;
+                    }
+                    .blog-skel-box::after {
+                        content: '' !important;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        bottom: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        transform: translateX(-100%);
+                        background: linear-gradient(
+                            90deg,
+                            rgba(255, 255, 255, 0) 0%,
+                            rgba(255, 255, 255, 0.75) 50%,
+                            rgba(255, 255, 255, 0) 100%
+                        ) !important;
+                        animation: blogSkelWave 1.6s ease-in-out infinite !important;
+                        pointer-events: none !important;
+                    }
+                    @keyframes blogSkelPulse {
+                        0%, 100% { opacity: 1; }
+                        50% { opacity: 0.45; }
+                    }
+                    @keyframes blogSkelWave {
+                        0% { transform: translateX(-100%); }
+                        100% { transform: translateX(100%); }
                     }
                 `}</style>
             </Layout>
