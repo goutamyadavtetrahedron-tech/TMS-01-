@@ -155,4 +155,9 @@
     margin-top: 140px;
     transform: scale(1.5);
   }
+
+  /* Allow sticky navbar to stick to viewport on scroll */
+  .page-wrapper {
+    overflow: clip !important;
+  }
   
