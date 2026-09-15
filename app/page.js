@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import axios from 'axios'
 
 import Layout from "@/components/layout/Layout"
 import Banner from "@/components/home/Banner"
@@ -11,7 +10,7 @@ import About from "@/components/home/About"
 import Business from "@/components/home/Business"
 import Awards from "@/components/home/Awards"
 import Testimonial from "@/components/home/Testimonial"
-import ContactForm from "@/components/ContactForm"
+import ContactFormModal from "@/components/ContactFormModal"
 
 export default function Home() {
     if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true') {
@@ -54,31 +53,6 @@ export default function Home() {
         localStorage.setItem("leadFormClosed", Date.now().toString())
     }
 
-    const handleSubmitForm = async (e) => {
-        e.preventDefault();
-        console.log('Sending form data:', formData);
-        try {
-            const payload = {
-                ...formData,
-                pageUrl: typeof window !== "undefined" ? window.location.href : "",
-                pagePath: typeof window !== "undefined" ? window.location.pathname : "",
-                pageTitle: typeof window !== "undefined" ? document.title : "",
-                referrer: typeof window !== "undefined" ? document.referrer : "",
-                submissionTime: new Date().toISOString(),
-            };
-            const res = await axios.post('/api/contact', payload);
-            if (res.status === 200) {
-                setModal({ open: true, message: 'Form submitted successfully!', success: true });
-                handleCloseForm();
-            } else {
-                setModal({ open: true, message: 'Failed to submit form.', success: false });
-            }
-        } catch (err) {
-            setModal({ open: true, message: 'Failed to submit form.', success: false });
-        }
-        setTimeout(() => setModal({ ...modal, open: false }), 3000);
-    };
-
     return (
         <Layout>
             <div style={{ zoom: '80%' }}>
@@ -102,44 +76,11 @@ export default function Home() {
 
             </div>
 
-            {showForm && (
-                <div style={{
-                    position: "fixed",
-                    top: 0, left: 0, width: "100%", height: "100%",
-                    backgroundColor: "rgba(0,0,0,0.6)",
-                    display: "flex", justifyContent: "center", alignItems: "center",
-                    zIndex: 9999
-                }}>
-                    <div style={{
-                        background: "linear-gradient(135deg, #ffffff, #f5f5f5)",
-                        padding: "30px",
-                        borderRadius: "16px",
-                        width: "90%",
-                        maxWidth: "450px",
-                        maxHeight: "90vh",
-                        overflowY: "auto",
-                        position: "relative",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
-                        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                        scrollbarWidth: "none",
-                        msOverflowStyle: "none",
-                    }} className="hide-scroll">
-                        <div onClick={handleCloseForm} style={{
-                            position: "absolute",
-                            top: "12px",
-                            right: "16px",
-                            cursor: "pointer",
-                            fontSize: "22px",
-                            fontWeight: "bold",
-                            color: "#555"
-                        }}>✖</div>
-
-
-
-                        <ContactForm />
-                    </div>
-                </div>
-            )}
+            <ContactFormModal
+                open={showForm}
+                onClose={handleCloseForm}
+                buttonText="Quick Support"
+            />
 
             {modal.open && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 99999 }} onClick={() => setModal({ ...modal, open: false })}>
@@ -149,36 +90,6 @@ export default function Home() {
                     </div>
                 </div>
             )}
-
-            <style jsx>{`
-                .hide-scroll::-webkit-scrollbar {
-                    display: none;
-                }
-            `}</style>
         </Layout>
     )
-}
-
-const inputStyle = {
-    width: "100%",
-    padding: "12px",
-    margin: "8px 0",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#f0f0f0",
-    fontSize: "14px",
-    outline: "none"
-}
-
-const submitButtonStyle = {
-    width: "100%",
-    padding: "12px",
-    backgroundColor: "var(--elitecons-base)",
-    color: "#111827",
-    border: "none",
-    borderRadius: "8px",
-    fontWeight: "bold",
-    fontSize: "15px",
-    cursor: "pointer",
-    transition: "background 0.3s ease"
 }

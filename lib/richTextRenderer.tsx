@@ -384,10 +384,122 @@ export function renderMarkdownTable(lines: string[], key: React.Key): React.Reac
 }
 
 /**
+ * Helper to test if a line is a list item:
+ * - Markdown bullets: •, -, *
+ * - Numbered lists: 1., 1.), 1), (1)
+ * - Lettered lists: a), A), a.
+ */
+export function isListItem(line: string): boolean {
+  const trimmed = line.trim();
+  if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+    return true;
+  }
+  return /^(\d+(?:\.\)|\)|\.)|\(\d+\)|[a-zA-Z](?:\.\)|\)|\.))\s+/.test(trimmed);
+}
+
+/**
+ * Helper to detect standalone subheadings:
+ * Short standalone lines that look like section titles (e.g. "Daily Planning Sessions", "Visual Management Boards")
+ */
+export function isLikelySubheading(line: string): boolean {
+  const trimmed = line.trim();
+  if (trimmed.length < 3 || trimmed.length > 70) return false;
+  // Cannot end with sentence punctuation or colons
+  if (/[.:,;?!]$/.test(trimmed)) return false;
+  // Cannot start with bullet/quote/code/heading markdown
+  if (/^[•\-*>#`]/.test(trimmed)) return false;
+  // Cannot be URL or markdown link
+  if (trimmed.includes('http') || trimmed.includes('](')) return false;
+  // Word count between 1 and 8 words
+  const words = trimmed.split(/\s+/);
+  if (words.length > 8) return false;
+  // Must start with an uppercase letter
+  if (!/^[A-Z]/.test(trimmed)) return false;
+  // Cannot contain sentence-internal period
+  if (/\w\.\s+\w/.test(trimmed)) return false;
+  return true;
+}
+
+/**
+ * Helper to detect if a text contains an inline numbered list, e.g.:
+ * "The program typically covers: 1.) Item one 2.) Item two 3.) Item three..."
+ * and break it into an introductory text line followed by individual list items.
+ */
+export function splitInlineListIfPresent(text: string): string[] {
+  const trimmed = text.trim();
+  // Check if text has at least two sequential numbered items like 1.) and 2.) or 1) and 2) or (1) and (2)
+  const pattern = /(?:^|\s)(?:(\d+)[\.\)]|\((\d+)\))\s+/g;
+  const matches = [...trimmed.matchAll(pattern)];
+
+  // If fewer than 2 numbered markers, no need to split inline
+  if (matches.length < 2) {
+    return [trimmed];
+  }
+
+  // Check if first match is item 1
+  const firstNum = matches[0][1] || matches[0][2];
+  if (firstNum !== '1') {
+    return [trimmed];
+  }
+
+  const result: string[] = [];
+  const firstMatchIndex = matches[0].index ?? 0;
+
+  // Intro text before 1.)
+  if (firstMatchIndex > 0) {
+    const intro = trimmed.slice(0, firstMatchIndex).trim();
+    if (intro) result.push(intro);
+  }
+
+  // Iterate over matches to slice items
+  for (let m = 0; m < matches.length; m++) {
+    const startIdx = matches[m].index ?? 0;
+    const endIdx = m + 1 < matches.length ? (matches[m + 1].index ?? trimmed.length) : trimmed.length;
+    let itemChunk = trimmed.slice(startIdx, endIdx).trim();
+
+    // In the last item, check if there's a trailing independent concluding paragraph
+    if (m === matches.length - 1) {
+      const sentenceBoundaryMatch = itemChunk.match(/^((?:(?:\d+[\.\)]|\(\d+\))\s+.*?[.!?]))\s+([A-Z].*)$/s);
+      if (sentenceBoundaryMatch) {
+        result.push(sentenceBoundaryMatch[1].trim());
+        result.push(sentenceBoundaryMatch[2].trim());
+        continue;
+      }
+    }
+
+    result.push(itemChunk);
+  }
+
+  return result;
+}
+
+/**
+ * Check if a numbered line is a strategy section heading (e.g. "1. It Converts Strategy Into Action")
+ */
+export function isNumberedStrategyHeading(line: string): { num: string; title: string } | null {
+  const trimmed = line.trim();
+  // Match "1. Title" with dot only (distinguishes numbered section headings from "1.)" list items)
+  const match = trimmed.match(/^(\d+)\.\s+(.*)$/);
+  if (!match) return null;
+  const num = match[1];
+  const title = match[2].trim();
+
+  // If title is <= 80 chars, doesn't contain sentence-internal period followed by uppercase
+  if (title.length <= 80 && !/\w\.\s+[A-Z]/.test(title)) {
+    // If it ends with period, only allow if short title
+    if (!title.endsWith('.') || title.length <= 45) {
+      return { num, title: title.replace(/\.$/, '') };
+    }
+  }
+  return null;
+}
+
+/**
  * Intelligently groups lines of content into semantic blocks:
  * - Markdown tables (groups headers, separator, and rows into one block)
  * - Multi-line HTML blocks (<table>, <details>, <blockquote>)
- * - Lists, subheadings, images, blockquotes, and paragraphs.
+ * - Numbered strategy headings & scannable list items
+ * - Subheadings, images, blockquotes, and paragraphs.
  */
 export function splitContentIntoBlocks(rawContent: string | string[] | null | undefined): string[] {
   if (!rawContent) return [];
@@ -396,11 +508,38 @@ export function splitContentIntoBlocks(rawContent: string | string[] | null | un
   if (Array.isArray(rawContent)) {
     for (const item of rawContent) {
       if (typeof item === 'string') {
+        const itemTrimmed = item.trim();
+        if (!itemTrimmed) continue;
+
+        // Check if item contains an inline numbered list: "intro: 1.) a 2.) b"
+        const inlineSplits = splitInlineListIfPresent(itemTrimmed);
+        if (inlineSplits.length > 1) {
+          rawLines.push(...inlineSplits);
+          rawLines.push(""); // Separate from following items
+          continue;
+        }
+
+        // Check if item is a likely subheading
+        if (isLikelySubheading(itemTrimmed)) {
+          rawLines.push(`### ${itemTrimmed}`);
+          rawLines.push("");
+          continue;
+        }
+
+        // Normal multi-line split within string
         rawLines.push(...item.split(/\r?\n/));
+        rawLines.push(""); // Array entries represent distinct editorial paragraphs
       }
     }
   } else if (typeof rawContent === 'string') {
-    rawLines.push(...rawContent.split(/\r?\n/));
+    const trimmed = rawContent.trim();
+    // Check if entire string is an inline numbered list
+    const inlineSplits = splitInlineListIfPresent(trimmed);
+    if (inlineSplits.length > 1) {
+      rawLines.push(...inlineSplits);
+    } else {
+      rawLines.push(...rawContent.split(/\r?\n/));
+    }
   }
 
   const blocks: string[] = [];
@@ -482,8 +621,25 @@ export function splitContentIntoBlocks(rawContent: string | string[] | null | un
       continue;
     }
 
-    // List item (•, -, *, 1.)
-    if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
+    // Check if this line is an inline list that was not caught earlier
+    const inlineCheck = splitInlineListIfPresent(trimmed);
+    if (inlineCheck.length > 1) {
+      flushPara();
+      inlineCheck.forEach((item) => blocks.push(item));
+      i++;
+      continue;
+    }
+
+    // Check if line is a likely subheading
+    if (isLikelySubheading(trimmed)) {
+      flushPara();
+      blocks.push(`### ${trimmed}`);
+      i++;
+      continue;
+    }
+
+    // List item (•, -, *, 1., 1.), 1), (1), a))
+    if (isListItem(trimmed)) {
       flushPara();
       blocks.push(trimmed);
       i++;
@@ -702,17 +858,10 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h3
         key={key}
-        className="blog-subheading-h3"
-        style={{
-          fontFamily: 'var(--font-poppins)',
-          fontSize: '21.5px',
-          fontWeight: 600,
-          margin: '24px 0 10px 0',
-          color: '#0f172a',
-          lineHeight: '1.35',
-        }}
+        className="blog-subheading-h3 text-lg sm:text-xl font-bold text-[#001659] mt-8 mb-3 tracking-tight flex items-center gap-2.5"
       >
-        {renderRichText(cleanHeading)}
+        <span className="w-2 h-2 rounded-full bg-[#FF5E14] inline-block shrink-0" />
+        <span>{renderRichText(cleanHeading)}</span>
       </h3>
     );
   }
@@ -725,15 +874,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h2
         key={key}
-        className="blog-subheading-h2"
-        style={{
-          fontFamily: 'var(--font-poppins)',
-          fontSize: '25px',
-          fontWeight: 700,
-          margin: '28px 0 12px 0',
-          color: '#0f172a',
-          lineHeight: '1.3',
-        }}
+        className="blog-subheading-h2 text-xl sm:text-2xl font-extrabold text-[#001659] mt-9 mb-4 tracking-tight"
       >
         {renderRichText(cleanHeading)}
       </h2>
@@ -748,80 +889,74 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h1
         key={key}
-        className="blog-subheading-h1"
-        style={{
-          fontFamily: 'var(--font-poppins)',
-          fontSize: '29px',
-          fontWeight: 800,
-          margin: '32px 0 14px 0',
-          color: '#0f172a',
-          lineHeight: '1.25',
-        }}
+        className="blog-subheading-h1 text-2xl sm:text-3xl font-extrabold text-[#001659] mt-10 mb-5 tracking-tight"
       >
         {renderRichText(cleanHeading)}
       </h1>
     );
   }
 
-  // 6. List items (•, -, *, or 1.)
+  // 6. Numbered Strategy Section / Step Header (e.g. "1. It Converts Strategy Into Action")
+  const stratHeading = isNumberedStrategyHeading(trimmed);
+  if (stratHeading) {
+    return (
+      <div key={key} className="blog-strategy-step-header mt-8 mb-3 pt-2">
+        <div className="flex items-center gap-3">
+          <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#001659] text-[#FF7A3D] font-extrabold text-sm sm:text-base flex items-center justify-center shadow-xs border border-blue-900/40 shrink-0">
+            {String(stratHeading.num).padStart(2, '0')}
+          </span>
+          <h3 className="text-base sm:text-lg md:text-[19px] font-bold text-[#001659] tracking-tight">
+            {renderRichText(stratHeading.title)}
+          </h3>
+        </div>
+      </div>
+    );
+  }
+
+  // 7. Bullet List items (•, -, *)
   if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
     const listContent = trimmed.replace(/^[•\-\*]\s+/, '');
     return (
       <div
         key={key}
-        className="blog-list-item"
-        style={{
-          display: 'flex',
-          alignItems: 'baseline',
-          gap: '10px',
-          marginBottom: '8px',
-          fontSize: '17px',
-          lineHeight: '1.7',
-          color: '#333333',
-        }}
+        className="my-2.5 p-3.5 sm:p-4 rounded-xl bg-slate-50/70 hover:bg-slate-100/70 border border-slate-200/70 transition-all flex items-start gap-3.5 group"
       >
-        <span style={{ color: '#ff5722', fontSize: '12px', flexShrink: 0 }}>●</span>
-        <span style={{ flex: 1 }}>{renderRichText(listContent)}</span>
+        <div className="w-5 h-5 rounded-full bg-orange-100 text-[#FF5E14] flex items-center justify-center shrink-0 mt-0.5 border border-orange-200/60">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF5E14]" />
+        </div>
+        <div className="text-[17px] sm:text-[18px] text-slate-700 leading-relaxed flex-1">
+          {renderRichText(listContent)}
+        </div>
       </div>
     );
   }
 
-  // Numbered list item: e.g. "1. Item"
-  const numberedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
-  if (numberedMatch) {
-    const num = numberedMatch[1];
-    const content = numberedMatch[2];
+  // 8. Numbered / Lettered List Item (e.g. "1.) Item", "1) Item", "(1) Item", "a) Item")
+  const numListMatch = trimmed.match(/^(\d+(?:\.\)|\)|\.)|\(\d+\)|[a-zA-Z](?:\.\)|\)|\.))\s+(.*)$/);
+  if (numListMatch) {
+    const rawBadge = numListMatch[1].replace(/[^\w]/g, '');
+    const content = numListMatch[2];
+    const formattedBadge = /^\d+$/.test(rawBadge) ? String(rawBadge).padStart(2, '0') : rawBadge;
     return (
       <div
         key={key}
-        className="blog-numbered-item"
-        style={{
-          display: 'flex',
-          alignItems: 'baseline',
-          gap: '10px',
-          marginBottom: '8px',
-          fontSize: '17px',
-          lineHeight: '1.7',
-          color: '#333333',
-        }}
+        className="my-3 p-4 sm:p-4.5 rounded-xl bg-slate-50/80 hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-200 transition-all flex items-start gap-3.5 shadow-2xs group"
       >
-        <span style={{ fontWeight: 700, color: '#002244', minWidth: '22px' }}>{num}.</span>
-        <span style={{ flex: 1 }}>{renderRichText(content)}</span>
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-100/80 text-[#001659] font-bold text-xs sm:text-[13px] flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60 group-hover:bg-[#001659] group-hover:text-white transition-all">
+          {formattedBadge}
+        </div>
+        <div className="text-[17px] sm:text-[18px] text-slate-700 leading-relaxed flex-1">
+          {renderRichText(content)}
+        </div>
       </div>
     );
   }
 
-  // 7. Standard Paragraph
+  // 9. Standard Editorial Paragraph
   return (
     <p
       key={key}
-      className="blog-para"
-      style={{
-        fontSize: '17.5px',
-        lineHeight: '1.8',
-        marginBottom: '16px',
-        color: '#333333',
-      }}
+      className="blog-para text-[18px] sm:text-[19px] leading-[1.85] text-slate-700 mb-6 font-normal"
     >
       {renderRichText(trimmed)}
     </p>

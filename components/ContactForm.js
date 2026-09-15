@@ -2,7 +2,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function ContactForm({ onSuccess, onError, buttonText = "Submit", style = {} }) {
+export default function ContactForm({
+  onSuccess,
+  onError,
+  buttonText = "Submit",
+  style = {},
+  compact = false,
+}) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -24,14 +30,14 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
 
     return {
       width: "100%",
-      padding: "12px 16px 12px 42px",
-      borderRadius: "12px",
-      backgroundColor: isFocused ? "#ffffff" : "#f9fafb",
-      color: "#1e293b",
-      fontSize: "14px",
+      padding: compact ? "9px 12px 9px 36px" : "12px 14px 12px 42px",
+      borderRadius: compact ? "9px" : "10px",
+      backgroundColor: isFocused ? "#ffffff" : "#f8fafc",
+      color: "#0f172a",
+      fontSize: compact ? "13px" : "14.5px",
       fontFamily: "var(--font-poppins, sans-serif)",
-      border: hasError ? "1.5px solid #ef4444" : isFocused ? "1.5px solid #ff6600" : "1.5px solid #e2e8f0",
-      boxShadow: isFocused ? "0 0 0 4px rgba(255, 102, 0, 0.12)" : "0 1px 2px rgba(0,0,0,0.03)",
+      border: hasError ? "1.5px solid #ef4444" : isFocused ? "1.5px solid #ff6600" : "1px solid #e2e8f0",
+      boxShadow: isFocused ? "0 0 0 3px rgba(255, 102, 0, 0.12)" : "0 1px 2px rgba(0,0,0,0.02)",
       outline: "none",
       transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
       boxSizing: "border-box",
@@ -111,17 +117,22 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
     }
   };
 
+  const iconSize = compact ? 15 : 18;
+  const iconLeft = compact ? "12px" : "14px";
+  const iconTop = compact ? "10px" : "13px";
+
   return (
-    <div style={{ width: "100%", ...normalStyle }} ref={topDivRef}>
+    <div style={{ width: "100%", maxWidth: normalStyle.maxWidth || (compact ? "420px" : "500px"), margin: "0 auto", ...normalStyle }} ref={topDivRef}>
       <form
         onSubmit={handleSubmitForm}
         style={{
-          padding: "32px 28px",
-          borderRadius: "20px",
-          boxShadow: "0 12px 36px rgba(0,0,0,0.08)",
-          border: "1px solid #eef2f6",
+          padding: compact ? "22px 20px" : "32px 28px",
+          borderRadius: "16px",
+          boxShadow: normalStyle.boxShadow !== undefined ? normalStyle.boxShadow : "0 10px 30px rgba(0, 22, 89, 0.07)",
+          border: normalStyle.border !== undefined ? normalStyle.border : "1px solid #e2e8f0",
           background: "#ffffff",
-          maxWidth: "100%",
+          maxWidth: normalStyle.maxWidth || (compact ? "420px" : "500px"),
+          margin: "0 auto",
           boxSizing: "border-box",
           position: "relative",
           overflow: "hidden",
@@ -135,38 +146,38 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             top: 0,
             left: 0,
             right: 0,
-            height: "5px",
+            height: "3.5px",
             background: "linear-gradient(90deg, #ff6600 0%, #ff9900 100%)",
           }}
         />
 
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+        <div style={{ textAlign: "center", marginBottom: compact ? "16px" : "20px" }}>
           <h2
             style={{
-              fontSize: "22px",
+              fontSize: compact ? "18px" : "22px",
               fontWeight: 700,
-              color: "#0f172a",
-              margin: "0 0 6px 0",
-              letterSpacing: "-0.3px",
+              color: "#001659",
+              margin: "0 0 4px 0",
+              letterSpacing: "-0.2px",
             }}
           >
             Get in Touch
           </h2>
-          <p style={{ fontSize: "13.5px", color: "#64748b", margin: 0, lineHeight: "1.4" }}>
+          <p style={{ fontSize: compact ? "12px" : "13.5px", color: "#64748b", margin: 0, lineHeight: "1.35" }}>
             Fill out your details & our expert team will respond shortly.
           </p>
         </div>
 
         {/* Form Inputs with SVG Icons */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: compact ? "10px" : "13px" }}>
           {/* Full Name */}
           <div style={{ position: "relative" }}>
             <span
               style={{
                 position: "absolute",
-                left: "14px",
-                top: "12px",
+                left: iconLeft,
+                top: iconTop,
                 color: focusedField === "name" ? "#ff6600" : "#94a3b8",
                 display: "flex",
                 alignItems: "center",
@@ -174,7 +185,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 transition: "color 0.2s ease",
               }}
             >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </span>
@@ -196,8 +207,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             <span
               style={{
                 position: "absolute",
-                left: "14px",
-                top: "12px",
+                left: iconLeft,
+                top: iconTop,
                 color: focusedField === "company" ? "#ff6600" : "#94a3b8",
                 display: "flex",
                 alignItems: "center",
@@ -205,7 +216,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 transition: "color 0.2s ease",
               }}
             >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0v-5a2 2 0 012-2h2a2 2 0 012 2v5m-4 0h4" />
               </svg>
             </span>
@@ -227,8 +238,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             <span
               style={{
                 position: "absolute",
-                left: "14px",
-                top: "12px",
+                left: iconLeft,
+                top: iconTop,
                 color: errors.email ? "#ef4444" : focusedField === "email" ? "#ff6600" : "#94a3b8",
                 display: "flex",
                 alignItems: "center",
@@ -236,7 +247,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 transition: "color 0.2s ease",
               }}
             >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </span>
@@ -252,7 +263,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
               style={getFieldStyle("email")}
             />
             {errors.email && (
-              <p style={{ color: "#ef4444", fontSize: "12px", margin: "4px 0 0 4px", fontWeight: 500 }}>
+              <p style={{ color: "#ef4444", fontSize: "11px", margin: "3px 0 0 4px", fontWeight: 500 }}>
                 {errors.email}
               </p>
             )}
@@ -263,8 +274,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             <span
               style={{
                 position: "absolute",
-                left: "14px",
-                top: "12px",
+                left: iconLeft,
+                top: iconTop,
                 color: focusedField === "mobile" ? "#ff6600" : "#94a3b8",
                 display: "flex",
                 alignItems: "center",
@@ -272,7 +283,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 transition: "color 0.2s ease",
               }}
             >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
             </span>
@@ -294,8 +305,8 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
             <span
               style={{
                 position: "absolute",
-                left: "14px",
-                top: "12px",
+                left: iconLeft,
+                top: iconTop,
                 color: focusedField === "requirements" ? "#ff6600" : "#94a3b8",
                 display: "flex",
                 alignItems: "center",
@@ -303,7 +314,7 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
                 transition: "color 0.2s ease",
               }}
             >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </span>
@@ -314,38 +325,38 @@ export default function ContactForm({ onSuccess, onError, buttonText = "Submit",
               onFocus={() => setFocusedField("requirements")}
               onBlur={() => setFocusedField(null)}
               placeholder="Your Requirements *"
-              rows={3}
+              rows={compact ? 2 : 3}
               required
               style={{
                 ...getFieldStyle("requirements"),
                 resize: "none",
-                minHeight: "85px",
+                minHeight: compact ? "64px" : "85px",
               }}
             ></textarea>
           </div>
         </div>
 
         {/* Submit Button */}
-        <div style={{ marginTop: "22px" }}>
+        <div style={{ marginTop: compact ? "14px" : "20px" }}>
           <button
             type="submit"
             disabled={loading}
             style={{
               width: "100%",
-              padding: "13px 24px",
+              padding: compact ? "10px 18px" : "13px 24px",
               background: "linear-gradient(135deg, #ff6600 0%, #ff8800 100%)",
               color: "#ffffff",
               border: "none",
-              borderRadius: "12px",
+              borderRadius: compact ? "10px" : "12px",
               fontWeight: 700,
-              fontSize: "15px",
+              fontSize: compact ? "13.5px" : "15px",
               cursor: loading ? "not-allowed" : "pointer",
               transition: "all 0.25s ease",
-              boxShadow: "0 4px 14px rgba(255, 102, 0, 0.35)",
+              boxShadow: "0 3px 12px rgba(255, 102, 0, 0.3)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "8px",
+              gap: "7px",
               opacity: loading ? 0.8 : 1,
             }}
             onMouseEnter={(e) => {

@@ -73,10 +73,10 @@ export default function Testimonial() {
             </h2>
           </div>
 
-          <div className="row">
+          <div className="row align-items-center justify-content-between" style={{ alignItems: "center" }}>
             {/* Swiper Section */}
-            <div className="col-xl-8" style={{ maxWidth: "650px" }}>
-              <div className="testimonial-two__right">
+            <div className="col-xl-7 col-lg-7" style={{ maxWidth: "650px" }}>
+              <div className="testimonial-two__right" style={{ marginTop: "20px" }}>
                 <Swiper
                   {...swiperOptions}
                   className="thm-swiper__slider swiper-container"
@@ -226,8 +226,8 @@ export default function Testimonial() {
             </div>
 
             {/* Contact Form Section */}
-            <div className="col-xl-4" style={{ margin: "4px" }}>
-              <div className="testimonial-two__left">
+            <div className="col-xl-5 col-lg-5" style={{ maxWidth: "520px", width: "100%", marginTop: "20px" }}>
+              <div style={{ position: "relative", zIndex: 2, marginRight: 0 }}>
                 <ContactForm />
               </div>
             </div>

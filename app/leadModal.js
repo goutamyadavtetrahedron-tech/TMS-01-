@@ -56,11 +56,11 @@ export default function Modal({ isOpen, onClose }) {
         style={{
           position: "relative",
           background: "#ffffff",
-          borderRadius: "20px",
+          borderRadius: "18px",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
           padding: "0",
           width: "100%",
-          maxWidth: "520px",
+          maxWidth: "420px",
           maxHeight: "92vh",
           overflowY: "auto",
           boxSizing: "border-box",
@@ -71,15 +71,15 @@ export default function Modal({ isOpen, onClose }) {
           aria-label="Close modal"
           style={{
             position: "absolute",
-            top: "14px",
-            right: "14px",
-            width: "34px",
-            height: "34px",
+            top: "12px",
+            right: "12px",
+            width: "28px",
+            height: "28px",
             borderRadius: "50%",
             background: "#f1f5f9",
             color: "#64748b",
             border: "none",
-            fontSize: "20px",
+            fontSize: "18px",
             fontWeight: 700,
             cursor: "pointer",
             display: "flex",
@@ -103,7 +103,7 @@ export default function Modal({ isOpen, onClose }) {
           ×
         </button>
 
-        <ContactForm onSuccess={onClose} />
+        <ContactForm onSuccess={onClose} compact={true} style={{ border: "none", boxShadow: "none" }} />
       </div>
     </div>
   );

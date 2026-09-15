@@ -60,7 +60,6 @@ function LinkedInIcon({ className = "w-3.5 h-3.5" }) {
 }
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -77,11 +76,10 @@ export default function Navbar() {
     }
   }, [activeDropdown]);
 
-  // Scroll detection for sticky navigation and auto-closing dropdowns after scrolling
+  // Auto-close dropdown only after scrolling further (threshold: 70px from where it was opened)
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 40);
 
       // Close dropdown only after scrolling further (threshold: 70px from where it was opened)
       if (activeDropdown && Math.abs(currentScrollY - openedScrollYRef.current) > 70) {
@@ -90,7 +88,6 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeDropdown]);
@@ -139,15 +136,27 @@ export default function Navbar() {
         .page-wrapper {
           overflow: clip !important;
         }
+        /* Keep the top contact bar in normal flow so it naturally scrolls out of view */
+        .top-bar {
+          position: static !important;
+          height: 38px !important;
+        }
+        /* Make only the main navigation stick to the top */
+        .main-navbar,
         .tetra-navbar {
           position: sticky !important;
           top: 0 !important;
           z-index: 1000 !important;
+          background: #ffffff !important;
         }
+        .main-navbar a,
+        .main-navbar button,
         .tetra-navbar a,
-        .tetra-navbar button {
+        .tetra-navbar button,
+        .top-bar a {
           font-family: var(--font-poppins), Poppins, sans-serif !important;
         }
+        .main-navbar .nav-link-item,
         .tetra-navbar .nav-link-item {
           font-size: 13.5px !important;
           font-weight: 600 !important;
@@ -158,41 +167,52 @@ export default function Navbar() {
           transition: color 0.15s ease !important;
         }
         @media (min-width: 1400px) {
+          .main-navbar .nav-link-item,
           .tetra-navbar .nav-link-item {
             font-size: 14px !important;
           }
         }
+        .main-navbar .nav-link-item:hover,
+        .main-navbar .nav-link-active,
         .tetra-navbar .nav-link-item:hover,
         .tetra-navbar .nav-link-active {
           color: #FF5E14 !important;
         }
+        .top-bar .top-link,
+        .main-navbar .top-link,
         .tetra-navbar .top-link {
           color: #001659 !important;
           text-decoration: none !important;
           font-size: 13px !important;
         }
+        .top-bar .top-link:hover,
+        .main-navbar .top-link:hover,
         .tetra-navbar .top-link:hover {
           color: #FF5E14 !important;
         }
+        .main-navbar .quick-support-btn,
         .tetra-navbar .quick-support-btn {
           font-size: 11px !important;
           font-weight: 600 !important;
         }
         @media (min-width: 640px) {
+          .main-navbar .quick-support-btn,
           .tetra-navbar .quick-support-btn {
             font-size: 11.5px !important;
           }
         }
 
         /* ABOUT US DROPDOWN STYLES */
-        .tetra-navbar .about-dropdown-container {
+        .tetra-navbar .about-dropdown-container,
+        .main-navbar .about-dropdown-container {
           position: absolute !important;
           left: 50% !important;
           top: 100% !important;
           transform: translateX(-50%) translateY(4px) !important;
           transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease !important;
         }
-        .tetra-navbar .about-dropdown-container.is-open {
+        .tetra-navbar .about-dropdown-container.is-open,
+        .main-navbar .about-dropdown-container.is-open {
           transform: translateX(-50%) translateY(0px) !important;
         }
 
@@ -338,117 +358,108 @@ export default function Navbar() {
         }
       `}</style>
 
+      {/* 1. TOP UTILITY/CONTACT BAR: Normal document flow so it naturally scrolls out of view */}
+      <div className="top-bar w-full bg-white border-b border-slate-100 hidden md:block">
+        <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 lg:px-6 flex items-center justify-between h-[38px] text-xs">
+          {/* Contact list with prominent orange icons */}
+          <div className="flex items-center gap-4 lg:gap-6">
+            <a
+              href={`tel:${contactInfo.phone}`}
+              className="top-link flex items-center gap-1.5 font-medium transition-colors focus:outline-none"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#FF5E14] shrink-0" />
+              <span className="tracking-wide font-medium text-[#001659]">
+                {contactInfo.phoneDisplay}
+              </span>
+            </a>
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="top-link flex items-center gap-1.5 font-medium transition-colors focus:outline-none"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#FF5E14] shrink-0" />
+              <span className="font-medium text-[#001659]">
+                {contactInfo.email}
+              </span>
+            </a>
+          </div>
+
+          {/* Social media icons with "Follow Us On:" */}
+          <div className="flex items-center gap-3">
+            <span className="text-[12px] lg:text-[12.5px] font-semibold text-[#001659] leading-none select-none">
+              Follow Us On:
+            </span>
+            <div className="flex items-center gap-2.5 text-[#001659]">
+              <a
+                href={contactInfo.socials[0].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="top-link flex items-center justify-center w-5 h-5 transition-colors"
+              >
+                <FacebookIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={contactInfo.socials[1].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="top-link flex items-center justify-center w-5 h-5 transition-colors"
+              >
+                <InstagramIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={contactInfo.socials[2].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter / X"
+                className="top-link flex items-center justify-center w-5 h-5 transition-colors"
+              >
+                <TwitterIcon className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href={contactInfo.socials[3].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="top-link flex items-center justify-center w-5 h-5 transition-colors"
+              >
+                <LinkedInIcon className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. MAIN NAVIGATION BAR: Sticky positioning handled natively by CSS */}
       <header
         ref={navbarRef}
-        className={`tetra-navbar w-full sticky top-0 z-[1000] bg-white transition-all duration-300 ${
-          isScrolled ? "shadow-md" : "border-b border-slate-200/90 shadow-2xs"
-        }`}
+        className="main-navbar tetra-navbar w-full sticky top-0 z-[1000] bg-white border-b border-slate-200/90 shadow-xs"
       >
         <div className="w-full flex items-stretch">
-          {/* BRAND LOGOS: Zero padding so images take up the complete space */}
+          {/* BRAND LOGOS: Constant stable height, zero layout shift */}
           <div className="shrink-0 flex items-center p-0 bg-white">
-            <Link href="/" className="flex items-center gap-1.5 sm:gap-2 h-full pl-1 pr-1.5 focus:outline-none">
+            <Link href="/" className="flex items-center gap-1.5 sm:gap-2 h-full pl-2 sm:pl-3 pr-2 sm:pr-3 focus:outline-none">
               <img
                 src="/assets/images/Tetrahedron Logo.png"
                 alt="Tetrahedron Logo"
-                className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] ${
-                  isScrolled ? "h-10 md:h-11" : "h-[68px] sm:h-[72px] lg:h-[76px]"
-                }`}
+                className="w-auto h-[44px] sm:h-[48px] lg:h-[50px] object-contain transition-transform duration-200 hover:scale-[1.02]"
               />
               <img
                 src="/assets/images/logocertified.jpeg"
                 alt="Incredible Workplaces Certified Badge"
-                className={`w-auto object-contain rounded shadow-2xs transition-all duration-300 ${
-                  isScrolled ? "h-7 md:h-8" : "h-[50px] sm:h-[54px] lg:h-[58px]"
-                }`}
+                className="w-auto h-[34px] sm:h-[38px] lg:h-[40px] object-contain rounded shadow-2xs"
               />
             </Link>
           </div>
 
-          {/* RIGHT SIDE: TWO ROWS (TOP UTILITY BAR + MAIN MENU BAR) */}
-          <div className="flex-1 flex flex-col justify-between min-w-0">
-            {/* TOP UTILITY ROW (Hides smoothly on scroll - Requirement 6) */}
-            <div
-              className={`w-full flex items-center justify-between pl-2 sm:pl-3 pr-3 sm:pr-4 lg:pr-5 transition-all duration-300 ${
-                isScrolled ? "hidden" : "hidden md:flex py-1 border-b border-slate-100"
-              }`}
+          {/* MAIN NAVIGATION BAR (#F3F3F3 background container) */}
+          <div className="flex-1 flex items-stretch justify-between bg-[#F3F3F3] min-h-[48px] lg:min-h-[52px] min-w-0">
+            {/* DESKTOP NAV LINKS (Visible on xl screens: 1200px+) */}
+            <nav
+              className="hidden xl:flex items-center pl-1 sm:pl-2 2xl:pl-3 gap-0.5 lg:gap-1"
+              role="navigation"
+              aria-label="Main Menu"
             >
-              {/* Contact list with prominent orange icons */}
-              <div className="flex items-center gap-4 lg:gap-6">
-                <a
-                  href={`tel:${contactInfo.phone}`}
-                  className="top-link flex items-center gap-1.5 font-medium transition-colors focus:outline-none"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#FF5E14] shrink-0" />
-                  <span className="tracking-wide font-medium text-[#001659]">
-                    {contactInfo.phoneDisplay}
-                  </span>
-                </a>
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  className="top-link flex items-center gap-1.5 font-medium transition-colors focus:outline-none"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#FF5E14] shrink-0" />
-                  <span className="font-medium text-[#001659]">
-                    {contactInfo.email}
-                  </span>
-                </a>
-              </div>
-
-              {/* Social media icons with "Follow Us On:" */}
-              <div className="flex items-center gap-3">
-                <span className="text-[12.5px] lg:text-[13px] font-semibold text-[#001659] leading-none select-none">
-                  Follow Us On:
-                </span>
-                <div className="flex items-center gap-2.5 text-[#001659]">
-                  <a
-                    href={contactInfo.socials[0].href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                    className="top-link flex items-center justify-center w-5 h-5 transition-colors"
-                  >
-                    <FacebookIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href={contactInfo.socials[1].href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    className="top-link flex items-center justify-center w-5 h-5 transition-colors"
-                  >
-                    <InstagramIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href={contactInfo.socials[2].href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Twitter / X"
-                    className="top-link flex items-center justify-center w-5 h-5 transition-colors"
-                  >
-                    <TwitterIcon className="w-3.5 h-3.5" />
-                  </a>
-                  <a
-                    href={contactInfo.socials[3].href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    className="top-link flex items-center justify-center w-5 h-5 transition-colors"
-                  >
-                    <LinkedInIcon className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* MAIN NAVIGATION BAR (#F3F3F3 background container) */}
-            <div className="w-full flex items-stretch justify-between bg-[#F3F3F3] min-h-[40px] lg:min-h-[44px]">
-              {/* DESKTOP NAV LINKS (Visible on xl screens: 1200px+) */}
-              <nav
-                className="hidden xl:flex items-center pl-1 sm:pl-2 2xl:pl-3 gap-0.5 lg:gap-1"
-                role="navigation"
-                aria-label="Main Menu"
-              >
                 {navigationData.map((item) => {
                   const hasChildren = !!item.children;
                   const isMega = !!item.isMegaMenu;
@@ -832,7 +843,6 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-        </div>
       </header>
 
       {/* OVERHAULED MOBILE & TABLET DRAWER WITH LIVE SEARCH */}
