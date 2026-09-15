@@ -429,7 +429,7 @@ export function splitInlineListIfPresent(text: string): string[] {
   const trimmed = text.trim();
   // Check if text has at least two sequential numbered items like 1.) and 2.) or 1) and 2) or (1) and (2)
   const pattern = /(?:^|\s)(?:(\d+)[\.\)]|\((\d+)\))\s+/g;
-  const matches = [...trimmed.matchAll(pattern)];
+  const matches = Array.from(trimmed.matchAll(pattern));
 
   // If fewer than 2 numbered markers, no need to split inline
   if (matches.length < 2) {
@@ -459,7 +459,7 @@ export function splitInlineListIfPresent(text: string): string[] {
 
     // In the last item, check if there's a trailing independent concluding paragraph
     if (m === matches.length - 1) {
-      const sentenceBoundaryMatch = itemChunk.match(/^((?:(?:\d+[\.\)]|\(\d+\))\s+.*?[.!?]))\s+([A-Z].*)$/s);
+      const sentenceBoundaryMatch = itemChunk.match(/^((?:(?:\d+[\.\)]|\(\d+\))\s+[\s\S]*?[.!?]))\s+([A-Z][\s\S]*)$/);
       if (sentenceBoundaryMatch) {
         result.push(sentenceBoundaryMatch[1].trim());
         result.push(sentenceBoundaryMatch[2].trim());
