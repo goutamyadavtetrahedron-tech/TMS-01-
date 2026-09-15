@@ -440,13 +440,7 @@ export default function TrainingPage({ params }) {
   const getIcon = (iconName, size = 28) => {
     const IconComponent = Icons[iconName];
     if (!IconComponent) return <Icons.HelpCircle size={size} />;
-    return (
-      <span style={dynamicStyles.iconWrapper}>
-        {" "}
-        {/* Apply themed style */}
-        <IconComponent size={size} />
-      </span>
-    );
+    return <IconComponent size={size} />;
   };
 
   const renderSectionTitle = (title) => (
@@ -648,7 +642,7 @@ export default function TrainingPage({ params }) {
   };
 
   // Generic Card Renderer (Uses dynamicStyles and hover state)
-  const renderCard = (item, index, type) => {
+  const renderCard = (item, index, type, totalCount = 3) => {
     // Ensure item has at least a title or description to render
     const cardTitle = item.title || item.level || item.phase || item.step;
     const cardDescriptionContent = renderParagraphs(
@@ -669,19 +663,33 @@ export default function TrainingPage({ params }) {
         : {}),
     };
 
+    const colClass =
+      totalCount === 4
+        ? "col-lg-3 col-md-6 mb-4"
+        : totalCount === 2
+        ? "col-lg-6 col-md-6 mb-4"
+        : "col-lg-4 col-md-6 mb-4";
+
     return (
-      <div key={key} className="col-lg-4 col-md-6 mb-4">
+      <div key={key} className={`${colClass} flex flex-col`}>
         <div
           style={cardStyle}
+          className="h-full flex flex-col items-center text-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
           onMouseEnter={() => handleMouseEnter(key)}
           onMouseLeave={() => handleMouseLeave(key)}
         >
-          {item.icon && getIcon(item.icon)}
+          {item.icon && (
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 transition-colors duration-300 shadow-sm">
+              {getIcon(item.icon, 28)}
+            </div>
+          )}
           {isNonEmptyString(cardTitle) && (
-            <h5 style={dynamicStyles.cardTitle}>{cardTitle}</h5>
+            <h5 style={dynamicStyles.cardTitle} className="text-lg font-bold text-slate-800 mb-2">
+              {cardTitle}
+            </h5>
           )}
           {cardDescriptionContent && (
-            <div style={dynamicStyles.cardDescription}>
+            <div style={dynamicStyles.cardDescription} className="text-slate-600 text-sm leading-relaxed">
               {cardDescriptionContent}
             </div>
           )}
@@ -700,7 +708,7 @@ export default function TrainingPage({ params }) {
       (p) => !p.isSectionTitle && !p.isImage
     );
     const renderedCards = cardPillars
-      .map((pillar, index) => renderCard(pillar, index, "pillar"))
+      .map((pillar, index) => renderCard(pillar, index, "pillar", cardPillars.length))
       .filter(Boolean); // Filter out null results from renderCard
 
     if (renderedCards.length === 0 && !imagePillar) return null; // Don't render if no cards and no image
@@ -713,12 +721,12 @@ export default function TrainingPage({ params }) {
           renderSectionTitle(titlePillar.title)}
 
         {imagePillar && (
-          <div className="mb-5 text-center">
+          <div className="w-full flex justify-center items-center my-8 text-center">
             <img
               src={imagePillar.image}
               alt={titlePillar?.title || "Pillars"}
-              className="img-fluid rounded shadow-sm"
-              style={{ maxWidth: "700px" }}
+              className="mx-auto block max-w-full lg:max-w-[700px] h-auto rounded-2xl shadow-md object-contain"
+              style={{ margin: "0 auto", display: "block" }}
             />
           </div>
         )}
@@ -742,7 +750,7 @@ export default function TrainingPage({ params }) {
     const descriptionContent = renderParagraphs(sectionData.description);
     const renderedCards = isNonEmptyArray(itemsToRender)
       ? itemsToRender
-        .map((item, index) => renderCard(item, index, dataKey))
+        .map((item, index) => renderCard(item, index, dataKey, itemsToRender.length))
         .filter(Boolean) // Filter out null cards
       : [];
 
@@ -764,12 +772,12 @@ export default function TrainingPage({ params }) {
           renderSectionTitle(sectionData.title || defaultTitle)}
 
         {sectionData.image && (
-          <div className="mb-5 text-center">
+          <div className="w-full flex justify-center items-center my-8 text-center">
             <img
               src={sectionData.image}
               alt={sectionData.title || defaultTitle}
-              className="img-fluid rounded shadow-sm"
-              style={{ maxWidth: "700px" }}
+              className="mx-auto block max-w-full lg:max-w-[700px] h-auto rounded-2xl shadow-md object-contain"
+              style={{ margin: "0 auto", display: "block" }}
             />
           </div>
         )}
@@ -812,12 +820,12 @@ export default function TrainingPage({ params }) {
           renderSectionTitle(sectionData.title || "Our Approach")}
 
         {sectionData.image && (
-          <div className="mb-5 text-center">
+          <div className="w-full flex justify-center items-center my-8 text-center">
             <img
               src={sectionData.image}
               alt={sectionData.title || "Process Steps"}
-              className="img-fluid rounded shadow-sm"
-              style={{ maxWidth: "600px" }}
+              className="mx-auto block max-w-full lg:max-w-[600px] h-auto rounded-2xl shadow-md object-contain"
+              style={{ margin: "0 auto", display: "block" }}
             />
           </div>
         )}
@@ -861,7 +869,7 @@ export default function TrainingPage({ params }) {
   const renderFeatures = () => {
     if (!isNonEmptyArray(data.features)) return null;
     const renderedCards = data.features
-      .map((feature, idx) => renderCard(feature, idx, "feature"))
+      .map((feature, idx) => renderCard(feature, idx, "feature", data.features.length))
       .filter(Boolean);
     if (renderedCards.length === 0) return null; // Don't render if no valid cards
 
@@ -908,38 +916,29 @@ export default function TrainingPage({ params }) {
         )}
 
         {hasList && (
-          <ul
-            style={{
-              ...dynamicStyles.listStyleBase,
-              ...dynamicStyles.audienceList,
-              ...(audienceListItems.length > 6
-                ? dynamicStyles.audienceColumns
-                : {}),
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-w-5xl mx-auto my-6 px-3">
             {audienceListItems.map((item, index) => (
-              <li
+              <div
                 key={index}
-                style={{
-                  ...dynamicStyles.listItemBase,
-                  ...dynamicStyles.audienceListItem,
-                }}
+                className="group flex items-center gap-3.5 p-3.5 px-4 bg-white rounded-xl border border-slate-200/90 shadow-xs hover:shadow-md hover:border-blue-500/40 hover:-translate-y-0.5 transition-all duration-200 text-left"
               >
-                <Icons.UserCheck
-                  size={20}
-                  style={dynamicStyles.listGroupIcon}
-                />
-                <span style={{ color: dynamicStyles.listItemBase.color }}>
+                <div className="w-10 h-10 rounded-lg bg-blue-50/90 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200 shadow-xs">
+                  <Icons.UserCheck size={19} />
+                </div>
+                <span className="text-slate-800 font-medium text-sm sm:text-[15px] leading-snug group-hover:text-blue-900 transition-colors duration-200">
                   {item}
                 </span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
         {hasPrerequisite && (
-          <span style={dynamicStyles.prerequisiteNote}>
-            {audienceData.prerequisite}
-          </span>
+          <div className="flex justify-center mt-6 px-3">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-blue-50/90 border border-blue-200/80 rounded-full text-blue-900 text-sm font-medium shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              <span>{audienceData.prerequisite}</span>
+            </div>
+          </div>
         )}
       </section>
     );
@@ -972,12 +971,12 @@ export default function TrainingPage({ params }) {
           </div>
         )}
         {hasImage && (
-          <div className="mb-4 text-center">
+          <div className="w-full flex justify-center items-center my-8 text-center">
             <img
               src={contentData.image}
               alt="Course Content Visual"
-              className="img-fluid rounded shadow-sm"
-              style={{ maxWidth: "600px", margin: "auto" }}
+              className="mx-auto block max-w-full lg:max-w-[600px] h-auto rounded-2xl shadow-md object-contain"
+              style={{ margin: "0 auto", display: "block" }}
             />
           </div>
         )}
@@ -1064,12 +1063,12 @@ export default function TrainingPage({ params }) {
             )}
           </div>
           {hasImage && (
-            <div className="col-lg-5 text-center">
+            <div className="col-lg-5 flex justify-center items-center text-center">
               <img
                 src={methodologyData.image}
                 alt="Training Methodology"
-                className="img-fluid rounded shadow"
-                style={{ maxWidth: "450px" }}
+                className="mx-auto block max-w-full h-auto rounded-2xl shadow-md object-contain"
+                style={{ maxWidth: "450px", margin: "0 auto", display: "block" }}
               />
             </div>
           )}

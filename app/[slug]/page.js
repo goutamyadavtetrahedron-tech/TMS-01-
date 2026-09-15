@@ -302,12 +302,15 @@ const styles = {
   },
   iconWrapper: {
     // Wrapper for icons in cards/features
-    backgroundColor: "rgba(0, 34, 68, 0.1)", // Light blue background for icon
-    borderRadius: "50%",
-    padding: "12px",
+    backgroundColor: "rgba(0, 34, 68, 0.08)",
+    borderRadius: "14px",
+    width: "48px",
+    height: "48px",
     display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: "1rem",
-    color: "#002244", // Icon color
+    color: "#002244",
   },
   // Styles for dynamically generated sections
   dynamicSection: {
@@ -1164,8 +1167,16 @@ export default function ServiceOrBlogPage({ params }) {
                     data.improvementAreas.title || "Key Improvement Areas"
                   )}
                 <div className="row g-4 justify-content-center">
-                  {data.improvementAreas.map((item, index) => (
-                    <div key={index} className="col-lg-4 col-md-6 col-sm-6">
+                  {data.improvementAreas.map((item, index) => {
+                    const count = data.improvementAreas.length;
+                    const colClass =
+                      count === 4
+                        ? "col-lg-3 col-md-6 col-sm-6"
+                        : count === 2
+                        ? "col-lg-6 col-md-6"
+                        : "col-lg-4 col-md-6 col-sm-6";
+                    return (
+                    <div key={index} className={colClass}>
                       <div
                         style={{
                           ...styles.infoCard,
@@ -1192,7 +1203,7 @@ export default function ServiceOrBlogPage({ params }) {
                         )}
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               </section>
             )}
@@ -1239,8 +1250,16 @@ export default function ServiceOrBlogPage({ params }) {
                 {isNonEmptyArray(data.objectives.items) &&
                   renderSectionTitle(data.objectives.title || "Our Objectives")}
                 <div className="row g-4 justify-content-center">
-                  {data.objectives.items.map((item, index) => (
-                    <div key={index} className="col-lg-4 col-md-6 col-sm-6">
+                  {data.objectives.items.map((item, index) => {
+                    const count = data.objectives.items.length;
+                    const colClass =
+                      count === 4
+                        ? "col-lg-3 col-md-6 col-sm-6"
+                        : count === 2
+                        ? "col-lg-6 col-md-6"
+                        : "col-lg-4 col-md-6 col-sm-6";
+                    return (
+                    <div key={index} className={colClass}>
                       <div
                         style={{
                           ...styles.infoCard,
@@ -1265,7 +1284,7 @@ export default function ServiceOrBlogPage({ params }) {
                         )}
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               </section>
             )}
@@ -1436,12 +1455,12 @@ export default function ServiceOrBlogPage({ params }) {
                       data.comparisonDojo1vs2.title || "Comparison"
                     )}
                   {data.comparisonDojo1vs2.image && (
-                    <div className="text-center mb-4">
+                    <div className="w-full flex justify-center items-center text-center my-6">
                       <img
                         src={data.comparisonDojo1vs2.image}
                         alt="Comparison Chart"
-                        className="img-fluid rounded shadow-sm"
-                        style={{ maxWidth: "800px" }}
+                        className="mx-auto block max-w-full lg:max-w-[800px] h-auto rounded-2xl shadow-md object-contain"
+                        style={{ margin: "0 auto", display: "block" }}
                       />
                     </div>
                   )}
@@ -1604,35 +1623,78 @@ export default function ServiceOrBlogPage({ params }) {
                     )}
                   </div> // Assuming title comes from data.featuresTitle or is static
                 )}
-                <div className="row g-4">
-                  {data.features.map((feature, idx) => (
-                    <div className="col-md-6 col-lg-4" key={idx}>
+                <div
+                  className={`w-full max-w-7xl mx-auto grid gap-6 ${
+                    data.features.length === 1
+                      ? "grid-cols-1 max-w-xl mx-auto"
+                      : data.features.length === 2
+                      ? "grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto"
+                      : data.features.length === 4
+                      ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                      : data.features.length === 3
+                      ? "grid-cols-1 md:grid-cols-3"
+                      : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  }`}
+                >
+                  {data.features.map((feature, idx) => {
+                    const IconComponent = feature.icon ? Icons[feature.icon] : null;
+                    return (
                       <div
-                        style={{
-                          ...styles.featureCard,
-                          ...(hoveredFeature === idx
-                            ? styles.featureCardHover
-                            : {}),
-                        }}
-                        onMouseEnter={() => setHoveredFeature(idx)}
-                        onMouseLeave={() => setHoveredFeature(null)}
+                        key={idx}
+                        className="group bg-white rounded-2xl p-6 lg:p-7 border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(0,34,68,0.1)] hover:-translate-y-1.5 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between text-left"
                       >
-                        <div className="d-flex align-items-center mb-3">
-                          {feature.icon && getIcon(feature.icon, 24)}{" "}
-                          {/* Use the icon wrapper */}
-                          <h5 className="fw-semibold mb-0 ms-3">
+                        <div>
+                          {IconComponent && (
+                            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-xs">
+                              <IconComponent size={24} />
+                            </div>
+                          )}
+                          <h4 className="text-lg font-bold text-slate-900 mb-2.5 group-hover:text-blue-600 transition-colors duration-200 leading-snug">
                             {feature.title}
-                          </h5>
-                        </div>
-                        <div style={styles.featureCardContent}>
-                          {" "}
-                          {/* Apply indenting style */}
-                          <p className="mb-0">{feature.desc}</p>
+                          </h4>
+                          <p className="text-slate-600 text-sm lg:text-[15px] leading-relaxed m-0">
+                            {feature.desc}
+                          </p>
                         </div>
                       </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            {/* Target Audience Section */}
+            {data.targetAudience && isNonEmptyArray(data.targetAudience.list) && (
+              <section style={{ ...styles.dynamicSection, ...styles.dynamicSectionBgLight }} className="text-center">
+                {renderSectionTitle(data.targetAudience.title || "Who Should Attend?")}
+                {data.targetAudience.introText && (
+                  <div className="fs-5 text-center mx-auto mb-4" style={{ maxWidth: "800px" }}>
+                    {renderParagraphs(data.targetAudience.introText)}
+                  </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-w-5xl mx-auto my-6 px-3">
+                  {data.targetAudience.list.filter(isNonEmptyString).map((item, index) => (
+                    <div
+                      key={index}
+                      className="group flex items-center gap-3.5 p-3.5 px-4 bg-white rounded-xl border border-slate-200/90 shadow-xs hover:shadow-md hover:border-blue-500/40 hover:-translate-y-0.5 transition-all duration-200 text-left"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-blue-50/90 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200 shadow-xs">
+                        <Icons.UserCheck size={19} />
+                      </div>
+                      <span className="text-slate-800 font-medium text-sm sm:text-[15px] leading-snug group-hover:text-blue-900 transition-colors duration-200">
+                        {item}
+                      </span>
                     </div>
                   ))}
                 </div>
+                {data.targetAudience.prerequisite && (
+                  <div className="flex justify-center mt-6 px-3">
+                    <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-blue-50/90 border border-blue-200/80 rounded-full text-blue-900 text-sm font-medium shadow-xs">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                      <span>{data.targetAudience.prerequisite}</span>
+                    </div>
+                  </div>
+                )}
               </section>
             )}
 
@@ -2125,8 +2187,16 @@ export default function ServiceOrBlogPage({ params }) {
                   )}
                   {isNonEmptyArray(data.visualTools.items) && (
                     <div className="row g-4 justify-content-center">
-                      {data.visualTools.items.map((tool, index) => (
-                        <div key={index} className="col-lg-4 col-md-6">
+                      {data.visualTools.items.map((tool, index) => {
+                        const count = data.visualTools.items.length;
+                        const colClass =
+                          count === 4
+                            ? "col-lg-3 col-md-6"
+                            : count === 2
+                            ? "col-lg-6 col-md-6"
+                            : "col-lg-4 col-md-6";
+                        return (
+                        <div key={index} className={colClass}>
                           <div
                             style={{
                               ...styles.infoCard,
@@ -2151,7 +2221,7 @@ export default function ServiceOrBlogPage({ params }) {
                             )}
                           </div>
                         </div>
-                      ))}
+                      );})}
                     </div>
                   )}
                 </section>
@@ -2170,8 +2240,16 @@ export default function ServiceOrBlogPage({ params }) {
                 {isNonEmptyArray(data.layoutTypes.items) &&
                   renderSectionTitle(data.layoutTypes.title || "Layout Types")}
                 <div className="row g-4 justify-content-center">
-                  {data.layoutTypes.items.map((layout, index) => (
-                    <div key={index} className="col-lg-4 col-md-6">
+                  {data.layoutTypes.items.map((layout, index) => {
+                    const count = data.layoutTypes.items.length;
+                    const colClass =
+                      count === 4
+                        ? "col-lg-3 col-md-6"
+                        : count === 2
+                        ? "col-lg-6 col-md-6"
+                        : "col-lg-4 col-md-6";
+                    return (
+                    <div key={index} className={colClass}>
                       <div
                         style={{
                           ...styles.infoCard,
@@ -2196,7 +2274,7 @@ export default function ServiceOrBlogPage({ params }) {
                         )}
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               </section>
             )}
@@ -2220,8 +2298,16 @@ export default function ServiceOrBlogPage({ params }) {
                   )}
                   {isNonEmptyArray(data.agvTypes.items) && (
                     <div className="row g-4 justify-content-center">
-                      {data.agvTypes.items.map((agv, index) => (
-                        <div key={index} className="col-lg-4 col-md-6">
+                      {data.agvTypes.items.map((agv, index) => {
+                        const count = data.agvTypes.items.length;
+                        const colClass =
+                          count === 4
+                            ? "col-lg-3 col-md-6"
+                            : count === 2
+                            ? "col-lg-6 col-md-6"
+                            : "col-lg-4 col-md-6";
+                        return (
+                        <div key={index} className={colClass}>
                           <div
                             style={{
                               ...styles.infoCard,
@@ -2246,7 +2332,7 @@ export default function ServiceOrBlogPage({ params }) {
                             )}
                           </div>
                         </div>
-                      ))}
+                      );})}
                     </div>
                   )}
                 </section>
@@ -2265,8 +2351,16 @@ export default function ServiceOrBlogPage({ params }) {
                 {isNonEmptyArray(data.applications.items) &&
                   renderSectionTitle(data.applications.title || "Applications")}
                 <div className="row g-4 justify-content-center">
-                  {data.applications.items.map((app, index) => (
-                    <div key={index} className="col-lg-4 col-md-6">
+                  {data.applications.items.map((app, index) => {
+                    const count = data.applications.items.length;
+                    const colClass =
+                      count === 4
+                        ? "col-lg-3 col-md-6"
+                        : count === 2
+                        ? "col-lg-6 col-md-6"
+                        : "col-lg-4 col-md-6";
+                    return (
+                    <div key={index} className={colClass}>
                       <div
                         style={{
                           ...styles.infoCard,
@@ -2284,7 +2378,7 @@ export default function ServiceOrBlogPage({ params }) {
                         )}
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               </section>
             )}

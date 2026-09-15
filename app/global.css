@@ -565,4 +565,26 @@
     box-shadow: 0 6px 16px rgba(255, 94, 20, 0.35) !important;
   }
 
+/* ==========================================================================
+   Modern Tailwind & Image Centering Safeguards
+   ========================================================================== */
+
+/* Ensure all images inside text-center containers or with mx-auto are centered */
+.text-center > img,
+div.text-center > img,
+div.text-center img.img-fluid,
+section.text-center img,
+img.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+}
+
+/* Ensure flex containers designed to center images work reliably */
+.flex.justify-center img,
+.justify-center > img {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 
