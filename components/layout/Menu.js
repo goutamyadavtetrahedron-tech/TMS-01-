@@ -1052,6 +1052,8 @@ export default function Menu() {
           <Link
             href="/automated-guided-vehicle-manufacturers"
             aria-haspopup="true"
+            title="AGV AMR RGV and REGV Manufacturer in India"
+            aria-label="AGV AMR RGV and REGV Manufacturer in India"
           >
             AMR/AGV/RGV
           </Link>

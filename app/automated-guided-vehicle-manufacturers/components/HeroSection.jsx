@@ -38,6 +38,11 @@ export default function HeroSection() {
       <div className={styles.container}>
         <div className={styles.heroFlex}>
           <div className={`${styles.contentArea} wow animate__animated animate__fadeInLeft`}>
+            <div className={styles.badgeWrapper}>
+              <span className={styles.badgeDot}></span>
+              <span className={styles.badgeText}>India&apos;s Leading AGV, AMR, RGV &amp; REGV Manufacturer</span>
+            </div>
+
             <div className={styles.subheadingWrapper}>
               <span className={styles.subLine}></span>
               <span className={styles.subHeading}>SMARTER MOVEMENT. STRONGER FUTURE.</span>
@@ -48,6 +53,7 @@ export default function HeroSection() {
               AGV <span className={styles.highlightText}>Automated Guided Vehicles</span> <br />
               AMR <span className={styles.highlightText}>Autonomous Mobile Robots</span> <br />
               RGV <span className={styles.highlightText}>Rail Guided Vehicles</span>  <br />
+              REGV <span className={styles.highlightText}>Remote Guided Vehicles</span> <br />
               Cleaning Robots <br />
               TMS Trackless <span className={styles.highlightText}>Flat Cars</span> <br />
             </h1>

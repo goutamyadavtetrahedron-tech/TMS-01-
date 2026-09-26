@@ -470,7 +470,7 @@ export const navigationData = [
   {
     title: "AMR/AGV/RGV",
     href: "/automated-guided-vehicle-manufacturers/",
-    description: "Autonomous Mobile Robots & Automated Guided Vehicles engineered for flexible shopfloor intralogistics.",
+    description: "Leading AGV, AMR, RGV & REGV Manufacturer in India engineered for flexible shopfloor intralogistics.",
   },
   {
     title: "Career",
