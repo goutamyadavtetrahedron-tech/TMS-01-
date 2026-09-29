@@ -484,10 +484,13 @@ export function isNumberedStrategyHeading(line: string): { num: string; title: s
   const num = match[1];
   const title = match[2].trim();
 
-  // If title is <= 80 chars, doesn't contain sentence-internal period followed by uppercase
-  if (title.length <= 80 && !/\w\.\s+[A-Z]/.test(title)) {
+  // Strip HTML and Markdown to evaluate visible text length rather than raw tags
+  const cleanTitle = stripHtmlAndMarkdown(title);
+
+  // If clean visible title is <= 80 chars, doesn't contain sentence-internal period followed by uppercase
+  if (cleanTitle.length <= 80 && !/\w\.\s+[A-Z]/.test(cleanTitle)) {
     // If it ends with period, only allow if short title
-    if (!title.endsWith('.') || title.length <= 45) {
+    if (!cleanTitle.endsWith('.') || cleanTitle.length <= 45) {
       return { num, title: title.replace(/\.$/, '') };
     }
   }

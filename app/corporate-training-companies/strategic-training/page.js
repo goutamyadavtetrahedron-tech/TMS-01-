@@ -22,7 +22,7 @@ export default function Page() {
           {/* Image with overlay */}
           <div className="absolute top-0 left-0 w-full h-full z-0">
             <Image
-              src="/assets/images/backgrounds/page-header-bg1.jpg"
+              src="/assets/images/backgrounds/corporate-training-program.png"
               alt="Banner"
               fill
               priority

@@ -2991,7 +2991,7 @@
   {"compressed-air-system-controls": {
     "id": 31,
     "title": "Air Compression System | Compressed Air System Control Strategy",
-    "image": "/assets/images/backgrounds/page-header-bg1.jpg",
+    "image": "/images/blog/compressed-air-system-controls-0.jpg",
     "sections": [
       {
         "heading": "Control Strategies For Air Compression System",
@@ -3075,7 +3075,7 @@
   {"application-of-agv-automated-guided-vehicle": {
     "id": 33,
     "title": "Application of AGV | Automated Guided Vehicle",
-    "image": "/assets/images/backgrounds/page-header-bg1.jpg",
+    "image": "/images/blog/application-of-agv-automated-guided-vehicle-0.jpg",
     "sections": [
       {
         "heading": "Automated Guided Vehicle",
@@ -3284,7 +3284,7 @@
   {"energy-audit": {
     "id": 36,
     "title": "Why should an industry conduct an energy audit in their plant?",
-    "image": "/assets/images/backgrounds/page-header-bg1.jpg",
+    "image": "/images/blog/energy-audit-0.jpg",
     "sections": [
       {
         "heading": "What is an energy audit?",

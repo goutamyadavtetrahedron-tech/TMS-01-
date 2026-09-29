@@ -1,6 +1,9 @@
 # Node modules
 node_modules/
 
+# Utility / Migration Scripts
+scripts/
+
 # Next.js build output
 .next/
 required-changes/
