@@ -55,8 +55,8 @@ export default function Home() {
 
     return (
         <Layout>
+            <Banner />
             <div style={{ zoom: '80%' }}>
-                <Banner />
                 <About />
                 <Business />
                 <Services />
