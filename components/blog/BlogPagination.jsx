@@ -64,7 +64,7 @@ export default function BlogPagination({
       className="mt-10 sm:mt-12 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4"
     >
       {/* Informative Results Counter */}
-      <div className="blog-pagination-counter text-slate-500 font-medium order-2 sm:order-1">
+      <div className="text-[11.5px] text-slate-500 font-medium order-2 sm:order-1">
         Showing{" "}
         <span className="font-extrabold text-[#001659]">{startItem}</span>–
         <span className="font-extrabold text-[#001659]">{endItem}</span> of{" "}
@@ -80,8 +80,7 @@ export default function BlogPagination({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           aria-label="Go to previous page"
-          style={{ borderRadius: "8px" }}
-          className={`blog-pagination-btn blog-pagination-nav transition-all cursor-pointer ${
+          className={`h-8 px-2.5 sm:px-3 inline-flex items-center gap-1 text-[11.5px] font-semibold rounded-lg transition-all cursor-pointer ${
             currentPage === 1
               ? "opacity-40 cursor-not-allowed text-slate-400 bg-slate-100/80 border border-slate-200/60"
               : "text-slate-700 bg-white hover:bg-slate-50 hover:text-[#FF5E14] hover:border-slate-300 border border-slate-200/90 shadow-2xs active:scale-95"
@@ -112,8 +111,7 @@ export default function BlogPagination({
                 type="button"
                 onClick={() => onPageChange(page)}
                 aria-current={isCurrent ? "page" : undefined}
-                style={{ borderRadius: "8px" }}
-                className={`blog-pagination-btn blog-pagination-num transition-all cursor-pointer ${
+                className={`w-8 h-8 min-w-[32px] p-0 inline-flex items-center justify-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   isCurrent
                     ? "bg-[#001659] text-white shadow-xs ring-1 ring-[#001659]/15 scale-105"
                     : "bg-white text-slate-700 hover:bg-slate-50 hover:text-[#001659] hover:border-slate-300 border border-slate-200/90 shadow-2xs active:scale-95"
@@ -131,8 +129,7 @@ export default function BlogPagination({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           aria-label="Go to next page"
-          style={{ borderRadius: "8px" }}
-          className={`blog-pagination-btn blog-pagination-nav transition-all cursor-pointer ${
+          className={`h-8 px-2.5 sm:px-3 inline-flex items-center gap-1 text-[11.5px] font-semibold rounded-lg transition-all cursor-pointer ${
             currentPage === totalPages
               ? "opacity-40 cursor-not-allowed text-slate-400 bg-slate-100/80 border border-slate-200/60"
               : "text-slate-700 bg-white hover:bg-slate-50 hover:text-[#FF5E14] hover:border-slate-300 border border-slate-200/90 shadow-2xs active:scale-95"

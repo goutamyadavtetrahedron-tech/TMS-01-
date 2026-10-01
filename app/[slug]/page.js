@@ -18,6 +18,7 @@ import {
 import * as Icons from "lucide-react";
 import ContactFormModal from "@/components/ContactFormModal";
 import ContactForm from "@/components/ContactForm";
+import DojoContactForm from "@/components/DojoContactForm";
 import { renderRichText } from "@/lib/richTextRenderer";
 
 // Internal CSS styles (keep the styles object as it is)
@@ -579,6 +580,15 @@ export default function ServiceOrBlogPage({ params }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalButtonText, setModalButtonText] = useState("");
 
+  const isDojoPage = useMemo(() => {
+    const slugStr = (params?.slug || "").toLowerCase();
+    return (
+      slugStr.includes("dojo") ||
+      slugStr === "ergonomics-and-workplace-design" ||
+      slugStr === "augmented-reality-virtual-reality"
+    );
+  }, [params?.slug]);
+
   // Improved fallback logic
   const getFallbackData = (slug) => {
     // console.log("🔍 Checking fallback data for slug:", slug);
@@ -802,28 +812,18 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Helper to render a standard CTA button with modal functionality
   const renderCtaButton = (text, href = "#") => (
-    <a
-      href={href}
-      className="btn"
-      style={styles.ctaButton}
-      onMouseEnter={(e) =>
-        Object.assign(
-          e.currentTarget.style,
-          styles.ctaButton,
-          styles.ctaButtonHover
-        )
-      }
-      onMouseLeave={(e) =>
-        Object.assign(e.currentTarget.style, styles.ctaButton)
-      }
+    <button
+      type="button"
+      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white font-bold py-3.5 px-8 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 cursor-pointer border-0 text-base"
       onClick={(e) => {
         e.preventDefault();
-        setModalButtonText(text || "Learn More");
+        setModalButtonText(text || "Schedule a free consultation");
         setModalOpen(true);
       }}
     >
-      {text || "Learn More"}
-    </a>
+      <span>{text || "Schedule a free consultation"}</span>
+      <Icons.ArrowRight size={18} />
+    </button>
   );
 
   // Helper to check if an array is non-empty
@@ -930,6 +930,7 @@ export default function ServiceOrBlogPage({ params }) {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         buttonText={modalButtonText}
+        isDojo={isDojoPage}
       />
       {/* Banner Section */}
       {data.heroLayout === "split" ? (() => {
@@ -1000,12 +1001,17 @@ export default function ServiceOrBlogPage({ params }) {
               )}
 
               {/* Contact Button */}
-              <a
-                href="/contact-us"
-                className="mt-6 bg-[#007BFF] text-white py-3 px-6 rounded-lg text-lg lg:text-xl no-underline inline-block w-fit transition-all shadow-md hover:bg-[#0056b3]"
+              <button
+                type="button"
+                onClick={() => {
+                  setModalButtonText("Schedule a free consultation");
+                  setModalOpen(true);
+                }}
+                className="mt-6 bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white py-3.5 px-7 rounded-xl text-base lg:text-lg font-bold shadow-lg shadow-orange-500/25 transition-all inline-flex items-center gap-2 cursor-pointer border-0 w-fit"
               >
-                Start Your Journey
-              </a>
+                <span>Schedule a free consultation</span>
+                <Icons.ArrowRight size={20} />
+              </button>
             </div>
 
             {/* Right Content Section - Contact Form */}
@@ -1013,13 +1019,22 @@ export default function ServiceOrBlogPage({ params }) {
               <div
                 style={{
                   width: "100%",
-                  maxWidth: 400,
+                  maxWidth: isDojoPage ? 480 : 400,
                   background: "rgba(255,255,255,0.97)",
                   borderRadius: 16,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
                 }}
               >
-                <ContactForm buttonText="Contact Us" />
+                {isDojoPage ? (
+                  <DojoContactForm
+                    buttonText="Schedule a free consultation"
+                    title="Get In Touch"
+                    subtitle="Share your requirements to receive a custom Dojo pricing & project lead time estimate."
+                    badge="DOJO SETUP & CONSULTATION"
+                  />
+                ) : (
+                  <ContactForm buttonText="Contact Us" />
+                )}
               </div>
             </div>
           </div>
@@ -1086,74 +1101,52 @@ export default function ServiceOrBlogPage({ params }) {
           <ContactForm />
         </div>
       </div> */}
-      <div
-        className="container w-full"
-        style={{ paddingTop: "50px", paddingBottom: "50px" }}
-      >
-        <div>
-          {isDetailedPage && isNonEmptyString(data.introText) && (
-            <section>
-              <div >{renderParagraphs(data.introText)}</div>
-            </section>
-          )}
-        </div>
-      </div>
-      <div className="container py-5">
-        {/* Main container for content */}
-
-        {/* Intro Text Section (Common for detailed pages) */}
-        {/* {isDetailedPage && isNonEmptyString(data.introText) && (
-          <section style={styles.dynamicSection} className="text-center">
-            <div className="fs-5 mx-auto" style={{ maxWidth: "900px" }}>
+      {/* Executive Intro Overview Section */}
+      {isDetailedPage && isNonEmptyString(data.introText) && (
+        <section className="py-10 sm:py-14 bg-gradient-to-b from-white via-slate-50/50 to-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="bg-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-slate-200/90 shadow-[0_10px_35px_rgba(0,22,89,0.05)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#001659] via-[#FF5E14] to-[#001659]" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF5E14]/10 text-[#FF5E14] border border-[#FF5E14]/20 uppercase tracking-wider mb-4">
+                Executive Overview & Methodology
+              </div>
+              <div className="text-slate-700 text-base sm:text-lg leading-relaxed space-y-4">
                 {renderParagraphs(data.introText)}
+              </div>
             </div>
-          </section>
-        )} */}
+          </div>
+        </section>
+      )}
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Conditional Rendering based on Page Type */}
         {isDetailedPage ? (
-          // ===========================================
-          // DETAILED PAGE CONTENT (Dynamically Rendered)
-          // ===========================================
           <>
             {/* Why Choose Us Section */}
             {data.whyChoose &&
               (isNonEmptyString(data.whyChoose.content) ||
                 isNonEmptyString(data.whyChoose.subText) ||
                 data.whyChoose.buttonText) && (
-                <section
-                  style={{
-                    ...styles.dynamicSection,
-                    ...styles.dynamicSectionBgLight,
-                  }}
-                  className="text-center"
-                >
-                  {/* --- MODIFIED: Conditional Title --- */}
+                <section className="py-12 sm:py-16 text-center bg-gradient-to-br from-slate-50 via-white to-blue-50/30 rounded-3xl my-8 sm:my-12 px-6 sm:px-10 border border-slate-200/80 shadow-[0_8px_30px_rgba(0,22,89,0.04)]">
                   {(isNonEmptyString(data.whyChoose.content) ||
                     isNonEmptyString(data.whyChoose.subText) ||
                     data.whyChoose.buttonText) &&
                     renderSectionTitle(
-                      data.whyChoose.title || "Why Choose Us?"
+                      data.whyChoose.title || "Why Choose Tetrahedron?"
                     )}
-                  <div
-                    className="fs-5 mx-auto mb-4"
-                    style={{ maxWidth: "900px" }}
-                  >
+                  <div className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto mb-6">
                     {renderParagraphs(data.whyChoose.content)}
                   </div>
                   {data.whyChoose.subTitle && (
-                    <h4 className="fw-semibold mt-4 mb-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-[#001659] mt-6 mb-3">
                       {data.whyChoose.subTitle}
-                    </h4>
+                    </h3>
                   )}
-                  <div
-                    className="fs-5 mx-auto mb-4"
-                    style={{ maxWidth: "900px" }}
-                  >
+                  <div className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto mb-8">
                     {renderParagraphs(data.whyChoose.subText)}
                   </div>
                   {renderCtaButton(
-                    data.whyChoose.buttonText || "Book a Consultation"
+                    data.whyChoose.buttonText || (isDojoPage ? "Schedule a free consultation" : "Book a Consultation")
                   )}
                 </section>
               )}
@@ -1447,63 +1440,79 @@ export default function ServiceOrBlogPage({ params }) {
             {data.comparisonDojo1vs2 &&
               (data.comparisonDojo1vs2.image ||
                 isNonEmptyArray(data.comparisonDojo1vs2.points)) && (
-                <section style={styles.dynamicSection}>
-                  {/* --- MODIFIED: Conditional Title --- */}
-                  {(data.comparisonDojo1vs2.image ||
-                    isNonEmptyArray(data.comparisonDojo1vs2.points)) &&
-                    renderSectionTitle(
-                      data.comparisonDojo1vs2.title || "Comparison"
-                    )}
+                <section className="my-14 sm:my-20">
+                  <div className="text-center mb-8">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF5E14]/10 text-[#FF5E14] border border-[#FF5E14]/20 uppercase tracking-wider mb-2">
+                      Generational Evolution
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001659] tracking-tight">
+                      {data.comparisonDojo1vs2.title || "Dojo 1.0 vs. Dojo 2.0: Key Differences"}
+                    </h2>
+                    <div className="w-16 h-1 bg-[#FF5E14] mx-auto mt-3 rounded-full" />
+                  </div>
+
                   {data.comparisonDojo1vs2.image && (
                     <div className="w-full flex justify-center items-center text-center my-6">
                       <img
                         src={data.comparisonDojo1vs2.image}
-                        alt="Comparison Chart"
-                        className="mx-auto block max-w-full lg:max-w-[800px] h-auto rounded-2xl shadow-md object-contain"
-                        style={{ margin: "0 auto", display: "block" }}
+                        alt="Dojo 1.0 vs Dojo 2.0 Comparison Chart"
+                        className="mx-auto block max-w-full lg:max-w-[850px] h-auto rounded-2xl shadow-lg border border-slate-200/80 object-contain"
                       />
                     </div>
                   )}
+
                   {isNonEmptyArray(data.comparisonDojo1vs2.points) && (
-                    <div className="table-responsive">
-                      <table style={styles.comparisonPointsTable}>
-                        <thead>
-                          <tr>
-                            <th style={styles.comparisonPointsTh}>Feature</th>
-                            <th style={styles.comparisonPointsTh}>Dojo 1.0</th>
-                            <th style={styles.comparisonPointsTh}>Dojo 2.0</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {data.comparisonDojo1vs2.points.map(
-                            (point, index) => (
+                    <div className="max-w-5xl mx-auto rounded-2xl overflow-hidden border border-slate-200/90 shadow-[0_8px_30px_rgba(0,22,89,0.06)] bg-white">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr>
+                              <th className="bg-[#001659] text-white font-extrabold text-xs sm:text-sm p-4 w-1/4">
+                                Dimension / Feature
+                              </th>
+                              <th className="bg-slate-800 text-slate-100 font-extrabold text-xs sm:text-sm p-4 w-[37.5%]">
+                                <div className="flex items-center gap-1.5">
+                                  <span>Dojo 1.0</span>
+                                  <span className="text-[10px] font-semibold text-slate-300 bg-white/10 px-2 py-0.5 rounded-full">
+                                    Physical / Manual
+                                  </span>
+                                </div>
+                              </th>
+                              <th className="bg-gradient-to-r from-[#FF5E14] to-[#ff7a29] text-white font-extrabold text-xs sm:text-sm p-4 w-[37.5%]">
+                                <div className="flex items-center gap-1.5">
+                                  <span>Dojo 2.0</span>
+                                  <span className="text-[10px] font-bold text-orange-950 bg-white/30 px-2 py-0.5 rounded-full">
+                                    Industry 4.0 / Digital
+                                  </span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {data.comparisonDojo1vs2.points.map((point, index) => (
                               <tr
                                 key={index}
-                                style={
-                                  index % 2 !== 0
-                                    ? styles.comparisonTableTrOdd
-                                    : {}
-                                }
+                                className={`transition-colors hover:bg-orange-50/30 ${
+                                  index % 2 === 1 ? "bg-slate-50/50" : "bg-white"
+                                }`}
                               >
-                                <td
-                                  style={{
-                                    ...styles.comparisonPointsTd,
-                                    fontWeight: "500",
-                                  }}
-                                >
+                                <td className="p-3.5 sm:p-4 text-xs sm:text-sm font-bold text-[#001659]">
                                   {point.feature}
                                 </td>
-                                <td style={styles.comparisonPointsTd}>
+                                <td className="p-3.5 sm:p-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
                                   {point.dojo1}
                                 </td>
-                                <td style={styles.comparisonPointsTd}>
-                                  {point.dojo2}
+                                <td className="p-3.5 sm:p-4 text-xs sm:text-sm font-semibold text-[#001659] leading-relaxed bg-orange-50/20">
+                                  <span className="inline-flex items-start gap-1.5">
+                                    <span className="text-[#FF5E14] font-bold mt-0.5">✓</span>
+                                    <span>{point.dojo2}</span>
+                                  </span>
                                 </td>
                               </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   )}
                 </section>
@@ -1698,73 +1707,144 @@ export default function ServiceOrBlogPage({ params }) {
               </section>
             )}
 
-            {/* Pillars / Consulting Areas / Key Elements (Tabs Layout) */}
+            {/* Pillars / Consulting Areas / Key Elements (Modernized Tabs Layout) */}
             {isNonEmptyArray(data.pillars) && (
-              <section style={styles.dynamicSection}>
-                {/* --- MODIFIED: Conditional Title --- */}
-                {isNonEmptyArray(data.pillars) && (
-                  <div className="text-center">
-                    {renderSectionTitle(
-                      data.pillars.title || "Consulting Areas"
-                    )}
-                  </div>
-                )}
-                <div className="row g-0">
-                  {" "}
-                  {/* Use g-0 to remove gutters between columns */}
-                  <div className="col-lg-3 col-md-4">
-                    <div
-                      className="list-group h-100"
-                      style={styles.pillarsTabContainer}
-                    >
-                      {data.pillars.map((pillar, index) => (
+              <section className="my-14 sm:my-20">
+                <div className="text-center mb-8 sm:mb-12">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF5E14]/10 text-[#FF5E14] border border-[#FF5E14]/20 uppercase tracking-wider mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF5E14] animate-pulse" />
+                    Core Modules & Specializations
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001659] tracking-tight">
+                    {data.pillars.title || "Consulting Areas"}
+                  </h2>
+                  <div className="w-16 h-1 bg-[#FF5E14] mx-auto mt-3 rounded-full" />
+                </div>
+
+                <div className="flex flex-col lg:flex-row items-stretch gap-4 sm:gap-6 max-w-6xl mx-auto">
+                  {/* Left Column: Interactive Tab Navigation */}
+                  <div className="w-full lg:w-[360px] shrink-0 flex flex-col gap-2.5">
+                    {data.pillars.map((pillar, index) => {
+                      const isActive = activeTab === index;
+                      return (
                         <button
                           key={index}
-                          className={`list-group-item list-group-item-action ${activeTab === index ? "active" : ""
-                            }`}
+                          type="button"
                           onClick={() => setActiveTab(index)}
-                          style={{
-                            ...(activeTab === index
-                              ? styles.pillarsTabActive
-                              : styles.pillarsTab),
-                            // Apply base or active style
-                          }}
+                          className={`w-full text-left p-3.5 sm:p-4 rounded-xl transition-all duration-200 flex items-center justify-between gap-3 cursor-pointer border ${
+                            isActive
+                              ? "bg-[#001659] text-white shadow-md shadow-[#001659]/20 border-l-4 border-l-[#FF5E14] border-slate-700/50 translate-x-1"
+                              : "bg-white hover:bg-slate-50 text-slate-700 hover:text-[#001659] border-slate-200/80 shadow-2xs hover:border-slate-300"
+                          }`}
                         >
-                          {pillar.title}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="col-lg-9 col-md-8 d-flex">
-                    {/* Render content only if the active tab has content */}
-                    {data.pillars[activeTab] &&
-                      isNonEmptyString(data.pillars[activeTab].content) && (
-                        <div
-                          className="w-100 align-self-stretch"
-                          style={styles.pillarsContent}
-                        >
-                          <h4 className="fw-bold mb-3">
-                            {data.pillars[activeTab].title}
-                          </h4>
-                          <div className="fs-6">
-                            {" "}
-                            {/* Slightly smaller font for content */}
-                            {renderParagraphs(data.pillars[activeTab].content)}
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span
+                              className={`w-6 h-6 rounded-md text-[11px] font-extrabold flex items-center justify-center shrink-0 ${
+                                isActive
+                                  ? "bg-white/15 text-orange-300"
+                                  : "bg-slate-100 text-slate-500 group-hover:bg-[#001659] group-hover:text-white"
+                              }`}
+                            >
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <span
+                              className={`text-[13.5px] sm:text-sm font-semibold truncate ${
+                                isActive ? "text-white" : "text-slate-700"
+                              }`}
+                            >
+                              {pillar.title}
+                            </span>
                           </div>
+                          <Icons.ChevronRight
+                            className={`w-4 h-4 shrink-0 transition-transform ${
+                              isActive
+                                ? "text-[#FF5E14] translate-x-0.5"
+                                : "text-slate-300"
+                            }`}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Right Column: Modern Active Card Showcase */}
+                  <div className="flex-1 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-200/90 shadow-[0_12px_40px_rgba(0,22,89,0.06)] flex flex-col justify-between relative overflow-hidden">
+                    {/* Background Decorative Accent */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-orange-100/40 via-blue-50/20 to-transparent rounded-bl-full pointer-events-none" />
+
+                    <div className="relative z-10">
+                      {/* Active Tab Badge & Counter */}
+                      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#001659] border border-blue-200/60 uppercase tracking-wider">
+                          Module {String(activeTab + 1).padStart(2, "0")} of {String(data.pillars.length).padStart(2, "0")}
+                        </span>
+                        <span className="text-xs font-medium text-slate-400">
+                          Industry 4.0 Standard
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#001659] tracking-tight leading-snug mb-4">
+                        {data.pillars[activeTab]?.title}
+                      </h3>
+
+                      {/* Content Body */}
+                      <div className="text-slate-600 text-base sm:text-[17px] leading-relaxed mb-6 font-normal">
+                        {renderParagraphs(data.pillars[activeTab]?.content)}
+                      </div>
+
+                      {/* Practical Implementation Value Cards */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6 pt-2 border-t border-slate-100">
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-left">
+                          <span className="text-[11px] font-bold text-[#FF5E14] uppercase tracking-wider block mb-0.5">
+                            Deployment
+                          </span>
+                          <span className="text-xs font-semibold text-slate-800">
+                            Turnkey Setup & Integration
+                          </span>
                         </div>
-                      )}
-                    {/* Optional: Placeholder if active tab content is empty */}
-                    {!(
-                      data.pillars[activeTab] &&
-                      isNonEmptyString(data.pillars[activeTab].content)
-                    ) && (
-                        <div
-                          className="w-100 align-self-stretch d-flex align-items-center justify-content-center text-muted"
-                          style={styles.pillarsContent}
-                        >
-                          <p>Select an area to see details.</p>
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-left">
+                          <span className="text-[11px] font-bold text-[#FF5E14] uppercase tracking-wider block mb-0.5">
+                            Outcome
+                          </span>
+                          <span className="text-xs font-semibold text-slate-800">
+                            Zero-Defect Standard Work
+                          </span>
                         </div>
-                      )}
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-left">
+                          <span className="text-[11px] font-bold text-[#FF5E14] uppercase tracking-wider block mb-0.5">
+                            Validation
+                          </span>
+                          <span className="text-xs font-semibold text-slate-800">
+                            Certified Skill Verification
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom CTA Row */}
+                    <div className="relative z-10 pt-5 mt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="text-left">
+                        <span className="text-xs sm:text-sm font-bold text-[#001659] block">
+                          Looking to implement this in your manufacturing plant?
+                        </span>
+                        <span className="text-xs text-slate-400">
+                          Get a tailored architecture blueprint & ROI calculation.
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalButtonText("Schedule a free consultation");
+                          setModalOpen(true);
+                        }}
+                        style={{ fontSize: "13.5px" }}
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white text-[13.5px] font-bold px-5 py-3 shadow-[0_4px_14px_rgba(255,94,20,0.3)] hover:shadow-[0_6px_20px_rgba(255,94,20,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 whitespace-nowrap cursor-pointer border-0 leading-tight shrink-0"
+                      >
+                        <span>Schedule a free consultation</span>
+                        <Icons.ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </section>

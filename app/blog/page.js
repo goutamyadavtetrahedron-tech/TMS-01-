@@ -165,15 +165,15 @@ export default function BlogListingPage() {
     <Layout>
       <div className="blog-modern-layout bg-[#f8fafc] min-h-screen pb-16">
         {/* Balanced Full-Width Editorial Hero Banner */}
-        <section className="blog-hero-banner bg-gradient-to-b from-[#001659] via-[#051f6d] to-[#0a2c5e] text-white py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 shadow-sm">
+        <section className="bg-gradient-to-b from-[#001659] via-[#051f6d] to-[#0a2c5e] text-white py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 shadow-sm">
           <div className="max-w-7xl mx-auto">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-xs font-medium mb-3.5" aria-label="Breadcrumb">
-              <Link href="/" className="hero-breadcrumb-link hover:text-white transition-colors">
+              <Link href="/" className="text-slate-300 hover:text-white transition-colors">
                 Home
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="hero-breadcrumb-current">
+              <span className="text-[#FF7A3D] font-semibold">
                 Insights & Publications
               </span>
             </nav>
@@ -189,7 +189,7 @@ export default function BlogListingPage() {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-snug mb-3 text-white">
                   Manufacturing Intelligence & Operational Insights
                 </h1>
-                <p className="hero-description text-slate-200/90 leading-relaxed font-normal max-w-xl mb-0">
+                <p className="text-slate-200/90 text-sm sm:text-[15.5px] leading-relaxed font-normal max-w-xl mb-0">
                   Research-backed frameworks, shopfloor automation blueprints, and capability-building methodologies from Tetrahedron principal consultants.
                 </p>
               </div>
@@ -198,34 +198,34 @@ export default function BlogListingPage() {
               <div className="lg:col-span-5">
                 <div className="bg-white/[0.08] backdrop-blur-md border border-white/15 rounded-2xl p-5 sm:p-6 shadow-lg space-y-3.5">
                   <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/10">
-                    <span className="blog-hero-card-header font-bold uppercase tracking-wider">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#FF7A3D]">
                       Industrial Advisory Practice
                     </span>
-                    <span className="blog-hero-card-count px-2.5 py-0.5 rounded-full bg-white/15 text-slate-200">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white/15 text-slate-200">
                       {publishedBlogs.length}+ Publications
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-slate-200">
-                    <div className="blog-hero-focus-pill flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="text-[12.5px] font-semibold text-slate-100 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                       <span className="w-2 h-2 rounded-full bg-[#FF5E14] shrink-0" />
                       <span className="whitespace-nowrap">Smart Automation</span>
                     </div>
-                    <div className="blog-hero-focus-pill flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="text-[12.5px] font-semibold text-slate-100 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
                       <span className="whitespace-nowrap">Lean Operations</span>
                     </div>
-                    <div className="blog-hero-focus-pill flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="text-[12.5px] font-semibold text-slate-100 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                       <span className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
                       <span className="whitespace-nowrap">AGV & AMR Systems</span>
                     </div>
-                    <div className="blog-hero-focus-pill flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="text-[12.5px] font-semibold text-slate-100 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                       <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
                       <span className="whitespace-nowrap">Plant Engineering</span>
                     </div>
                   </div>
 
-                  <p className="blog-hero-card-footer pt-0.5 mb-0">
+                  <p className="text-xs text-slate-300 font-normal leading-relaxed pt-0.5 mb-0">
                     Curated by Senior Advisory Consultants, Six Sigma Champions & Automation Leaders.
                   </p>
                 </div>

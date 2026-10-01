@@ -154,36 +154,46 @@ export default function BlogEditorialContent({
           headingCount % 3 === 0 &&
           idx < sections.length - 1
         ) {
+          const ctaHeading =
+            cta.text ||
+            (cta.buttonText && cta.buttonText.includes("?")
+              ? cta.buttonText
+              : "Want to setup a World-Class Dojo Center?");
+
+          const ctaButtonText =
+            cta.buttonText && !cta.buttonText.includes("?")
+              ? cta.buttonText
+              : "Schedule a free consultation";
+
           ctaElement = (
             <div
               key={`mid-cta-${idx}`}
-              className="blog-mid-cta-card relative overflow-hidden rounded-2xl p-6 sm:p-7 my-8 sm:my-10 border border-orange-200/90 bg-gradient-to-br from-[#FFFBF7] via-[#FFF6EE] to-[#FEEDDC] shadow-xs"
+              className="relative overflow-hidden rounded-2xl p-6 sm:p-7 my-8 sm:my-10 border border-orange-200/90 bg-gradient-to-br from-[#FFFBF7] via-[#FFF6EE] to-[#FEEDDC] shadow-[0_8px_30px_rgba(255,94,20,0.06)]"
             >
               {/* Subtle brand color accent stripe on left */}
-              <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#FF5E14]" />
+              <div className="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-b from-[#FF5E14] to-[#ff7a29]" />
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-6 pl-2">
-                <div className="text-left space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF5E14]/10 text-[#FF5E14] border border-[#FF5E14]/20 uppercase tracking-wider mb-1">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6 pl-2.5">
+                <div className="text-left space-y-1.5 flex-1 min-w-0">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#FF5E14]/10 text-[#FF5E14] border border-[#FF5E14]/20 uppercase tracking-wider mb-1">
                     <Sparkles className="w-3.5 h-3.5 text-[#FF5E14] shrink-0" />
                     <span>Specialist Advisory</span>
                   </div>
-                  {cta.text && (
-                    <h3 className="text-lg sm:text-xl md:text-[21px] font-extrabold text-[#001659] leading-snug tracking-tight mb-1.5">
-                      {cta.text}
-                    </h3>
-                  )}
-                  <p className="text-sm text-slate-600 leading-relaxed max-w-xl font-normal">
-                    Discuss tailored implementation strategies with our manufacturing engineering experts.
+                  <h3 className="text-lg sm:text-xl md:text-[21px] font-extrabold text-[#001659] leading-snug tracking-tight m-0">
+                    {ctaHeading}
+                  </h3>
+                  <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed max-w-xl font-normal m-0 pt-1">
+                    Discuss tailored implementation strategies and simulation blueprints with our manufacturing engineering experts.
                   </p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => onOpenConsultModal?.(cta.buttonText || "Consult Experts")}
-                  className="blog-mid-cta-btn shrink-0 self-start sm:self-center"
+                  onClick={() => onOpenConsultModal?.("Schedule a free consultation")}
+                  style={{ fontSize: "13.5px" }}
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white text-[13.5px] font-bold px-6 py-3.5 shadow-[0_4px_16px_rgba(255,94,20,0.3)] hover:shadow-[0_6px_22px_rgba(255,94,20,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 whitespace-nowrap cursor-pointer border-0 leading-tight shrink-0 self-start md:self-center"
                 >
-                  <span>{cta.buttonText || "Talk to Principal Advisors"}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>{ctaButtonText}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
             </div>
