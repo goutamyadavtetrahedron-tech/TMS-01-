@@ -96,7 +96,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
           <Link
             key={index}
             href={href}
-            className="blog-content-link"
+            className="text-[#FF5E14] font-semibold underline decoration-[#FF5E14]/40 underline-offset-2 hover:text-[#001659] hover:decoration-[#001659] transition-colors"
             target={target}
             rel={rel}
           >
@@ -109,7 +109,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
         <a
           key={index}
           href={href}
-          className="blog-content-link"
+          className="text-[#FF5E14] font-semibold underline decoration-[#FF5E14]/40 underline-offset-2 hover:text-[#001659] hover:decoration-[#001659] transition-colors"
           target={target}
           rel={rel}
         >
@@ -130,7 +130,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
           <Link
             key={index}
             href={href}
-            className="blog-content-link"
+            className="text-[#FF5E14] font-semibold underline decoration-[#FF5E14]/40 underline-offset-2 hover:text-[#001659] hover:decoration-[#001659] transition-colors"
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noopener noreferrer' : undefined}
           >
@@ -143,7 +143,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
         <a
           key={index}
           href={href}
-          className="blog-content-link"
+          className="text-[#FF5E14] font-semibold underline decoration-[#FF5E14]/40 underline-offset-2 hover:text-[#001659] hover:decoration-[#001659] transition-colors"
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
         >
@@ -156,7 +156,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
     const boldMatch = part.match(/^<(?:strong|b)>(.*?)<\/(?:strong|b)>$/i);
     if (boldMatch) {
       return (
-        <strong key={index} style={{ fontWeight: 600, color: 'inherit' }}>
+        <strong key={index} className="font-bold text-inherit">
           {renderRichText(boldMatch[1])}
         </strong>
       );
@@ -164,7 +164,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
     const mdBoldMatch = part.match(/^\*\*(.*?)\*\*$/);
     if (mdBoldMatch) {
       return (
-        <strong key={index} style={{ fontWeight: 600, color: 'inherit' }}>
+        <strong key={index} className="font-bold text-inherit">
           {renderRichText(mdBoldMatch[1])}
         </strong>
       );
@@ -174,7 +174,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
     const italicMatch = part.match(/^<(?:em|i)>(.*?)<\/(?:em|i)>$/i);
     if (italicMatch) {
       return (
-        <em key={index} style={{ fontStyle: 'italic' }}>
+        <em key={index} className="italic">
           {renderRichText(italicMatch[1])}
         </em>
       );
@@ -182,7 +182,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
     const mdItalicMatch = part.match(/^\*(.*?)\*$/);
     if (mdItalicMatch && !part.startsWith('**')) {
       return (
-        <em key={index} style={{ fontStyle: 'italic' }}>
+        <em key={index} className="italic">
           {renderRichText(mdItalicMatch[1])}
         </em>
       );
@@ -194,14 +194,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
       return (
         <code
           key={index}
-          style={{
-            background: '#f1f5f9',
-            color: '#0f172a',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            fontSize: '0.9em',
-            fontFamily: 'monospace',
-          }}
+          className="bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono border border-slate-200"
         >
           {codeMatch[1]}
         </code>
@@ -212,14 +205,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
       return (
         <code
           key={index}
-          style={{
-            background: '#f1f5f9',
-            color: '#0f172a',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            fontSize: '0.9em',
-            fontFamily: 'monospace',
-          }}
+          className="bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono border border-slate-200"
         >
           {mdCodeMatch[1]}
         </code>
@@ -230,7 +216,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
     const strikeMatch = part.match(/^<(?:del|s)>(.*?)<\/(?:del|s)>$/i);
     if (strikeMatch) {
       return (
-        <del key={index} style={{ textDecoration: 'line-through' }}>
+        <del key={index} className="line-through text-slate-400">
           {renderRichText(strikeMatch[1])}
         </del>
       );
@@ -242,12 +228,7 @@ export function renderRichText(text: string | null | undefined): React.ReactNode
       return (
         <mark
           key={index}
-          style={{
-            background: '#fef08a',
-            color: '#854d0e',
-            padding: '2px 4px',
-            borderRadius: '3px',
-          }}
+          className="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded"
         >
           {renderRichText(markMatch[1])}
         </mark>
@@ -309,68 +290,42 @@ export function renderMarkdownTable(lines: string[], key: React.Key): React.Reac
     .filter(l => l.trim().length > 0 && !isTableSeparatorLine(l))
     .map(l => splitCells(l));
 
+  const getAlignClass = (align: string) => {
+    if (align === 'center') return 'text-center';
+    if (align === 'right') return 'text-right';
+    return 'text-left';
+  };
+
   return (
     <div
       key={key}
-      className="blog-table-container"
-      style={{
-        margin: '28px 0',
-        overflowX: 'auto',
-        borderRadius: '10px',
-        border: '1px solid #e2e8f0',
-        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.05)',
-        background: '#ffffff',
-      }}
+      className="my-7 overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white"
     >
-      <table
-        className="blog-data-table"
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          fontSize: '15px',
-        }}
-      >
+      <table className="w-full border-collapse text-left text-xs sm:text-sm">
         <thead>
-          <tr style={{ background: '#002244' }}>
+          <tr className="bg-[#001659] text-white">
             {headers.map((h, i) => (
               <th
                 key={i}
-                style={{
-                  color: '#ffffff',
-                  padding: '13px 18px',
-                  fontWeight: 600,
-                  fontSize: '14.5px',
-                  fontFamily: 'var(--font-poppins)',
-                  textAlign: (alignments[i] || 'left') as any,
-                  borderBottom: '2px solid #001730',
-                  whiteSpace: 'nowrap',
-                }}
+                className={`py-3.5 px-4 sm:px-5 font-bold text-xs sm:text-[13px] tracking-wider text-white uppercase border-b-2 border-blue-950/80 whitespace-nowrap ${getAlignClass(alignments[i])}`}
               >
                 {renderRichText(h)}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-200/80">
           {bodyRows.map((row, rIdx) => (
             <tr
               key={rIdx}
-              style={{
-                background: rIdx % 2 === 1 ? '#f8fafc' : '#ffffff',
-                transition: 'background 0.15s ease',
-              }}
+              className={`transition-colors hover:bg-orange-50/40 ${
+                rIdx % 2 === 1 ? 'bg-slate-50/70' : 'bg-white'
+              }`}
             >
               {row.map((cell, cIdx) => (
                 <td
                   key={cIdx}
-                  style={{
-                    padding: '12px 18px',
-                    borderBottom: '1px solid #e2e8f0',
-                    color: '#334155',
-                    fontSize: '14px',
-                    lineHeight: '1.6',
-                    textAlign: (alignments[cIdx] || 'left') as any,
-                  }}
+                  className={`py-3.5 px-4 sm:px-5 text-slate-700 text-xs sm:text-[14px] leading-relaxed ${getAlignClass(alignments[cIdx])}`}
                 >
                   {renderRichText(cell)}
                 </td>
@@ -689,36 +644,15 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     const imgSrc = imgMatch[2];
     const optimizedSrc = getOptimizedCloudinaryUrl(imgSrc, { width: 1200 });
     return (
-      <figure
-        key={key}
-        className="blog-inline-image-figure"
-        style={{
-          margin: '28px 0',
-          textAlign: 'center',
-        }}
-      >
+      <figure key={key} className="my-7 text-center">
         <img
           src={optimizedSrc}
           alt={altText}
           loading="lazy"
-          style={{
-            maxWidth: '100%',
-            height: 'auto',
-            borderRadius: '10px',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-            display: 'inline-block',
-          }}
+          className="max-w-full h-auto rounded-2xl shadow-sm mx-auto block border border-slate-200/80"
         />
         {altText && !['image', 'screenshot', 'illustration'].includes(altText.toLowerCase()) && (
-          <figcaption
-            style={{
-              fontSize: '13px',
-              color: '#64748b',
-              fontStyle: 'italic',
-              marginTop: '8px',
-              textAlign: 'center',
-            }}
-          >
+          <figcaption className="text-xs text-slate-500 italic mt-2.5 text-center">
             {altText}
           </figcaption>
         )}
@@ -726,37 +660,20 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     );
   }
 
-  // 1. YouTube Video Embed (via iframe or container)
+  // 1. YouTube Video Embed (via iframe or direct link)
   if (trimmed.includes('<iframe') && trimmed.includes('youtube')) {
     const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
     const videoSrc = srcMatch ? srcMatch[1] : '';
     if (videoSrc) {
       return (
-        <div key={key} className="blog-video-wrapper" style={{ margin: '24px 0' }}>
-          <div
-            style={{
-              position: 'relative',
-              paddingBottom: '56.25%', // 16:9 aspect ratio
-              height: 0,
-              overflow: 'hidden',
-              borderRadius: '12px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-              background: '#000',
-            }}
-          >
+        <div key={key} className="my-7">
+          <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-2xl shadow-md bg-black border border-slate-200">
             <iframe
               src={videoSrc}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                border: 0,
-              }}
+              className="absolute top-0 left-0 w-full h-full border-0"
             />
           </div>
         </div>
@@ -764,19 +681,38 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     }
   }
 
+  const directYtMatch = trimmed.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+  if (directYtMatch && !trimmed.startsWith('<')) {
+    const videoId = directYtMatch[1];
+    const urlText = directYtMatch[0];
+    const rawCaption = trimmed.replace(urlText, '').replace(/^[-–—:\s]+|[-–—:\s]+$/g, '').trim();
+
+    return (
+      <div key={key} className="my-7">
+        {rawCaption && (
+          <div className="mb-2.5 font-bold text-[#001659] text-sm sm:text-base">
+            {renderRichText(rawCaption)}
+          </div>
+        )}
+        <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-2xl shadow-lg bg-[#001659] border border-slate-200">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0`}
+            title="Dojo Demonstration Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="absolute top-0 left-0 w-full h-full border-0"
+          />
+        </div>
+      </div>
+    );
+  }
+
   // 2. Comparison / Data Table (HTML <table>)
   if (trimmed.startsWith('<table') || trimmed.startsWith('<div class="blog-table-container">') || trimmed.includes('<table')) {
     return (
       <div
         key={key}
-        className="blog-table-container"
-        style={{
-          margin: '24px 0',
-          overflowX: 'auto',
-          borderRadius: '8px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-        }}
+        className="my-7 overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white p-2"
         dangerouslySetInnerHTML={{ __html: trimmed }}
       />
     );
@@ -784,13 +720,36 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
 
   // 3. FAQ Accordion (<details><summary>Question</summary>...</details>)
   if (trimmed.startsWith('<details') && trimmed.includes('<summary>')) {
+    const summaryMatch = trimmed.match(/<summary>([\s\S]*?)<\/summary>/i);
+    const questionText = summaryMatch ? summaryMatch[1].trim() : "Frequently Asked Question";
+    const answerText = trimmed
+      .replace(/<details[^>]*>/i, '')
+      .replace(/<\/details>/i, '')
+      .replace(/<summary>[\s\S]*?<\/summary>/i, '')
+      .trim();
+
     return (
-      <div
+      <details
         key={key}
-        className="blog-faq-block"
-        style={{ margin: '14px 0' }}
-        dangerouslySetInnerHTML={{ __html: trimmed }}
-      />
+        className="group my-3 rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm open:border-blue-200 open:bg-slate-50/50 open:shadow-sm"
+      >
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm sm:text-base font-bold text-[#001659] select-none [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2.5">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-[11px] font-extrabold text-[#FF5E14]">
+              Q
+            </span>
+            <span>{renderRichText(questionText)}</span>
+          </span>
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[#001659] transition-transform duration-200 group-open:rotate-180 group-open:bg-blue-100">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <div className="mt-3.5 pt-3.5 border-t border-slate-100 text-xs sm:text-[14.5px] leading-relaxed text-slate-600 pl-8">
+          {renderRichText(answerText.replace(/^<p>/i, '').replace(/<\/p>$/i, ''))}
+        </div>
+      </details>
     );
   }
 
@@ -812,19 +771,15 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <blockquote
         key={key}
-        className={isTakeaway ? 'blog-takeaway-box' : 'blog-standard-quote'}
-        style={{
-          borderLeft: isTakeaway ? '4px solid #2563eb' : '4px solid #94a3b8',
-          background: isTakeaway ? '#f0f7ff' : '#f8fafc',
-          padding: '16px 20px',
-          margin: '20px 0',
-          borderRadius: '0 8px 8px 0',
-          fontSize: '16px',
-          lineHeight: '1.7',
-          color: '#1e293b',
-        }}
+        className={`my-6 rounded-2xl p-5 sm:p-6 border-l-4 shadow-2xs ${
+          isTakeaway
+            ? 'border-[#FF5E14] bg-gradient-to-r from-orange-50/80 via-amber-50/30 to-white text-slate-800'
+            : 'border-blue-700 bg-slate-50 text-slate-700'
+        }`}
       >
-        {renderRichText(innerText)}
+        <div className="text-sm sm:text-base leading-relaxed font-medium">
+          {renderRichText(innerText)}
+        </div>
       </blockquote>
     );
   }
@@ -838,15 +793,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h4
         key={key}
-        className="blog-subheading-h4"
-        style={{
-          fontFamily: 'var(--font-poppins)',
-          fontSize: '18.5px',
-          fontWeight: 600,
-          margin: '20px 0 8px 0',
-          color: '#0f172a',
-          lineHeight: '1.4',
-        }}
+        className="text-base sm:text-lg font-bold text-slate-900 mt-6 mb-2 tracking-tight leading-snug"
       >
         {renderRichText(cleanHeading)}
       </h4>
@@ -861,7 +808,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h3
         key={key}
-        className="blog-subheading-h3 text-lg sm:text-xl font-bold text-[#001659] mt-8 mb-3 tracking-tight flex items-center gap-2.5"
+        className="text-lg sm:text-xl font-bold text-[#001659] mt-8 mb-3 tracking-tight flex items-center gap-2.5"
       >
         <span className="w-2 h-2 rounded-full bg-[#FF5E14] inline-block shrink-0" />
         <span>{renderRichText(cleanHeading)}</span>
@@ -877,7 +824,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h2
         key={key}
-        className="blog-subheading-h2 text-xl sm:text-2xl font-extrabold text-[#001659] mt-9 mb-4 tracking-tight"
+        className="text-xl sm:text-2xl font-extrabold text-[#001659] mt-9 mb-4 tracking-tight"
       >
         {renderRichText(cleanHeading)}
       </h2>
@@ -892,7 +839,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
     return (
       <h1
         key={key}
-        className="blog-subheading-h1 text-2xl sm:text-3xl font-extrabold text-[#001659] mt-10 mb-5 tracking-tight"
+        className="text-2xl sm:text-3xl font-extrabold text-[#001659] mt-10 mb-5 tracking-tight"
       >
         {renderRichText(cleanHeading)}
       </h1>
@@ -903,7 +850,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
   const stratHeading = isNumberedStrategyHeading(trimmed);
   if (stratHeading) {
     return (
-      <div key={key} className="blog-strategy-step-header mt-8 mb-3 pt-2">
+      <div key={key} className="mt-8 mb-3 pt-2">
         <div className="flex items-center gap-3">
           <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#001659] text-[#FF7A3D] font-extrabold text-sm sm:text-base flex items-center justify-center shadow-xs border border-blue-900/40 shrink-0">
             {String(stratHeading.num).padStart(2, '0')}
@@ -927,30 +874,77 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
         <div className="w-5 h-5 rounded-full bg-orange-100 text-[#FF5E14] flex items-center justify-center shrink-0 mt-0.5 border border-orange-200/60">
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF5E14]" />
         </div>
-        <div className="text-[17px] sm:text-[18px] text-slate-700 leading-relaxed flex-1">
+        <div className="text-sm sm:text-base text-slate-700 leading-relaxed flex-1">
           {renderRichText(listContent)}
         </div>
       </div>
     );
   }
 
-  // 8. Numbered / Lettered List Item (e.g. "1.) Item", "1) Item", "(1) Item", "a) Item")
-  const numListMatch = trimmed.match(/^(\d+(?:\.\)|\)|\.)|\(\d+\)|[a-zA-Z](?:\.\)|\)|\.))\s+(.*)$/);
-  if (numListMatch) {
-    const rawBadge = numListMatch[1].replace(/[^\w]/g, '');
+  // 8. Numbered / Lettered List Item (e.g. "1.) Item", "1) Item", "1. Item", "1- Item", "4.1 Item", "(1) Item", "a) Item")
+  const numListMatch = trimmed.match(/^(\d+(?:\.\d+)?(?:\.\)|\)|\.|\-|\s\-)|\(\d+\)|[a-zA-Z](?:\.\)|\)|\.))\s*(.*)$/);
+  if (numListMatch && numListMatch[2] && numListMatch[2].length > 0) {
+    const rawBadge = numListMatch[1].replace(/[^\w.]/g, '');
     const content = numListMatch[2];
     const formattedBadge = /^\d+$/.test(rawBadge) ? String(rawBadge).padStart(2, '0') : rawBadge;
     return (
       <div
         key={key}
-        className="my-3 p-4 sm:p-4.5 rounded-xl bg-slate-50/80 hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-200 transition-all flex items-start gap-3.5 shadow-2xs group"
+        className="my-2.5 p-3.5 sm:p-4 rounded-xl bg-slate-50/80 hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-200 transition-all flex items-start gap-3.5 shadow-2xs group"
       >
         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-100/80 text-[#001659] font-bold text-xs sm:text-[13px] flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60 group-hover:bg-[#001659] group-hover:text-white transition-all">
           {formattedBadge}
         </div>
-        <div className="text-[17px] sm:text-[18px] text-slate-700 leading-relaxed flex-1">
+        <div className="text-sm sm:text-base text-slate-700 leading-relaxed flex-1">
           {renderRichText(content)}
         </div>
+      </div>
+    );
+  }
+
+  // 8.5 Key Concept / Definition Card (e.g. "Physical Ergonomics – ...", "See: ...", "Managerial Competencies: ...")
+  const defMatch = trimmed.match(/^([A-Z][a-zA-Z0-9\s\/\-&()]{1,35})\s*(?:–|—|:)\s+(.+)$/);
+  if (defMatch && !trimmed.startsWith('http') && !trimmed.startsWith('<') && !stratHeading) {
+    const term = defMatch[1].trim();
+    const definition = defMatch[2].trim();
+    if (definition.length > 12 && !/^(https?|mailto)/i.test(definition)) {
+      return (
+        <div
+          key={key}
+          className="my-3 p-4 sm:p-4.5 rounded-xl bg-white border border-slate-200/80 hover:border-blue-300 hover:bg-blue-50/20 shadow-2xs transition-all flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-3"
+        >
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#001659] text-white shrink-0 uppercase tracking-wide">
+            {term}
+          </span>
+          <div className="text-sm sm:text-[15px] leading-relaxed text-slate-700 flex-1">
+            {renderRichText(definition)}
+          </div>
+        </div>
+      );
+    }
+  }
+
+  // 8.6 Concise Simulation Drill / Checklist Item
+  const isActionDrill = (
+    trimmed.length > 10 &&
+    trimmed.length < 95 &&
+    !trimmed.endsWith('.') &&
+    !trimmed.endsWith('?') &&
+    !trimmed.startsWith('<') &&
+    /^(Picking|Improving|Tighten|Accurate|Temperature|Measure|Place|Select|Pick|Insert|Balance|Travel|Estimation|Rotate|Group|Task|Use|Interviews|Taskforces|Questionnaire|Conducting|The result|This will|The results|Thus|Conduct|Capture|Develop|From|Refer|Create|Facilitate)\b/i.test(trimmed)
+  );
+  if (isActionDrill) {
+    return (
+      <div
+        key={key}
+        className="my-2 p-3 sm:p-3.5 rounded-xl bg-white hover:bg-orange-50/30 border border-slate-200/80 hover:border-orange-300 transition-all flex items-start gap-3 shadow-2xs group"
+      >
+        <span className="w-5 h-5 rounded-md bg-orange-500/10 text-[#FF5E14] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-orange-500/20 group-hover:bg-[#FF5E14] group-hover:text-white transition-colors">
+          ✓
+        </span>
+        <span className="text-xs sm:text-[13.5px] font-semibold text-slate-800 leading-snug">
+          {renderRichText(trimmed)}
+        </span>
       </div>
     );
   }
@@ -959,7 +953,7 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
   return (
     <p
       key={key}
-      className="blog-para text-[18px] sm:text-[19px] leading-[1.85] text-slate-700 mb-6 font-normal"
+      className="text-sm sm:text-base md:text-[16px] leading-[1.8] text-slate-700 mb-5 font-normal"
     >
       {renderRichText(trimmed)}
     </p>

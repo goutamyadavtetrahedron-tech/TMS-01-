@@ -137,12 +137,13 @@ export default function BlogSidebar({
             type="button"
             onClick={() => {
               if (onOpenConsultModal) {
-                onOpenConsultModal("Article Consultation");
+                onOpenConsultModal("Schedule a free consultation");
               }
             }}
-            className="blog-sidebar-cta-btn w-full"
+            style={{ fontSize: "13.5px" }}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white text-[13.5px] font-bold px-4 py-3 shadow-[0_4px_14px_rgba(255,94,20,0.3)] hover:shadow-[0_6px_20px_rgba(255,94,20,0.45)] transition-all duration-200 cursor-pointer border-0 leading-tight"
           >
-            <span>Book Consultation</span>
+            <span>Schedule a free consultation</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

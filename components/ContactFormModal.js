@@ -1,9 +1,23 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import ContactForm from "./ContactForm";
+import DojoContactForm from "./DojoContactForm";
 
-export default function ContactFormModal({ open, onClose, buttonText }) {
+export default function ContactFormModal({ open, onClose, buttonText, isDojo = false }) {
   const backdropRef = useRef(null);
+
+  const isDojoActive = useMemo(() => {
+    if (isDojo) return true;
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname.toLowerCase();
+      return (
+        path.includes("dojo") ||
+        path.includes("ergonomics-and-workplace-design") ||
+        path.includes("augmented-reality-virtual-reality")
+      );
+    }
+    return false;
+  }, [isDojo]);
 
   useEffect(() => {
     if (!open) return;
@@ -62,7 +76,7 @@ export default function ContactFormModal({ open, onClose, buttonText }) {
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
           padding: "0",
           width: "100%",
-          maxWidth: "420px",
+          maxWidth: isDojoActive ? "480px" : "420px",
           maxHeight: "92vh",
           overflowY: "auto",
           boxSizing: "border-box",
@@ -108,7 +122,21 @@ export default function ContactFormModal({ open, onClose, buttonText }) {
         </button>
 
         <div style={{ padding: 0 }}>
-          <ContactForm buttonText={buttonText} onSuccess={onClose} compact={true} style={{ border: "none", boxShadow: "none" }} />
+          {isDojoActive ? (
+            <DojoContactForm
+              buttonText={buttonText || "Schedule a free consultation"}
+              onSuccess={onClose}
+              compact={true}
+              style={{ border: "none", boxShadow: "none" }}
+            />
+          ) : (
+            <ContactForm
+              buttonText={buttonText}
+              onSuccess={onClose}
+              compact={true}
+              style={{ border: "none", boxShadow: "none" }}
+            />
+          )}
         </div>
       </div>
     </div>
