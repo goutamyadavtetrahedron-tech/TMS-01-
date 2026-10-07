@@ -137,13 +137,6 @@ export default function Footer() {
                           Automation
                         </Link>
                       </li>
-                      <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                        <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
-                          {" "}
-                          <span className="icon-angle-left"></span>
-                          Sitemap
-                        </Link>
-                      </li>
                       {/* <li ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                         <Link href="/service-details/" ref={el => el && el.style.setProperty("font-size", "17px", "important")}>
                           {" "}

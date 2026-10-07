@@ -34,7 +34,6 @@ export async function GET(request) {
     "testimonials",
     "our-team",
     "services",
-    "service-details",
     "projects",
     "project-details",
     "pricing",
