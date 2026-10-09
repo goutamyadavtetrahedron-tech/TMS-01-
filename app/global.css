@@ -2,6 +2,10 @@
 
 
 :root {
+    --font-poppins: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-outfit: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --elitecons-font: var(--font-poppins);
+    --title-font: var(--font-outfit);
     --tagline-size: 32px;
     --heading-size: 43px;
     --body-text-size: 18px;
@@ -11,7 +15,7 @@
   html, body,
   h1, h2, h3, h4, h5, h6,
   p, li, ul, ol, label, input, textarea, button, th, td, div, blockquote, pre, code, strong, em, b, small, sup, sub, legend, caption, figcaption, dt, dd {
-    font-family: var(--font-poppins), Poppins, sans-serif !important;
+    font-family: var(--font-poppins, 'Poppins', sans-serif) !important;
   }
   /* About section specific font sizes */
   .about-two .section-title__tagline {
