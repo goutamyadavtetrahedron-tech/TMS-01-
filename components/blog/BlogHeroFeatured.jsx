@@ -47,8 +47,10 @@ export default function BlogHeroFeatured({ blog }) {
     return "Explore actionable insights, benchmarks, and operational frameworks from Tetrahedron principal consultants.";
   };
 
+  const rawImageUrl =
+    blog.image?.url || (typeof blog.image === "string" ? blog.image : "");
   const imageUrl = getOptimizedCloudinaryUrl(
-    blog.image?.url || (typeof blog.image === "string" ? blog.image : "/assets/images/blog/default-blog.jpg"),
+    rawImageUrl || "/images/smart-factory1.png",
     { width: 1200, quality: "auto" }
   );
 
@@ -67,6 +69,14 @@ export default function BlogHeroFeatured({ blog }) {
               src={imageUrl}
               alt={blog.image?.alt || blog.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95 group-hover:opacity-100"
+              onError={(e) => {
+                if (rawImageUrl && e.currentTarget.src !== rawImageUrl) {
+                  e.currentTarget.src = rawImageUrl;
+                } else {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/smart-factory1.png";
+                }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent lg:hidden" />
             <span className="absolute top-3 left-3 px-2.5 py-0.5 text-xs font-semibold tracking-wider uppercase rounded-full bg-white/95 text-[#001659] shadow-xs backdrop-blur-xs">

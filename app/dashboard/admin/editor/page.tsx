@@ -925,7 +925,15 @@ Before selecting a material transport platform, evaluate your plant floor stabil
             {/* Featured Hero Cover Image (starts immediately below the hero banner) */}
             {mainImagePreview ? (
               <div className="lp-hero-cover">
-                <img src={getOptimizedCloudinaryUrl(mainImagePreview, { width: 1200 })} alt={mainImageAlt || title} />
+                <img
+                  src={getOptimizedCloudinaryUrl(mainImagePreview, { width: 1200 })}
+                  alt={mainImageAlt || title}
+                  onError={(e) => {
+                    if (mainImagePreview && e.currentTarget.src !== mainImagePreview) {
+                      e.currentTarget.src = mainImagePreview;
+                    }
+                  }}
+                />
                 {mainImageAlt && <span className="lp-cover-caption">{mainImageAlt}</span>}
               </div>
             ) : (
@@ -962,7 +970,15 @@ Before selecting a material transport platform, evaluate your plant floor stabil
 
                   {sec.imagePreview && (
                     <div className="lp-sec-graphic">
-                      <img src={getOptimizedCloudinaryUrl(sec.imagePreview, { width: 800 })} alt={sec.heading} />
+                      <img
+                        src={getOptimizedCloudinaryUrl(sec.imagePreview, { width: 800 })}
+                        alt={sec.heading}
+                        onError={(e) => {
+                          if (sec.imagePreview && e.currentTarget.src !== sec.imagePreview) {
+                            e.currentTarget.src = sec.imagePreview;
+                          }
+                        }}
+                      />
                     </div>
                   )}
 
@@ -2200,6 +2216,11 @@ Before selecting a material transport platform, evaluate your plant floor stabil
                           alt={img.title}
                           className="studio-media-thumb"
                           loading="lazy"
+                          onError={(e) => {
+                            if (img.url && e.currentTarget.src !== img.url) {
+                              e.currentTarget.src = img.url;
+                            }
+                          }}
                         />
                       </div>
                       <div className="studio-media-card-caption">

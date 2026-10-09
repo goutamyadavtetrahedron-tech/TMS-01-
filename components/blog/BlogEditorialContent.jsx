@@ -103,10 +103,9 @@ export default function BlogEditorialContent({
 
         // 2. Section Image with Cloudinary Optimization & Responsive Frame
         if (section.image) {
-          const secImgUrl = getOptimizedCloudinaryUrl(
-            section.image?.url || (typeof section.image === "string" ? section.image : ""),
-            { width: 900 }
-          );
+          const rawSecImgUrl =
+            section.image?.url || (typeof section.image === "string" ? section.image : "");
+          const secImgUrl = getOptimizedCloudinaryUrl(rawSecImgUrl, { width: 900 });
           if (secImgUrl) {
             contentElements.push(
               <div
@@ -118,6 +117,14 @@ export default function BlogEditorialContent({
                   alt={section.heading || blogTitle}
                   className="w-full h-auto object-cover max-h-[420px]"
                   loading="lazy"
+                  onError={(e) => {
+                    if (rawSecImgUrl && e.currentTarget.src !== rawSecImgUrl) {
+                      e.currentTarget.src = rawSecImgUrl;
+                    } else {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.style.display = "none";
+                    }
+                  }}
                 />
               </div>
             );

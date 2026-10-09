@@ -701,6 +701,11 @@ export function renderBlogContentBlock(rawText: string | null | undefined, key: 
           src={optimizedSrc}
           alt={altText}
           loading="lazy"
+          onError={(e) => {
+            if (imgSrc && e.currentTarget.src !== imgSrc) {
+              e.currentTarget.src = imgSrc;
+            }
+          }}
           style={{
             maxWidth: '100%',
             height: 'auto',

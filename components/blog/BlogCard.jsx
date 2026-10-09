@@ -48,8 +48,10 @@ export default function BlogCard({ blog }) {
     return "Explore actionable insights and engineering frameworks from Tetrahedron experts.";
   };
 
+  const rawImageUrl =
+    blog.image?.url || (typeof blog.image === "string" ? blog.image : "");
   const imageUrl = getOptimizedCloudinaryUrl(
-    blog.image?.url || (typeof blog.image === "string" ? blog.image : "/assets/images/blog/default-blog.jpg"),
+    rawImageUrl || "/images/smart-factory1.png",
     { width: 800, quality: "auto" }
   );
 
@@ -64,6 +66,14 @@ export default function BlogCard({ blog }) {
           alt={blog.image?.alt || blog.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
+          onError={(e) => {
+            if (rawImageUrl && e.currentTarget.src !== rawImageUrl) {
+              e.currentTarget.src = rawImageUrl;
+            } else {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/images/smart-factory1.png";
+            }
+          }}
         />
         <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 text-xs font-semibold tracking-wider uppercase rounded-full bg-white/95 text-[#001659] shadow-2xs backdrop-blur-xs">
           {category}

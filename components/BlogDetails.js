@@ -61,8 +61,10 @@ export default function BlogDetails({ blog, recentBlogs = [] }) {
         .filter((s) => s.heading && s.heading.trim())
     : [];
 
+  const rawMainImageUrl =
+    blog.image?.url || (typeof blog.image === "string" ? blog.image : "");
   const mainImageUrl = getOptimizedCloudinaryUrl(
-    blog.image?.url || (typeof blog.image === "string" ? blog.image : ""),
+    rawMainImageUrl,
     { width: 1400, quality: "auto" }
   );
 
@@ -169,6 +171,14 @@ export default function BlogDetails({ blog, recentBlogs = [] }) {
                     alt={blog.image?.alt || blog.title}
                     className="w-full h-full object-cover"
                     priority="true"
+                    onError={(e) => {
+                      if (rawMainImageUrl && e.currentTarget.src !== rawMainImageUrl) {
+                        e.currentTarget.src = rawMainImageUrl;
+                      } else {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/smart-factory1.png";
+                      }
+                    }}
                   />
                 </div>
               )}

@@ -31,8 +31,10 @@ export default function RelatedBlogs({ blogs = [] }) {
         {blogs.slice(0, 3).map((blog) => {
           const blogLink = `/${blog.slug || blog._id}`;
           const category = blog.category || "Manufacturing";
+          const rawImageUrl =
+            blog.image?.url || (typeof blog.image === "string" ? blog.image : "");
           const imageUrl = getOptimizedCloudinaryUrl(
-            blog.image?.url || (typeof blog.image === "string" ? blog.image : "/assets/images/blog/default-blog.jpg"),
+            rawImageUrl || "/images/smart-factory1.png",
             { width: 600, quality: "auto" }
           );
 
@@ -66,6 +68,14 @@ export default function RelatedBlogs({ blogs = [] }) {
                   alt={blog.image?.alt || blog.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
+                  onError={(e) => {
+                    if (rawImageUrl && e.currentTarget.src !== rawImageUrl) {
+                      e.currentTarget.src = rawImageUrl;
+                    } else {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/smart-factory1.png";
+                    }
+                  }}
                 />
                 <span className="absolute top-2 left-2 px-2 py-0.5 text-[9.5px] font-bold tracking-wider uppercase rounded-full bg-white/95 text-[#001659] shadow-2xs backdrop-blur-xs">
                   {category}

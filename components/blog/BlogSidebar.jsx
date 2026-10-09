@@ -158,8 +158,10 @@ export default function BlogSidebar({
           </div>
           <div className="space-y-3">
             {recentBlogs.slice(0, 4).map((b) => {
+              const rawImgUrl =
+                b.image?.url || (typeof b.image === "string" ? b.image : "");
               const imgUrl = getOptimizedCloudinaryUrl(
-                b.image?.url || (typeof b.image === "string" ? b.image : "/assets/images/blog/default-blog.jpg"),
+                rawImgUrl || "/images/smart-factory1.png",
                 { width: 140 }
               );
               return (
@@ -173,6 +175,14 @@ export default function BlogSidebar({
                     alt={b.title}
                     className="w-14 h-12 object-cover rounded-lg shrink-0 border border-slate-100 group-hover/item:scale-105 transition-transform duration-200"
                     loading="lazy"
+                    onError={(e) => {
+                      if (rawImgUrl && e.currentTarget.src !== rawImgUrl) {
+                        e.currentTarget.src = rawImgUrl;
+                      } else {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/smart-factory1.png";
+                      }
+                    }}
                   />
                   <div className="flex-1 min-w-0">
                     <div className="!text-[12.5px] !font-semibold !text-slate-800 group-hover/item:!text-[#FF5E14] transition-colors line-clamp-2 leading-snug mb-0.5">
