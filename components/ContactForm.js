@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import DojoContactForm from "./DojoContactForm";
 
 export default function ContactForm({
   onSuccess,
@@ -9,20 +8,7 @@ export default function ContactForm({
   buttonText = "Submit",
   style = {},
   compact = false,
-  isDojo = false,
 }) {
-  if (isDojo) {
-    return (
-      <DojoContactForm
-        onSuccess={onSuccess}
-        onError={onError}
-        buttonText={buttonText === "Submit" ? "Schedule a free consultation" : buttonText}
-        style={style}
-        compact={compact}
-      />
-    );
-  }
-
   const router = useRouter();
 
   const [formData, setFormData] = useState({

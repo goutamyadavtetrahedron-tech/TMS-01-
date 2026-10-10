@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ChevronRight, Calendar, Clock, User, ShieldCheck, Sparkles, ListOrdered, ChevronDown } from "lucide-react";
 import ContactFormModal from "./ContactFormModal";
 import ContactForm from "./ContactForm";
-import DojoContactForm from "./DojoContactForm";
 import ReadingProgressBar from "./blog/ReadingProgressBar";
 import BlogSidebar from "./blog/BlogSidebar";
 import BlogAuthorCard from "./blog/BlogAuthorCard";
@@ -21,17 +20,7 @@ export default function BlogDetails({ blog, recentBlogs = [] }) {
   const [modalButtonText, setModalButtonText] = useState("Quick Support");
   const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
-  const isDojoBlog = React.useMemo(() => {
-    const slugStr = (
-      blog?.slug ||
-      blog?.link ||
-      (typeof window !== "undefined" ? window.location.pathname : "")
-    ).toLowerCase();
-    return (
-      slugStr.includes("dojo") ||
-      slugStr.includes("ergonomics-and-workplace-design")
-    );
-  }, [blog?.slug, blog?.link]);
+  if (!blog) return null;
 
   const openContactModal = (btnText = "Quick Support") => {
     setModalButtonText(btnText);
@@ -250,37 +239,17 @@ export default function BlogDetails({ blog, recentBlogs = [] }) {
 
               {/* Compact Modern Contact Section */}
               <section className="mt-8 flex flex-col items-center">
-                <div
-                  className={`w-full ${
-                    isDojoBlog ? "max-w-[480px]" : "max-w-[420px]"
-                  } text-center mb-3`}
-                >
+                <div className="w-full max-w-[420px] text-center mb-3">
                   <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-[#FF5E14] mb-1">
-                    {isDojoBlog ? "Dojo Planning & Consultation" : "Next Steps"}
+                    Next Steps
                   </span>
                   <div className="text-[16px] sm:text-[17px] font-bold text-[#001659] leading-snug">
-                    {isDojoBlog
-                      ? "Ready to Set Up or Upgrade Your Dojo Center?"
-                      : "Ready to Modernize Your Shopfloor Operations?"}
+                    Ready to Modernize Your Shopfloor Operations?
                   </div>
                 </div>
 
-                <div
-                  className={`w-full ${
-                    isDojoBlog ? "max-w-[480px]" : "max-w-[420px]"
-                  }`}
-                >
-                  {isDojoBlog ? (
-                    <DojoContactForm
-                      compact={true}
-                      buttonText="Schedule a free consultation"
-                      title="Get In Touch"
-                      subtitle="Select your budget and project lead time to receive an expert Dojo blueprint."
-                      badge="DOJO SETUP & AUDIT"
-                    />
-                  ) : (
-                    <ContactForm compact={true} />
-                  )}
+                <div className="w-full max-w-[420px]">
+                  <ContactForm compact={true} />
                 </div>
               </section>
             </div>
@@ -301,7 +270,6 @@ export default function BlogDetails({ blog, recentBlogs = [] }) {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         buttonText={modalButtonText}
-        isDojo={isDojoBlog}
       />
     </>
   );
