@@ -39,6 +39,7 @@
   }
   
   /* Global heading styling */
+  h1, h2, h3, h4, h5, h6,
   .section-title__title,
   .section-title h1,
   .section-title h2,
@@ -46,10 +47,8 @@
   .main-heading,
   h1.section-title,
   h2.section-title {
-    font-family: var(--font-poppins), Poppins, sans-serif !important;
-    font-size: var(--heading-size) !important;
-    font-weight: 700;
-    line-height: 1.1 !important;
+    font-family: var(--font-poppins, 'Poppins', sans-serif) !important;
+    font-weight: 700 !important;
   }
 
   /* Isolate Navigation component from any global typography bleed */

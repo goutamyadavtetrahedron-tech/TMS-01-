@@ -126,18 +126,34 @@ export default function IndustriesSection() {
   }
 
   return (
-    <section style={{ padding: "40px 20px", backgroundColor: "#f4f4f4" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-        <h2 style={{ fontSize: "32px", fontWeight: "bold", color: "#333", marginBottom: "20px" }}>
+    <section style={{ padding: "60px 20px", backgroundColor: "#f8fafc" }}>
+      <style jsx>{`
+        .industries-grid-7x3 {
+          display: grid;
+          gap: 14px;
+          width: 100%;
+        }
+        @media (min-width: 1024px) {
+          .industries-grid-7x3 {
+            grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .industries-grid-7x3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 639px) {
+          .industries-grid-7x3 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+      `}</style>
+      <div style={{ maxWidth: "1360px", margin: "0 auto", textAlign: "center" }}>
+        <h2 style={{ fontSize: "32px", fontWeight: "700", fontFamily: "var(--font-poppins, 'Poppins', sans-serif)", color: "#0a1c4c", marginBottom: "24px" }}>
           INDUSTRIES WE SERVE
         </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-            gap: "15px",
-          }}
-        >
+        <div className="industries-grid-7x3">
           {industries.map((item, index) => (
             <div
               key={index}
@@ -146,40 +162,49 @@ export default function IndustriesSection() {
               }
               style={{
                 backgroundColor: "white",
-                padding: "15px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                padding: "16px 10px",
+                borderRadius: "12px",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.06)",
+                border: "1px solid rgba(0, 0, 0, 0.06)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                justifyContent: "center",
+                minHeight: "135px",
                 cursor: "pointer",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
                 overflow: "hidden",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.15)";
+                e.currentTarget.style.transform = "translateY(-4px) scale(1.03)";
+                e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.12)";
+                e.currentTarget.style.borderColor = "#ff5e14";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.06)";
+                e.currentTarget.style.borderColor = "rgba(0,0,0,0.06)";
               }}
             >
               <span
                 style={{
-                  fontSize: "45px",
-                  color: "darkblue",
+                  fontSize: "38px",
+                  color: "#0a1c4c",
                   marginBottom: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 {React.createElement(item.icon)}
               </span>
               <span
                 style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  color: "#333",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  color: "#1e293b",
                   textAlign: "center",
+                  lineHeight: "1.3",
                 }}
               >
                 {item.text}

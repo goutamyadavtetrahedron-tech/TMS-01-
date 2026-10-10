@@ -60,8 +60,8 @@ const slides = [
     highlights: ["Payloads Up to 50 Tons", "SLAM & QR Navigation", "Industry 4.0 Dispatch"],
     ctaText: "Discover Mobile Robotics",
     ctaLink: "/automated-guided-vehicle-manufacturers/",
-    image: "/assets/images/resources/main-slider-two-img-1-2.jpg",
-    imageAlt: "Tetrahedron AMR AGV Autonomous Mobile Robots",
+    image: "/assets/images/amr-agv-rgv/heavy-duty-agv-2.png",
+    imageAlt: "Tetrahedron Heavy Duty AGV Industrial Mobile Robots",
   },
   {
     id: 4,
@@ -242,13 +242,19 @@ export default function Banner() {
                     {/* Clean Category Subtitle with Accent Dash (No bulky box) */}
                     <div className="flex items-center gap-2.5 mb-2.5">
                       <span className="w-6 h-[2.5px] bg-[#ff5e14] rounded-full" />
-                      <span className="text-xs sm:text-sm font-bold tracking-[0.16em] text-[#ff7a38] uppercase">
+                      <span 
+                        className="text-xs sm:text-sm font-bold tracking-[0.16em] text-[#ff7a38] uppercase"
+                        style={{ fontFamily: "var(--font-poppins, 'Poppins', sans-serif)", fontWeight: 700 }}
+                      >
                         {slide.category}
                       </span>
                     </div>
 
                     {/* Bold, Confident Main Headline */}
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-extrabold text-white leading-[1.16] tracking-tight uppercase">
+                    <h1 
+                      className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-bold text-white leading-[1.16] tracking-tight uppercase"
+                      style={{ fontFamily: "var(--font-poppins, 'Poppins', sans-serif)", fontWeight: 700 }}
+                    >
                       {slide.title}
                     </h1>
 

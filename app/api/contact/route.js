@@ -6,13 +6,13 @@ export async function POST(req) {
   try {
     const data = await req.json();
     // Accept both 'requirements' and 'message' as the message field
-    const { name, company, email, mobile, budget, timeline } = data;
+    const { name, company, email, mobile } = data;
     const requirements = data.requirements || data.message;
     if (!name || !company || !email || !mobile || !requirements) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
-    const payload = { ...data, requirements, budget, timeline };
+    const payload = { ...data, requirements };
 
     // Email content for admin
     const adminTo = process.env.CONTACT_RECEIVER || process.env.SMTP_USER;
@@ -23,8 +23,8 @@ export async function POST(req) {
     // Email content for user confirmation
     const userTo = email;
     const userSubject = 'Thank you for contacting us!';
-    const userText = `Dear ${name},\n\nThank you for reaching out to us. We have received your message and will get back to you soon.\n\n${budget ? `Estimated Budget: ${budget}\n` : ''}${timeline ? `Project Lead Time: ${timeline}\n` : ''}Your message:\n${requirements}\n\nBest regards,\nTetrahedron Team`;
-    const userHtml = `<p>Dear ${name},</p><p>Thank you for reaching out to us. We have received your message and will get back to you soon.</p>${budget ? `<p><strong>Estimated Budget:</strong> ${budget}</p>` : ''}${timeline ? `<p><strong>Project Lead Time:</strong> ${timeline}</p>` : ''}<p><strong>Your message:</strong><br/>${requirements}</p><p>Best regards,<br/>Tetrahedron Team</p>`;
+    const userText = `Dear ${name},\n\nThank you for reaching out to us. We have received your message and will get back to you soon.\n\nYour message:\n${requirements}\n\nBest regards,\nTetrahedron Team`;
+    const userHtml = `<p>Dear ${name},</p><p>Thank you for reaching out to us. We have received your message and will get back to you soon.</p><p><strong>Your message:</strong><br/>${requirements}</p><p>Best regards,<br/>Tetrahedron Team</p>`;
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,

@@ -18,7 +18,6 @@ import {
 import * as Icons from "lucide-react";
 import ContactFormModal from "@/components/ContactFormModal";
 import ContactForm from "@/components/ContactForm";
-import DojoContactForm from "@/components/DojoContactForm";
 import { renderRichText } from "@/lib/richTextRenderer";
 
 // Internal CSS styles (keep the styles object as it is)
@@ -580,15 +579,6 @@ export default function ServiceOrBlogPage({ params }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalButtonText, setModalButtonText] = useState("");
 
-  const isDojoPage = useMemo(() => {
-    const slugStr = (params?.slug || "").toLowerCase();
-    return (
-      slugStr.includes("dojo") ||
-      slugStr === "ergonomics-and-workplace-design" ||
-      slugStr === "augmented-reality-virtual-reality"
-    );
-  }, [params?.slug]);
-
   // Improved fallback logic
   const getFallbackData = (slug) => {
     // console.log("🔍 Checking fallback data for slug:", slug);
@@ -812,18 +802,28 @@ export default function ServiceOrBlogPage({ params }) {
 
   // Helper to render a standard CTA button with modal functionality
   const renderCtaButton = (text, href = "#") => (
-    <button
-      type="button"
-      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white font-bold py-3.5 px-8 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 cursor-pointer border-0 text-base"
+    <a
+      href={href}
+      className="btn"
+      style={styles.ctaButton}
+      onMouseEnter={(e) =>
+        Object.assign(
+          e.currentTarget.style,
+          styles.ctaButton,
+          styles.ctaButtonHover
+        )
+      }
+      onMouseLeave={(e) =>
+        Object.assign(e.currentTarget.style, styles.ctaButton)
+      }
       onClick={(e) => {
         e.preventDefault();
-        setModalButtonText(text || "Schedule a free consultation");
+        setModalButtonText(text || "Learn More");
         setModalOpen(true);
       }}
     >
-      <span>{text || "Schedule a free consultation"}</span>
-      <Icons.ArrowRight size={18} />
-    </button>
+      {text || "Learn More"}
+    </a>
   );
 
   // Helper to check if an array is non-empty
@@ -930,7 +930,6 @@ export default function ServiceOrBlogPage({ params }) {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         buttonText={modalButtonText}
-        isDojo={isDojoPage}
       />
       {/* Banner Section */}
       {data.heroLayout === "split" ? (() => {
@@ -1001,17 +1000,12 @@ export default function ServiceOrBlogPage({ params }) {
               )}
 
               {/* Contact Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  setModalButtonText("Schedule a free consultation");
-                  setModalOpen(true);
-                }}
-                className="mt-6 bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white py-3.5 px-7 rounded-xl text-base lg:text-lg font-bold shadow-lg shadow-orange-500/25 transition-all inline-flex items-center gap-2 cursor-pointer border-0 w-fit"
+              <a
+                href="/contact-us"
+                className="mt-6 bg-[#007BFF] text-white py-3 px-6 rounded-lg text-lg lg:text-xl no-underline inline-block w-fit transition-all shadow-md hover:bg-[#0056b3]"
               >
-                <span>Schedule a free consultation</span>
-                <Icons.ArrowRight size={20} />
-              </button>
+                Start Your Journey
+              </a>
             </div>
 
             {/* Right Content Section - Contact Form */}
@@ -1019,22 +1013,13 @@ export default function ServiceOrBlogPage({ params }) {
               <div
                 style={{
                   width: "100%",
-                  maxWidth: isDojoPage ? 480 : 400,
+                  maxWidth: 400,
                   background: "rgba(255,255,255,0.97)",
                   borderRadius: 16,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
                 }}
               >
-                {isDojoPage ? (
-                  <DojoContactForm
-                    buttonText="Schedule a free consultation"
-                    title="Get In Touch"
-                    subtitle="Share your requirements to receive a custom Dojo pricing & project lead time estimate."
-                    badge="DOJO SETUP & CONSULTATION"
-                  />
-                ) : (
-                  <ContactForm buttonText="Contact Us" />
-                )}
+                <ContactForm buttonText="Contact Us" />
               </div>
             </div>
           </div>
@@ -1146,7 +1131,7 @@ export default function ServiceOrBlogPage({ params }) {
                     {renderParagraphs(data.whyChoose.subText)}
                   </div>
                   {renderCtaButton(
-                    data.whyChoose.buttonText || (isDojoPage ? "Schedule a free consultation" : "Book a Consultation")
+                    data.whyChoose.buttonText || "Book a Consultation"
                   )}
                 </section>
               )}
@@ -1835,13 +1820,13 @@ export default function ServiceOrBlogPage({ params }) {
                       <button
                         type="button"
                         onClick={() => {
-                          setModalButtonText("Schedule a free consultation");
+                          setModalButtonText("Book a Consultation");
                           setModalOpen(true);
                         }}
                         style={{ fontSize: "13.5px" }}
                         className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF5E14] via-[#ff6a1a] to-[#ff7a29] hover:from-[#e04d00] hover:to-[#FF5E14] text-white text-[13.5px] font-bold px-5 py-3 shadow-[0_4px_14px_rgba(255,94,20,0.3)] hover:shadow-[0_6px_20px_rgba(255,94,20,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 whitespace-nowrap cursor-pointer border-0 leading-tight shrink-0"
                       >
-                        <span>Schedule a free consultation</span>
+                        <span>Book a Consultation</span>
                         <Icons.ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </button>
                     </div>

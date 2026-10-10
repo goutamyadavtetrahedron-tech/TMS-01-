@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 import Layout from "@/components/layout/Layout"
 import Banner from "@/components/home/Banner"
@@ -26,6 +28,11 @@ export default function Home() {
     const [modal, setModal] = useState({ open: false, message: '', success: false });
 
     useEffect(() => {
+        // Disable auto-popup form in development mode (npm run dev)
+        if (process.env.NODE_ENV === "development") {
+            return;
+        }
+
         const checkFormVisibility = () => {
             const lastClosed = localStorage.getItem("leadFormClosed")
             if (!lastClosed || Date.now() - Number(lastClosed) > 120000) {
@@ -56,23 +63,65 @@ export default function Home() {
     return (
         <Layout>
             <Banner />
-            <div style={{ zoom: '80%' }}>
+            <div className="w-full">
                 <About />
                 <Business />
                 <Services />
                 <Awards />
                 <Testimonial />
-                <div className="container text-center my-24">
-                    <h2 className="section-title__title">
-                        Trusted By Leading Brands
-                    </h2>
-                    <div className="border-amber-600 mt-8">
-                        <img
-                            src="/assets/images/home_client.jpeg"
-                            alt="Clients"
-                            className="border-amber-200"
-                        />
-                    </div></div>
+                
+                {/* Trusted By Leading Brands Section with Harmonized Typography & Blue Hover Effect */}
+                <section className="relative w-full bg-white py-12 sm:py-16 lg:py-20 overflow-hidden">
+                    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 text-center">
+                        
+                        {/* Section Header */}
+                        <div className="mb-6 sm:mb-8">
+                            <div className="flex items-center justify-center gap-2 mb-2 sm:mb-2.5">
+                                <span className="w-6 h-[2.5px] bg-[#ff5e14] rounded-full" />
+                                <span className="text-xs sm:text-sm font-bold tracking-[0.16em] text-[#ff5e14] uppercase">
+                                    OUR VALUED CLIENTELE
+                                </span>
+                                <span className="w-6 h-[2.5px] bg-[#ff5e14] rounded-full" />
+                            </div>
+                            <h2 
+                                className="text-xl sm:text-2xl lg:text-[28px] font-bold text-[#0a1c4c] tracking-tight m-0"
+                                style={{ fontFamily: "var(--font-poppins, 'Poppins', sans-serif)", fontWeight: 700 }}
+                            >
+                                Trusted By Leading Brands
+                            </h2>
+                            <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mt-2">
+                                Empowering 280+ top manufacturing organizations across 20+ diverse industry sectors in India.
+                            </p>
+                        </div>
+
+                        {/* Interactive Client Showcase Card with Blue Hover UI/UX Effect */}
+                        <div className="group relative bg-white rounded-2xl border-2 border-slate-200/90 hover:border-blue-500 p-4 sm:p-6 lg:p-8 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300">
+                            {/* Blue Accent Glow Bar on top */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-1/3 h-[3px] bg-gradient-to-r from-blue-500 to-[#0a1c4c] rounded-full transition-all duration-500" />
+                            
+                            <img
+                                src="/assets/images/home_client.jpeg"
+                                alt="Trusted By Leading Brands - Hero, L&T, Hindalco, Carrier, and 280+ Enterprise Clients"
+                                className="w-full h-auto object-contain mx-auto rounded-xl transition-transform duration-300 group-hover:scale-[1.008]"
+                            />
+
+                            {/* Blue UI/UX Hover Action Bar */}
+                            <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-left">
+                                <span className="text-xs sm:text-sm text-slate-500">
+                                    Partnering with <strong className="text-slate-800 font-semibold">280+ manufacturing plants</strong> nationwide.
+                                </span>
+                                <Link 
+                                    href="/our-clients/"
+                                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 group-hover:text-blue-600 transition-colors"
+                                >
+                                    <span>Explore Client Case Studies</span>
+                                    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                                </Link>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
 
             </div>
 

@@ -36,7 +36,7 @@ const swiperOptions = {
     loop: true,
     centeredSlides: true,
     autoplay: {
-        delay: 2500,
+        delay: 3000,
         disableOnInteraction: false,
     },
     navigation: {
@@ -49,16 +49,20 @@ const swiperOptions = {
     },
     breakpoints: {
       0: {
-        slidesPerView: 1.5,
-        spaceBetween: 20,
+        slidesPerView: 1.2,
+        spaceBetween: 16,
       },
-      768: {
-        slidesPerView: 3,
-        spaceBetween: 20,
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 22,
       },
       1024: {
-        slidesPerView: 5,
-        spaceBetween: 30,
+        slidesPerView: 2.8,
+        spaceBetween: 28,
+      },
+      1280: {
+        slidesPerView: 3.2,
+        spaceBetween: 32,
       }
     }
 };
@@ -66,31 +70,32 @@ const swiperOptions = {
 // Common styles
 const containerStyles = {
   width: "100%",
-  maxWidth: "1200px",
+  maxWidth: "1360px",
   margin: "0 auto",
-  padding: "0 20px"
+  padding: "0 24px"
 };
 
 const cardContainerStyles = {
-  padding: '10px',
+  padding: '12px 6px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   background: 'transparent',
   position: 'relative',
   zIndex: '1',
+  width: '100%',
 };
 
 const cardStyles = {
   background: '#fff',
-  boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)',
-  transition: 'transform .4s cubic-bezier(.4,2,.6,1), box-shadow .4s',
+  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+  transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
   width: '100%',
-  maxWidth: '320px',
+  maxWidth: '440px',
   cursor: 'pointer',
   position: 'relative',
-  borderRadius: '12px',
-  border: '4px solid orange',
+  borderRadius: '16px',
+  border: '2px solid rgba(255, 122, 56, 0.35)',
   zIndex: '120',
   overflow: 'hidden'
 };
@@ -99,7 +104,7 @@ const imageStyles = {
   width: '100%',
   height: 'auto',
   display: 'block',
-  transition: 'transform .4s',
+  transition: 'transform 0.4s ease',
 };
 
 const lightboxStyles = {
@@ -108,7 +113,7 @@ const lightboxStyles = {
   left: 0,
   right: 0,
   bottom: 0,
-  background: 'rgba(0,0,0,0.9)',
+  background: 'rgba(0,0,0,0.92)',
   zIndex: 99999,
   display: 'flex',
   alignItems: 'center',
@@ -123,7 +128,7 @@ const lightboxImageStyles = {
   maxWidth: '90vw',
   objectFit: 'contain',
   borderRadius: '16px',
-  boxShadow: '0 0 40px 8px rgba(0,0,0,0.8)',
+  boxShadow: '0 0 50px 10px rgba(0,0,0,0.85)',
   background: '#fff',
   zIndex: 100000,
   cursor: 'default',
@@ -155,14 +160,16 @@ const closeButtonStyles = {
 // Award Card Component
 const AwardCard = ({ award, index, onImageClick }) => {
   const handleMouseEnter = (e) => {
-    e.currentTarget.style.transform = 'scale(1.05)';
-    e.currentTarget.style.boxShadow = '0 0 24px 4px orange';
+    e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)';
+    e.currentTarget.style.boxShadow = '0 18px 40px rgba(255, 94, 20, 0.22)';
+    e.currentTarget.style.borderColor = '#ff5e14';
     e.currentTarget.style.zIndex = '9999';
   };
 
   const handleMouseLeave = (e) => {
-    e.currentTarget.style.transform = 'scale(1)';
-    e.currentTarget.style.boxShadow = '0 2px 12px 0 rgba(0,0,0,0.06)';
+    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+    e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.08)';
+    e.currentTarget.style.borderColor = 'rgba(255, 122, 56, 0.35)';
     e.currentTarget.style.zIndex = '120';
   };
 
@@ -173,16 +180,22 @@ const AwardCard = ({ award, index, onImageClick }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => onImageClick(award.image)}
+        className="group relative"
       >
         <Image
           src={award.image}
           alt={award.alt}
-          width={400}
-          height={500}
+          width={600}
+          height={800}
           style={imageStyles}
-          priority={index < 5}
-          loading={index < 5 ? undefined : "eager"}
+          priority={index < 4}
+          loading={index < 4 ? undefined : "lazy"}
         />
+        
+        {/* Click to Enlarge Hover Pill */}
+        <div className="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-md">
+          <span>Click to Enlarge</span>
+        </div>
       </div>
     </div>
   );
@@ -204,8 +217,8 @@ const Lightbox = ({ imageSrc, onClose }) => {
 
   const handleCloseButtonHover = (e, isHover) => {
     if (isHover) {
-        e.target.style.background = 'rgba(0,0,0,0.9)';
-        e.target.style.transform = 'scale(1.05)';
+        e.target.style.background = 'rgba(0,0,0,0.95)';
+        e.target.style.transform = 'scale(1.08)';
     } else {
         e.target.style.background = 'rgba(0,0,0,0.8)';
         e.target.style.transform = 'scale(1)';
@@ -217,8 +230,8 @@ const Lightbox = ({ imageSrc, onClose }) => {
       <Image
         src={imageSrc}
         alt="Award Preview"
-        width={1200}
-        height={1200}
+        width={1400}
+        height={1400}
         onClick={e => e.stopPropagation()}
         style={lightboxImageStyles}
       />
@@ -273,8 +286,8 @@ export default function Awards() {
     <>
       <style jsx global>{`
         .awards-carousel .swiper-slide {
-          opacity: 0.4;
-          transition: opacity 0.4s ease;
+          opacity: 0.5;
+          transition: opacity 0.4s ease, transform 0.4s ease;
         }
         @media (max-width: 767px) {
           .awards-carousel .swiper-slide-active {
@@ -282,7 +295,8 @@ export default function Awards() {
           }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
-          .awards-carousel .swiper-slide-active {
+          .awards-carousel .swiper-slide-active,
+          .awards-carousel .swiper-slide-next {
             opacity: 1;
           }
         }
@@ -293,6 +307,14 @@ export default function Awards() {
             opacity: 1;
           }
         }
+        @media (min-width: 1280px) {
+          .awards-carousel .swiper-slide-active,
+          .awards-carousel .swiper-slide-prev,
+          .awards-carousel .swiper-slide-next,
+          .awards-carousel .swiper-slide-next + .swiper-slide {
+            opacity: 0.95;
+          }
+        }
       `}</style>
 
       {/* Lightbox Overlay */}
@@ -301,11 +323,22 @@ export default function Awards() {
       )}
 
       {/* Project Two Start */}
-      <section className="project-two" style={{ width: '100%', margin: '0 auto', overflow: 'hidden' }}>
+      <section 
+        className="project-two" 
+        style={{ 
+          width: '100%', 
+          margin: '0 auto', 
+          overflow: 'hidden',
+          paddingTop: '60px',
+          paddingBottom: '70px',
+          backgroundColor: '#fff',
+          fontFamily: "var(--font-poppins, 'Poppins', sans-serif)"
+        }}
+      >
         <div className="container" style={containerStyles}>
 
           {/* Centered Tagline Above Awards Section */}
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 10 }}>
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 16 }}>
             <div
               className="section-title__tagline"
               style={{
@@ -313,7 +346,7 @@ export default function Awards() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '30px',
+                fontSize: '28px',
                 color: '#ff5e14',
                 fontWeight: '700',
                 marginBottom: '10px',
@@ -331,15 +364,32 @@ export default function Awards() {
                   pointerEvents: 'none'
                 }}
               >
-                {/* Blue left arrow */}
+                {/* Left Arrow Button */}
                 <div className="swiper-button-prev1 h1p" 
                   style={{ 
                     pointerEvents: 'auto',
                     cursor: 'pointer',
-                    zIndex: 10
+                    zIndex: 10,
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f1f5f9',
+                    color: '#0a1c4c',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#ff5e14';
+                    e.currentTarget.style.color = '#fff';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f1f5f9';
+                    e.currentTarget.style.color = '#0a1c4c';
                   }}
                 >
-                  <i className="icon-arrow-left" style={{ fontSize: '24px' }}></i>
+                  <i className="icon-arrow-left" style={{ fontSize: '20px' }}></i>
                 </div>
               </div>
               
@@ -358,15 +408,32 @@ export default function Awards() {
                   pointerEvents: 'none'
                 }}
               >
-                {/* Blue right arrow */}
+                {/* Right Arrow Button */}
                 <div className="swiper-button-next1 h1n" 
                   style={{ 
                     pointerEvents: 'auto',
                     cursor: 'pointer',
-                    zIndex: 10
+                    zIndex: 10,
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f1f5f9',
+                    color: '#0a1c4c',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#ff5e14';
+                    e.currentTarget.style.color = '#fff';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f1f5f9';
+                    e.currentTarget.style.color = '#0a1c4c';
                   }}
                 >
-                  <i className="icon-arrow-right" style={{ fontSize: '24px' }}></i>
+                  <i className="icon-arrow-right" style={{ fontSize: '20px' }}></i>
                 </div>
               </div>
             </div>
@@ -378,16 +445,27 @@ export default function Awards() {
                 width: '100%',
                 maxWidth: '1200px',
                 fontSize: '40px',
-                fontWeight: '700',
+                fontWeight: '800',
+                fontFamily: "var(--font-poppins, 'Poppins', sans-serif)",
                 color: '#0a1c4c',
                 margin: '0',
+                letterSpacing: '-0.02em',
               }}
             >
               Awards & Recognition
             </h2>
+            <p style={{
+              textAlign: 'center',
+              color: '#64748b',
+              fontSize: '16px',
+              marginTop: '10px',
+              maxWidth: '680px',
+            }}>
+              Honored by premier industrial bodies, manufacturing forums, and clients across India for sustained excellence in manufacturing transformation.
+            </p>
           </div>
 
-          <div className="project-two__bottom" style={{ marginTop: "30px", width: "100%" }}>
+          <div className="project-two__bottom" style={{ marginTop: "32px", width: "100%" }}>
             <Swiper {...swiperOptions} className="thm-swiper__slider swiper-container awards-carousel">
               {awardsData.map((award, index) => (
                 <SwiperSlide key={award.id}>
