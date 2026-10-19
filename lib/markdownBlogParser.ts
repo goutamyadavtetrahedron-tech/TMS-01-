@@ -66,8 +66,48 @@ export function parseMarkdownBlog(markdown: string): ParsedBlogArticle {
     };
   }
 
-  const rawLines = markdown.split(/\r?\n/);
   const totalWords = markdown.trim().split(/\s+/).filter(Boolean).length;
+
+  // Support parsing direct JSON article payload if user pastes JSON
+  const trimmedInput = markdown.trim();
+  if (trimmedInput.startsWith('{')) {
+    try {
+      const parsedJson = JSON.parse(trimmedInput);
+      const jTitle = parsedJson.title || '';
+      const jSlug = parsedJson.slug || generateSlug(jTitle);
+      const jCategory = parsedJson.category || '';
+      const jFocusKeyword = parsedJson.focusKeyword || '';
+      const jMetaDescription = parsedJson.metaDescription || '';
+      const rawSections = Array.isArray(parsedJson.sections) ? parsedJson.sections : [];
+
+      const parsedSections: ParsedChapter[] = rawSections.map((sec: any, idx: number) => {
+        const heading = sec.heading || `Chapter #${idx + 1}`;
+        let content = '';
+        if (Array.isArray(sec.content)) {
+          content = sec.content.join('\n\n');
+        } else if (typeof sec.content === 'string') {
+          content = sec.content;
+        }
+        return { heading, content };
+      });
+
+      if (jTitle && parsedSections.length > 0) {
+        return {
+          title: jTitle,
+          slug: jSlug,
+          category: jCategory,
+          focusKeyword: jFocusKeyword,
+          metaDescription: jMetaDescription,
+          sections: parsedSections,
+          rawWordCount: totalWords,
+        };
+      }
+    } catch (e) {
+      // Fall through to markdown parsing if not valid JSON
+    }
+  }
+
+  const rawLines = markdown.split(/\r?\n/);
 
   let title = '';
   let category = '';

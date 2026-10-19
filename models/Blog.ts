@@ -108,8 +108,9 @@ const blogSchema = new Schema<IBlog, BlogModel>({
 blogSchema.pre('save', function(next) {
   if (!this.isModified('sections')) return next();
 
-  const totalWords = this.sections.reduce((total, section) => {
-    const sectionWords = section.content.reduce((sectionTotal, content) => {
+  const totalWords = (this.sections || []).reduce((total, section) => {
+    const sectionWords = (section.content || []).reduce((sectionTotal, content) => {
+      if (typeof content !== 'string') return sectionTotal;
       return sectionTotal + content.split(' ').length;
     }, 0);
     return total + sectionWords;

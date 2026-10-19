@@ -515,6 +515,10 @@ Before selecting a material transport platform, evaluate your plant floor stabil
   };
 
   const handleSectionImage = (idx: number, file: File | null) => {
+    if (file && !file.type.startsWith('image/')) {
+      showToast('error', `❌ "${file.name}" is not an image file (${file.type || 'unknown'}). Please choose a JPG, PNG, or WebP graphic.`);
+      return;
+    }
     setIsDirty(true);
     setSections(prev =>
       prev.map((sec, i) =>
@@ -745,6 +749,29 @@ Before selecting a material transport platform, evaluate your plant floor stabil
     setIsSubmitting(true);
 
     try {
+      // 1. Client-side file type validation to prevent uploading non-image files to Cloudinary
+      if (mainImage && !mainImage.type.startsWith('image/')) {
+        const ext = mainImage.name ? mainImage.name.split('.').pop() : 'unknown';
+        showToast(
+          'error',
+          `❌ Invalid cover image: "${mainImage.name}" is a .${ext} file, not an image. Please click "Remove Banner" and upload a valid JPG, PNG, or WebP image.`
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
+      for (let idx = 0; idx < sections.length; idx++) {
+        const sec = sections[idx];
+        if (sec.image && !sec.image.type.startsWith('image/')) {
+          showToast(
+            'error',
+            `❌ Invalid Chapter #${idx + 1} graphic: "${sec.image.name}" is not a valid image file. Please remove or replace it with a JPG/PNG/WebP.`
+          );
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const formData = new FormData();
       const blogData = {
         title: title.trim(),
@@ -799,8 +826,21 @@ Before selecting a material transport platform, evaluate your plant floor stabil
         router.push('/dashboard/admin');
       }, 1200);
     } catch (err: any) {
-      console.error('Submit error:', err);
-      showToast('error', err.message || 'Failed to save blog post.');
+      const detailedMessage =
+        err?.message ||
+        (typeof err === 'string' ? err : null) ||
+        err?.error ||
+        err?.details ||
+        'Failed to save blog post.';
+
+      console.error('❌ [BlogEditorStudio] Blog submission failed:', {
+        message: detailedMessage,
+        status: err?.status,
+        details: err?.details,
+        rawError: err,
+      });
+
+      showToast('error', detailedMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -1337,6 +1377,21 @@ Before selecting a material transport platform, evaluate your plant floor stabil
                       <span>{mainImage ? `${(mainImage.size / 1024).toFixed(1)} KB` : 'Hosted on Cloudinary'}</span>
                     </div>
 
+                    {mainImage && !mainImage.type.startsWith('image/') && (
+                      <div style={{
+                        background: '#fef2f2',
+                        border: '1px solid #fecaca',
+                        borderRadius: 6,
+                        padding: '8px 10px',
+                        marginTop: 10,
+                        fontSize: 12,
+                        color: '#b91c1c',
+                        lineHeight: 1.4
+                      }}>
+                        ⚠️ <strong>Invalid File Type:</strong> "{mainImage.name}" is not an image file (type: {mainImage.type || 'unknown'}). Please click <strong>"Remove Banner"</strong> below and upload a JPG, PNG, or WebP image.
+                      </div>
+                    )}
+
                     <div className="studio-field" style={{ marginTop: 8 }}>
                       <label className="studio-label-sm">Image Alt Text (SEO & Google Image Search)</label>
                       <input
@@ -1393,6 +1448,14 @@ Before selecting a material transport platform, evaluate your plant floor stabil
                       onChange={e => {
                         if (e.target.files && e.target.files[0]) {
                           const file = e.target.files[0];
+                          if (!file.type.startsWith('image/')) {
+                            showToast(
+                              'error',
+                              `❌ "${file.name}" is not an image file (${file.type || 'unknown'}). Please choose a JPG, PNG, or WebP image.`
+                            );
+                            e.target.value = '';
+                            return;
+                          }
                           setMainImage(file);
                           setMainImagePreview(URL.createObjectURL(file));
                           setIsDirty(true);

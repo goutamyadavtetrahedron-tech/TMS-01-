@@ -44,6 +44,20 @@ export async function GET(
   }
 }
 
+function isCloudinaryConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  );
+}
+
+function isImageFile(file: File): boolean {
+  if (file.type && file.type.startsWith('image/')) return true;
+  const ext = file.name ? file.name.split('.').pop()?.toLowerCase() : '';
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'avif'].includes(ext || '');
+}
+
 // PUT update blog by id
 export async function PUT(
   req: Request,
@@ -54,32 +68,89 @@ export async function PUT(
 
     const { id } = await params;
     const formData = await req.formData();
-    const blogData = JSON.parse(formData.get('blogData') as string) || JSON.parse(formData.get('json') as string);
+    const blogDataRaw = formData.get('blogData') || formData.get('json');
+
+    if (!blogDataRaw) {
+      return NextResponse.json(
+        { success: false, message: 'Missing blog payload to update.', error: 'MISSING_DATA' },
+        { status: 400 }
+      );
+    }
+
+    let blogData: any;
+    try {
+      blogData = typeof blogDataRaw === 'string' ? JSON.parse(blogDataRaw) : blogDataRaw;
+    } catch (parseError: any) {
+      return NextResponse.json(
+        { success: false, message: `Malformed JSON in update payload: ${parseError.message}`, error: 'INVALID_JSON' },
+        { status: 400 }
+      );
+    }
 
     const blog = await Blog.findById(id);
     if (!blog) {
       return NextResponse.json(
-        { success: false, message: 'Blog not found' },
+        { success: false, message: `Blog with ID "${id}" not found.`, error: 'NOT_FOUND' },
         { status: 404 }
       );
+    }
+
+    // Check if new slug conflicts with another existing blog
+    if (blogData.slug && blogData.slug !== blog.slug) {
+      const duplicate = await Blog.findOne({ slug: blogData.slug, _id: { $ne: id } });
+      if (duplicate) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `A blog with the slug "${blogData.slug}" already exists. Please choose a different URL slug.`,
+            error: 'DUPLICATE_SLUG'
+          },
+          { status: 409 }
+        );
+      }
     }
 
     // Handle main image update (file or string)
     const mainImage = formData.get('mainImage') || formData.get('mainImageUrl');
     if (mainImage) {
-      // Delete old image if exists
-      if (blog.image?.publicId) {
-        await cloudinary.uploader.destroy(blog.image.publicId);
-      }
-
       if (typeof mainImage === 'string') {
-        // If it's a string, assume it's a URL or already uploaded image
         blogData.image = {
           url: mainImage,
-          publicId: '', // You may want to handle publicId if available
-          alt: blogData.imageAlt || blogData.title
+          publicId: '',
+          alt: blogData.imageAlt || blogData.title || ''
         };
       } else if (mainImage instanceof File) {
+        if (!isImageFile(mainImage)) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: `Invalid Featured Cover Image: "${mainImage.name}" is not an image file. Please upload a JPG, PNG, or WebP image.`,
+              error: 'INVALID_IMAGE_FILE_TYPE'
+            },
+            { status: 400 }
+          );
+        }
+
+        if (!isCloudinaryConfigured()) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: `Cannot upload cover image "${mainImage.name}": Cloudinary credentials are not configured in .env.local.`,
+              error: 'CLOUDINARY_NOT_CONFIGURED'
+            },
+            { status: 500 }
+          );
+        }
+
+        // Delete old image if exists
+        if (blog.image?.publicId) {
+          try {
+            await cloudinary.uploader.destroy(blog.image.publicId);
+          } catch (delErr) {
+            console.warn('Could not delete old Cloudinary image:', delErr);
+          }
+        }
+
         const bytes = await mainImage.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
@@ -89,44 +160,75 @@ export async function PUT(
               folder: 'blog_uploads',
               transformation: [{ width: 1200, height: 800, crop: 'limit', quality: 'auto' }]
             },
-            (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
+            (err, result) => {
+              if (err) {
+                console.error('❌ Cloudinary stream upload error for cover image:', err);
+                reject(err);
+              } else {
+                resolve(result);
+              }
             }
           ).end(buffer);
+        }).catch((err: any) => {
+          throw new Error(`Cloudinary upload failed for cover image "${mainImage.name}": ${err?.message || JSON.stringify(err)}`);
         });
 
         blogData.image = {
           url: (uploadResult as any).secure_url,
           publicId: (uploadResult as any).public_id,
-          alt: blogData.imageAlt || blogData.title
+          alt: blogData.imageAlt || blogData.title || ''
         };
       }
     }
 
-    // Handle section images (file or string) for each section, similar to POST in /api/blogs/route.ts
+    // Handle section images (file or string) for each section
     if (Array.isArray(blogData.sections)) {
       for (let i = 0; i < blogData.sections.length; i++) {
         const sectionImage = formData.get(`sectionImage_${i}`) || formData.get(`sectionImageUrl_${i}`);
         if (sectionImage) {
-          // Delete old section image if exists
-          if (
-            blog.sections &&
-            blog.sections[i] &&
-            blog.sections[i].image &&
-            blog.sections[i].image.publicId
-          ) {
-            await cloudinary.uploader.destroy(blog.sections[i].image.publicId);
-          }
-
           if (typeof sectionImage === 'string') {
-            // If it's a string, assume it's a URL or already uploaded image
             blogData.sections[i].image = {
               url: sectionImage,
-              publicId: '', // You may want to handle publicId if available
-              alt: blogData.sections[i].heading
+              publicId: '',
+              alt: blogData.sections[i].heading || ''
             };
           } else if (sectionImage instanceof File) {
+            if (!isImageFile(sectionImage)) {
+              return NextResponse.json(
+                {
+                  success: false,
+                  message: `Invalid graphic for Chapter #${i + 1}: "${sectionImage.name}" is not an image file.`,
+                  error: 'INVALID_IMAGE_FILE_TYPE'
+                },
+                { status: 400 }
+              );
+            }
+
+            if (!isCloudinaryConfigured()) {
+              return NextResponse.json(
+                {
+                  success: false,
+                  message: `Cannot upload Chapter #${i + 1} graphic: Cloudinary credentials are not configured in .env.local.`,
+                  error: 'CLOUDINARY_NOT_CONFIGURED'
+                },
+                { status: 500 }
+              );
+            }
+
+            // Delete old section image if exists
+            if (
+              blog.sections &&
+              blog.sections[i] &&
+              blog.sections[i].image &&
+              blog.sections[i].image.publicId
+            ) {
+              try {
+                await cloudinary.uploader.destroy(blog.sections[i].image.publicId);
+              } catch (delErr) {
+                console.warn('Could not delete old section image:', delErr);
+              }
+            }
+
             const bytes = await sectionImage.arrayBuffer();
             const buffer = Buffer.from(bytes);
 
@@ -136,17 +238,23 @@ export async function PUT(
                   folder: 'blog_uploads/sections',
                   transformation: [{ width: 800, height: 600, crop: 'limit', quality: 'auto' }]
                 },
-                (error, result) => {
-                  if (error) reject(error);
-                  else resolve(result);
+                (err, result) => {
+                  if (err) {
+                    console.error(`❌ Cloudinary error for Chapter #${i + 1}:`, err);
+                    reject(err);
+                  } else {
+                    resolve(result);
+                  }
                 }
               ).end(buffer);
+            }).catch((err: any) => {
+              throw new Error(`Cloudinary upload failed for Chapter #${i + 1} graphic "${sectionImage.name}": ${err?.message || JSON.stringify(err)}`);
             });
 
             blogData.sections[i].image = {
               url: (uploadResult as any).secure_url,
               publicId: (uploadResult as any).public_id,
-              alt: blogData.sections[i].heading
+              alt: blogData.sections[i].heading || ''
             };
           }
         }
@@ -164,10 +272,33 @@ export async function PUT(
       message: 'Blog updated successfully',
       data: updatedBlog
     });
-  } catch (error) {
-    console.error('Error updating blog:', error);
+  } catch (error: any) {
+    console.error('❌ [PUT /api/blogs/[id]] Error updating blog:', {
+      message: error?.message,
+      name: error?.name,
+      code: error?.code,
+      stack: error?.stack
+    });
+
+    if (error?.code === 11000) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Duplicate entry error: An article with this slug already exists. Please choose a different slug.`,
+          error: 'DUPLICATE_KEY',
+          details: error.message
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
-      { success: false, message: 'Error updating blog' },
+      {
+        success: false,
+        message: error?.message || 'Error updating blog',
+        error: error?.message || 'Unknown server error',
+        details: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      },
       { status: 500 }
     );
   }

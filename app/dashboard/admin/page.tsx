@@ -2355,8 +2355,9 @@ export default function AdminBlogDashboard() {
         dispatch(fetchBlogs({}));
         showToast('success', 'Blog created successfully');
       }
-    } catch (err) {
-      showToast('error', 'Failed to create blog');
+    } catch (err: any) {
+      console.error('❌ [AdminDashboard] Failed to create blog:', err);
+      showToast('error', err?.message || 'Failed to create blog');
     }
     setFormLoading(false);
   };
@@ -2370,8 +2371,9 @@ export default function AdminBlogDashboard() {
       setEditBlog(null);
       dispatch(fetchBlogs({}));
       showToast('success', 'Blog updated successfully');
-    } catch (err) {
-      showToast('error', 'Failed to update blog');
+    } catch (err: any) {
+      console.error('❌ [AdminDashboard] Failed to update blog:', err);
+      showToast('error', err?.message || 'Failed to update blog');
     }
     setFormLoading(false);
   };

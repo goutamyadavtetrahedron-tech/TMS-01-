@@ -78,31 +78,83 @@ export const fetchBlogBySlug = createAsyncThunk(
 
 export const createBlog = createAsyncThunk(
   'blogs/createBlog',
-  async (formData: FormData) => {
-    const response = await fetch('/api/blogs', {
-      method: 'POST',
-      body: formData,
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to create blog');
+  async (formData: FormData, { rejectWithValue }) => {
+    try {
+      const response = await fetch('/api/blogs', {
+        method: 'POST',
+        body: formData,
+      });
+
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        data = { message: `Server returned HTTP ${response.status} ${response.statusText}` };
+      }
+
+      if (!response.ok) {
+        const errorMsg = data?.message || data?.error || `Failed to create blog (HTTP ${response.status})`;
+        console.error('❌ [createBlog] API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          response: data,
+        });
+        return rejectWithValue({
+          message: errorMsg,
+          details: data?.details || data?.error,
+          status: response.status,
+        });
+      }
+
+      return data;
+    } catch (err: any) {
+      console.error('❌ [createBlog] Network or client failure:', err);
+      return rejectWithValue({
+        message: err?.message || 'Network error occurred while creating blog',
+        details: err?.stack,
+      });
     }
-    return response.json();
   }
 );
 
 export const updateBlog = createAsyncThunk(
   'blogs/updateBlog',
-  async ({ id, formData }: { id: string; formData: FormData }) => {
-    const response = await fetch(`/api/blogs/${id}`, {
-      method: 'PUT',
-      body: formData,
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to update blog');
+  async ({ id, formData }: { id: string; formData: FormData }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/blogs/${id}`, {
+        method: 'PUT',
+        body: formData,
+      });
+
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        data = { message: `Server returned HTTP ${response.status} ${response.statusText}` };
+      }
+
+      if (!response.ok) {
+        const errorMsg = data?.message || data?.error || `Failed to update blog (HTTP ${response.status})`;
+        console.error('❌ [updateBlog] API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          response: data,
+        });
+        return rejectWithValue({
+          message: errorMsg,
+          details: data?.details || data?.error,
+          status: response.status,
+        });
+      }
+
+      return data;
+    } catch (err: any) {
+      console.error('❌ [updateBlog] Network or client failure:', err);
+      return rejectWithValue({
+        message: err?.message || `Network error occurred while updating blog (${id})`,
+        details: err?.stack,
+      });
     }
-    return response.json();
   }
 );
 
@@ -260,7 +312,8 @@ const blogSlice = createSlice({
       })
       .addCase(createBlog.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to create blog';
+        const payload = action.payload as any;
+        state.error = payload?.message || action.error.message || 'Failed to create blog';
       })
 
     // Update Blog
@@ -282,7 +335,8 @@ const blogSlice = createSlice({
       })
       .addCase(updateBlog.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to update blog';
+        const payload = action.payload as any;
+        state.error = payload?.message || action.error.message || 'Failed to update blog';
       })
 
     // Delete Blog
