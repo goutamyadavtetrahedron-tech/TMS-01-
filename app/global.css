@@ -38,8 +38,13 @@
     line-height: 1.2 !important;
   }
   
-  /* Global heading styling */
-  h1, h2, h3, h4, h5, h6,
+  /* Global heading styling (exempts modern landing pages) */
+  h1:not(.modern-page h1):not(.modern-page *),
+  h2:not(.modern-page h2):not(.modern-page *),
+  h3:not(.modern-page h3):not(.modern-page *),
+  h4:not(.modern-page h4):not(.modern-page *),
+  h5:not(.modern-page h5):not(.modern-page *),
+  h6:not(.modern-page h6):not(.modern-page *),
   .section-title__title,
   .section-title h1,
   .section-title h2,
@@ -98,7 +103,7 @@
   /* Global body text styling */
   .section-text,
   .content-text,
-  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *) {
+  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *):not(.modern-page p):not(.modern-page *):not(.dojo-page-root p):not(.dojo-page-root *):not(.dojo-modal-root p):not(.dojo-modal-root *) {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--body-text-size);
     line-height: 1.6;
@@ -218,4 +223,79 @@ img.mx-auto {
   margin-right: auto !important;
 }
 
-
+/* ==========================================================================
+   Modern Landing Page Shield (.modern-page)
+   Provides 100% pure Tailwind CSS environment for new landing pages
+   ========================================================================== */
+.modern-page,
+.modern-page * {
+  box-sizing: border-box;
+}
+
+/* Ensure modern page headings follow Tailwind utility classes without user-agent inflation */
+.modern-page h1,
+.modern-page h2,
+.modern-page h3,
+.modern-page h4,
+.modern-page h5,
+.modern-page h6 {
+  margin: 0;
+  font-family: var(--font-poppins, 'Poppins', sans-serif);
+}
+
+/* Ensure buttons in modern pages use inherited font and standard sizing */
+.modern-page button {
+  font-family: inherit;
+}
+
+/* Neutralize Bootstrap Reboot button { border-radius: 0 } reset across modern pages */
+.modern-page button.rounded-full,
+.modern-page a.rounded-full,
+.modern-page .rounded-full,
+.dojo-modal-root button.rounded-full,
+.dojo-modal-root a.rounded-full,
+.dojo-modal-root .rounded-full {
+  border-radius: 9999px !important;
+}
+
+.modern-page button.rounded-3xl,
+.modern-page a.rounded-3xl,
+.modern-page .rounded-3xl,
+.dojo-modal-root .rounded-3xl {
+  border-radius: 1.5rem !important;
+}
+
+.modern-page button.rounded-2xl,
+.modern-page a.rounded-2xl,
+.modern-page .rounded-2xl,
+.dojo-modal-root .rounded-2xl {
+  border-radius: 1rem !important;
+}
+
+.modern-page button.rounded-xl,
+.modern-page a.rounded-xl,
+.modern-page .rounded-xl,
+.dojo-modal-root .rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+.modern-page button.rounded-lg,
+.modern-page a.rounded-lg,
+.modern-page .rounded-lg,
+.dojo-modal-root .rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.modern-page button.rounded-md,
+.modern-page a.rounded-md,
+.modern-page .rounded-md,
+.dojo-modal-root .rounded-md {
+  border-radius: 0.375rem !important;
+}
+
+.modern-page button.rounded,
+.modern-page a.rounded,
+.modern-page .rounded,
+.dojo-modal-root .rounded {
+  border-radius: 0.25rem !important;
+}

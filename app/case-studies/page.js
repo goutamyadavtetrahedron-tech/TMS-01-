@@ -3,7 +3,7 @@ import Image from "next/image";
 import Layout from "@/components/layout/Layout";
 
 // ✅ Static Import for Images to Fix Next.js Issues
-import CS1 from "/public/assets/images/case-studies/CS1.jpg";
+import CS1 from "/public/assets/images/case-studies/CS1-optimized.jpg";
 import CS2 from "/public/assets/images/case-studies/CS2.jpg";
 import CS3 from "/public/assets/images/case-studies/CS3.webp";
 import CS4 from "/public/assets/images/case-studies/CS4.jpg";
