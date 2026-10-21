@@ -84,7 +84,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal, onOpenImage }) {
       consultingModule: "Module: Standardized Work Stations",
       icon: <Wrench className="w-4 h-4" />,
       tagline: "SOP Repetition & Takt-Time Synchronization",
-      image: "/images/blog/dojo-training-1.jpg",
+      image: "/assets/images/dojo-physical-simulation/standardized-workstations.jpg",
       description:
         "Dedicated areas mimicking actual workstations where operators repeatedly practice Standard Operating Procedures (SOPs), high-torque fastening, harness routing, and takt-time pacing until flawless muscle memory is achieved.",
       equipment: [
@@ -102,7 +102,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal, onOpenImage }) {
       consultingModule: "Module: Kaizen & Autonomous Maintenance",
       icon: <Cpu className="w-4 h-4" />,
       tagline: "Hands-On Kaizen & Autonomous Maintenance",
-      image: "/images/blog/dojo-training.jpg",
+      image: "/assets/images/dojo-physical-simulation/kaizen-continuous-improvement.jpg",
       description:
         "Facilitates hands-on practice of small, incremental improvements (Kaizen) and Autonomous Maintenance (Jishu Hozen): pneumatic valve maintenance, sensor alignment, bearing lubrication, and single-piece flow optimization.",
       equipment: [
@@ -120,7 +120,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal, onOpenImage }) {
       consultingModule: "Module: Problem-Solving & Modularity",
       icon: <MonitorCheck className="w-4 h-4" />,
       tagline: "RCA Methodologies & L1–L4 Skill Certification",
-      image: "/images/servicesData/dojoherosection.png",
+      image: "/assets/images/dojo-physical-simulation/problem-solving-digital-assessment.jpg",
       description:
         "Equipped with whiteboards and A3 templates for root cause analysis (5-Why, Fishbone/Ishikawa). Designed with modularity to adapt for evolving training modules, biometric skill evaluation, and real-time competency matrices.",
       equipment: [
