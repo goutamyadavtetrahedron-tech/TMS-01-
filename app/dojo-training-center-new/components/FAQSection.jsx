@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 
 export default function FAQSection() {
   const [openIdx, setOpenIdx] = useState(0);
+  const [showAll, setShowAll] = useState(false);
 
   const faqs = [
     {
@@ -13,7 +14,7 @@ export default function FAQSection() {
     },
     {
       q: "How long does it take to set up and commission a Dojo?",
-      a: "Our standardized execution roadmap delivers a fully commissioned, turnkey Dojo within 8 weeks. This structured process covers on-site diagnostic assessment, 3D CAD spatial layout, custom precision jig fabrication, visual SOP matrix development, and certified Train-the-Trainer (TTT) facilitator handover.",
+      a: "Our standardized execution roadmap delivers a fully commissioned Dojo within 8 weeks. This structured process covers on-site diagnostic assessment, 3D CAD spatial layout, custom precision jig fabrication, visual SOP matrix development, and certified Train-the-Trainer (TTT) facilitator handover.",
     },
     {
       q: "Is a Dojo only for new employees?",
@@ -45,6 +46,8 @@ export default function FAQSection() {
     },
   ];
 
+  const visibleFaqs = showAll ? faqs : faqs.slice(0, 4);
+
   return (
     <section className="py-20 bg-slate-50 border-b border-slate-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,9 +65,9 @@ export default function FAQSection() {
           </p>
         </div>
 
-        {/* Single Clean Accordion List */}
+        {/* Accordion List (Shows 4 by default) */}
         <div className="space-y-3">
-          {faqs.map((f, i) => {
+          {visibleFaqs.map((f, i) => {
             const isOpen = openIdx === i;
             return (
               <div
@@ -95,6 +98,22 @@ export default function FAQSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* View More / Show Less Toggle Button */}
+        <div className="mt-8 text-center">
+          <button
+            type="button"
+            onClick={() => setShowAll(!showAll)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white hover:bg-slate-100 text-[#001730] font-semibold text-xs sm:text-sm border border-slate-300 shadow-xs hover:border-[#ff5722] hover:shadow-sm transition-all cursor-pointer"
+          >
+            <span>{showAll ? "Show Fewer Questions" : `View More FAQs (${faqs.length - 4} More)`}</span>
+            {showAll ? (
+              <ChevronUp className="w-4 h-4 text-[#ff5722]" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-[#ff5722]" />
+            )}
+          </button>
         </div>
       </div>
     </section>

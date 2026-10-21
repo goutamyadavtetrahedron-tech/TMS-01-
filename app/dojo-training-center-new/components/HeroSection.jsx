@@ -28,9 +28,7 @@ export default function HeroSection({ onOpenVideoModal }) {
           <div className="lg:col-span-7 space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-medium text-orange-300">
               <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />
-              <span>Industrial Capability Academy</span>
-              <span className="text-white/30">•</span>
-              <span className="text-white/80">WCM & TPS Benchmark</span>
+              <span>Industrial Training Academy & Simulation Setup</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight leading-tight text-white">
@@ -42,7 +40,7 @@ export default function HeroSection({ onOpenVideoModal }) {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl">
-              Cut blue-collar onboarding by <strong className="text-white font-semibold">80%</strong> and eliminate assembly defects. Tetrahedron engineers, fabricates, and commissions complete 6-zone sensory academies equipped with custom simulation jigs and L1–L4 skill matrices in <strong className="text-white font-semibold">8 weeks</strong>.
+              Cut blue-collar onboarding by <strong className="text-white font-semibold">80%</strong> and eliminate assembly defects with custom simulation jigs, 6-zone experiential learning pods, and L1–L4 skill matrices in <strong className="text-white font-semibold">8 weeks</strong>.
             </p>
 
             {/* High-Craft, Modern Industrial Action Buttons */}
@@ -76,10 +74,8 @@ export default function HeroSection({ onOpenVideoModal }) {
               <span className="text-white/20">•</span>
               <span className="flex items-center gap-1.5 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                CE/OSHA Safety Interlocks
+                Certified Safety Standards
               </span>
-              <span className="text-white/20">•</span>
-              <span className="text-slate-300 font-medium">IATF 16949 & VDA 6.3 Audit Ready</span>
             </div>
           </div>
 
@@ -93,14 +89,14 @@ export default function HeroSection({ onOpenVideoModal }) {
                 className="object-cover"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-              <div className="absolute bottom-4 left-5 right-5 text-white">
-                <span className="inline-block px-3 py-1 rounded-full bg-[#ff5722] text-[10px] font-bold uppercase tracking-wider mb-1.5 shadow-sm">
-                  Complete Setup & Handover
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-5 right-5 text-white flex items-center justify-between">
+                <span className="inline-block px-3 py-1 rounded-full bg-[#ff5722] text-[11px] font-bold uppercase tracking-wider shadow-sm">
+                  Full-Scale Plant Dojo
                 </span>
-                <p className="text-xs sm:text-sm font-medium text-slate-100 leading-snug">
-                  Custom sensory simulation jigs & standardized shopfloor workstations
-                </p>
+                <span className="text-xs text-slate-300 font-medium">
+                  Hands-On Simulation Pods
+                </span>
               </div>
             </div>
           </div>

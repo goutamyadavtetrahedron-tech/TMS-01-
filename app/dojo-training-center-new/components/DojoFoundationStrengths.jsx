@@ -64,85 +64,98 @@ export default function DojoFoundationStrengths({ onOpenVideoModal }) {
     <section className="py-20 bg-slate-50 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Pill & Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100/80 border border-orange-200 text-xs font-semibold text-[#ff5722] mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>The Dojo Philosophy & Industrial Foundation</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001730] tracking-tight leading-tight">
-            Hands-On Skill Development in a{" "}
-            <span className="text-[#ff5722]">Practical Learning Environment</span>
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-xs font-bold uppercase text-[#ff5722] tracking-wider">
+            Practical Learning Environment
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001730] mt-1 tracking-tight">
+            What is a <span className="text-[#ff5722]">Dojo Training Center?</span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-            Bridging the gap between theoretical classroom knowledge and real shopfloor execution through tactile muscle memory and zero-risk simulation.
+          <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Bridging theoretical classroom knowledge and real shopfloor execution through tactile muscle memory and zero-risk simulation.
           </p>
         </div>
 
-        {/* Executive Overview: Origin & Definition Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm mb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left: Origin Context */}
-            <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8">
-              <span className="inline-block px-3 py-1 rounded-md bg-[#001730] text-white text-[11px] font-bold tracking-wider uppercase mb-3">
+        {/* 3 Digestible Concept Cards (Replaces Dense Text Wall) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {/* Card 1: Japanese Origin */}
+          <div className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between hover:border-[#ff5722] hover:shadow-md transition-all">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-[#001730] font-bold text-sm mb-4">
+                道場
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
                 Cultural & Industrial Origin
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#001730] leading-snug">
-                From Japanese Martial Arts to Manufacturing Benchmark
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-2.5">
+                From Martial Arts to Manufacturing
               </h3>
-              <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                The term <strong>&lsquo;Dojo&rsquo; (道場)</strong> originates from Japanese martial arts, signifying a <em>&ldquo;place of immersive learning, disciplined practice, and continuous mastery.&rdquo;</em>
-              </p>
-              <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                In modern world-class manufacturing (TPS / WCM), a Dojo is a dedicated, controlled industrial ecosystem where employees safely practice and master operational tasks, standard operating procedures (SOPs), and defect recognition before touching live production lines.
+              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                ‘Dojo’ signifies a <em>place of immersive, disciplined practice</em>. In TPS &amp; WCM manufacturing, it is a dedicated off-line hub where operators master standard work (SOPs) and defect recognition before touching live lines.
               </p>
             </div>
+            <div className="mt-5 pt-3.5 border-t border-slate-100 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722]" />
+              Controlled, zero-risk practice space
+            </div>
+          </div>
 
-            {/* Right: Why a Dojo is Essential */}
-            <div className="lg:col-span-7 lg:pl-4 space-y-4">
-              <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-orange-50/60 border border-orange-100">
-                <div className="w-9 h-9 rounded-xl bg-[#ff5722] text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                  <Target className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900">
-                    Why Traditional Classroom Training Fails on the Shopfloor
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                    Classrooms rely on PowerPoint slides and theoretical lectures, resulting in over 70% skill drop-off within 48 hours. A Dojo replaces passive listening with <strong>experiential, sensory learning</strong>—allowing operators to feel fastener torque, hear pneumatic valve clicks, and spot micron-level defects in a controlled training pod.
-                  </p>
-                </div>
+          {/* Card 2: Classroom Failure */}
+          <div className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between hover:border-[#ff5722] hover:shadow-md transition-all">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#ff5722] mb-4">
+                <Target className="w-5 h-5" />
               </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff5722] block mb-1">
+                The Practical Shopfloor Problem
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-2.5">
+                Why Classroom Training Fails
+              </h3>
+              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                PowerPoint slides result in over 70% skill drop-off within 48 hours. A Dojo replaces passive listening with <strong>sensory learning</strong>—operators feel fastener torque, hear pneumatic valve clicks, and spot micron-level defects.
+              </p>
+            </div>
+            <div className="mt-5 pt-3.5 border-t border-slate-100 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722]" />
+              Tactile reflexes &amp; muscle memory
+            </div>
+          </div>
 
-              <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-9 h-9 rounded-xl bg-[#001730] text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                  <Layers className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900">
-                    Why Partner with Tetrahedron to Design & Build Your Dojo?
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                    Tetrahedron leverages deep automotive and heavy engineering lean expertise to build customized Dojo ecosystems. We don&apos;t just install hardware—we engineer the complete learning architecture: custom physical rigs, L1–L4 skill progression matrices, and Train-the-Trainer (TTT) facilitator certification.
-                  </p>
-                </div>
+          {/* Card 3: Tetrahedron Advantage */}
+          <div className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between hover:border-[#ff5722] hover:shadow-md transition-all">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white mb-4">
+                <Layers className="w-5 h-5 text-orange-400" />
               </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                Engineering & Execution
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-2.5">
+                The Tetrahedron Ecosystem
+              </h3>
+              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                We engineer the complete capability architecture: custom CE-compliant simulation rigs, bilingual visual SOPs, L1–L4 skill matrices, and certified internal Train-the-Trainer (TTT) facilitators.
+              </p>
+            </div>
+            <div className="mt-5 pt-3.5 border-t border-slate-100 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722]" />
+              End-to-end operational handover
             </div>
           </div>
         </div>
 
         {/* 6 Core Strengths Grid */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#ff5722]">
-                Proven Operational Impact
-              </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#001730] mt-1">
-                Our 6 Core Dojo Strengths
-              </h3>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-md">
-              Each strength is engineered into every custom training rig and curriculum zone we commission.
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#ff5722]">
+              Proven Operational Impact
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#001730] mt-1">
+              Our 6 Core Dojo Strengths
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 leading-relaxed">
+              Each strength is engineered into every custom simulation rig and curriculum zone we commission.
             </p>
           </div>
 

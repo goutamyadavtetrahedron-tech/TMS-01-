@@ -105,35 +105,37 @@ export default function DojoCurriculumMatrix() {
           </p>
         </div>
 
-        {/* Clean, Simple 6-Card Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Clean, Spacious 6-Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skillCategories.map((cat, idx) => {
             const Icon = cat.icon;
             return (
               <div
                 key={idx}
-                className="bg-slate-50/70 rounded-2xl p-5 border border-slate-200 hover:border-[#ff5722] hover:bg-white hover:shadow-sm transition-all"
+                className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 hover:border-[#ff5722] hover:shadow-md transition-all flex flex-col justify-between"
               >
-                <div className="flex items-center gap-3 mb-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center text-[#ff5722] shadow-xs shrink-0">
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <h3 className="text-sm sm:text-[15px] font-bold text-slate-900 leading-snug">
-                    {cat.title}
-                  </h3>
-                </div>
-
-                <p className="text-xs text-slate-600 leading-relaxed mb-3.5">
-                  {cat.desc}
-                </p>
-
-                <div className="space-y-1.5 pt-3 border-t border-slate-200/70">
-                  {cat.skills.map((skill, sIdx) => (
-                    <div key={sIdx} className="flex items-center gap-2 text-xs text-slate-700">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                      <span className="font-medium leading-tight">{skill}</span>
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#ff5722] shadow-xs shrink-0">
+                      <Icon className="w-5 h-5" />
                     </div>
-                  ))}
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                      {cat.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed mb-4">
+                    {cat.desc}
+                  </p>
+
+                  <div className="space-y-2.5 pt-4 border-t border-slate-100">
+                    {cat.skills.map((skill, sIdx) => (
+                      <div key={sIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-800">
+                        <CheckCircle2 className="w-4 h-4 text-[#ff5722] shrink-0 mt-0.5" />
+                        <span className="font-semibold leading-snug">{skill}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             );

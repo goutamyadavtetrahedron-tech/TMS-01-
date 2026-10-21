@@ -11,15 +11,21 @@ import {
   MonitorCheck,
   CheckCircle2,
   Video,
-  Sparkles,
+  ArrowRight,
+  ChevronRight,
+  ChevronLeft,
+  ZoomIn,
 } from "lucide-react";
+import ImageLightboxModal from "./ImageLightboxModal";
 
-export default function SixZonesBlueprint({ onOpenVideoModal }) {
+export default function SixZonesBlueprint({ onOpenVideoModal, onOpenImage }) {
   const [activeZone, setActiveZone] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const zones = [
     {
       number: "Zone 01",
+      shortTitle: "Culture & Visuals",
       title: "Induction, Culture & Visual Management",
       consultingModule: "Module: Visual Management Integration",
       icon: <Compass className="w-4 h-4" />,
@@ -37,6 +43,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
     },
     {
       number: "Zone 02",
+      shortTitle: "Quality & Metrology",
       title: "Quality Assurance Practice & Sensory Calibration",
       consultingModule: "Module: Quality Assurance Practice",
       icon: <Eye className="w-4 h-4" />,
@@ -54,6 +61,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
     },
     {
       number: "Zone 03",
+      shortTitle: "Safety & Danger Dome",
       title: "Safety Simulation & Hazard Danger Dome",
       consultingModule: "Module: Safety Simulation",
       icon: <Shield className="w-4 h-4" />,
@@ -71,6 +79,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
     },
     {
       number: "Zone 04",
+      shortTitle: "Standard Work & Assembly",
       title: "Standardized Work Stations & Assembly",
       consultingModule: "Module: Standardized Work Stations",
       icon: <Wrench className="w-4 h-4" />,
@@ -88,6 +97,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
     },
     {
       number: "Zone 05",
+      shortTitle: "Kaizen & Maintenance",
       title: "Kaizen & Continuous Improvement Area",
       consultingModule: "Module: Kaizen & Autonomous Maintenance",
       icon: <Cpu className="w-4 h-4" />,
@@ -105,6 +115,7 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
     },
     {
       number: "Zone 06",
+      shortTitle: "Problem-Solving & RCA",
       title: "Problem-Solving Zones & Digital Assessment",
       consultingModule: "Module: Problem-Solving & Modularity",
       icon: <MonitorCheck className="w-4 h-4" />,
@@ -123,147 +134,238 @@ export default function SixZonesBlueprint({ onOpenVideoModal }) {
   ];
 
   const current = zones[activeZone];
+  const nextIdx = (activeZone + 1) % zones.length;
+  const prevIdx = (activeZone - 1 + zones.length) % zones.length;
 
   return (
-    <section id="six-zones" className="py-20 bg-white border-b border-slate-200">
+    <section id="six-zones" className="py-10 sm:py-12 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Centered Clean Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100/80 border border-orange-200 text-xs font-semibold text-[#ff5722] mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Consulting Areas & Turnkey Setup Modules</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001730] tracking-tight leading-tight">
+        {/* Compact Clean Header */}
+        <div className="text-center max-w-3xl mx-auto mb-6">
+          <span className="text-[11px] font-bold uppercase text-[#ff5722] tracking-wider block mb-1">
+            Consulting Areas &amp; Core Setup Modules
+          </span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#001730] tracking-tight leading-tight">
             The Proven 6-Zone Dojo Blueprint &amp;{" "}
             <span className="text-[#ff5722]">Consulting Modules</span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-            Integrating all 7 core manufacturing training areas—from standardized workstations to problem-solving and safety simulation.
+          <p className="mt-1 text-xs sm:text-[13px] text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Integrating all 6 core manufacturing training areas—from standardized workstations to problem-solving and safety simulation.
           </p>
         </div>
 
-        {/* Viewport Split Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Left: 6 Vertical Tabs */}
-          <div className="lg:col-span-5 flex flex-col gap-2.5">
-            {zones.map((z, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setActiveZone(idx)}
-                className={`w-full text-left px-4 py-3 rounded-2xl border transition-all flex items-center justify-between cursor-pointer ${
-                  activeZone === idx
-                    ? "bg-[#001730] text-white border-[#001730] shadow-md ring-1 ring-[#001730]"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
-                      activeZone === idx
-                        ? "bg-[#ff5722] text-white"
-                        : "bg-slate-200 text-slate-700"
-                    }`}
-                  >
-                    0{idx + 1}
-                  </span>
-                  <div>
-                    <span className="text-xs sm:text-sm font-bold block leading-snug">
-                      {z.title}
-                    </span>
+        {/* Viewport Split Grid (Clean 4-col Left Tabs, 8-col Spacious Right Showcase) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          {/* Left: 6 Sleek Vertical Tabs with Short Titles and Hover Expansion */}
+          <div className="lg:col-span-4 flex flex-col justify-between gap-1.5">
+            {zones.map((z, idx) => {
+              const isActive = activeZone === idx;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveZone(idx)}
+                  className={`group w-full text-left px-3.5 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-between cursor-pointer ${
+                    isActive
+                      ? "bg-[#001730] text-white border-[#001730] shadow-sm ring-1 ring-[#001730]"
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-white hover:border-[#ff5722]/50 hover:shadow-xs"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <span
-                      className={`text-[11px] block mt-0.5 font-medium ${
-                        activeZone === idx ? "text-orange-300" : "text-slate-500"
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-extrabold shrink-0 transition-colors ${
+                        isActive
+                          ? "bg-[#ff5722] text-white"
+                          : "bg-slate-200 text-slate-700 group-hover:bg-orange-100 group-hover:text-[#ff5722]"
                       }`}
                     >
-                      {z.consultingModule}
+                      0{idx + 1}
                     </span>
-                  </div>
-                </div>
 
-                <div
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    activeZone === idx ? "bg-[#ff5722]" : "bg-transparent"
-                  }`}
-                />
-              </button>
-            ))}
+                    <div className="min-w-0 flex-1">
+                      {/* Short Name Always Visible, Full Name on Hover/Active */}
+                      <span className="text-xs sm:text-[13px] font-bold block leading-tight truncate">
+                        {isActive ? z.title : z.shortTitle}
+                      </span>
+                      <span
+                        className={`text-[10px] block mt-0.5 font-medium truncate transition-all ${
+                          isActive
+                            ? "text-orange-300"
+                            : "text-slate-400 group-hover:text-slate-600"
+                        }`}
+                      >
+                        {z.consultingModule}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 ml-2">
+                    {isActive ? (
+                      <span className="w-2 h-2 rounded-full bg-[#ff5722] block ring-4 ring-orange-500/20" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#ff5722] group-hover:translate-x-0.5 transition-transform" />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Right: Active Zone Details Panel */}
-          <div className="lg:col-span-7 bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+          {/* Right: Active Zone Details Panel with Prominent Photo & Bottom-Right Next Button */}
+          <div className="lg:col-span-8 bg-slate-50 rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
             <div>
               {/* Header Badges */}
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-md bg-[#001730] text-white text-xs font-bold">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="px-2.5 py-0.5 rounded-md bg-[#001730] text-white text-[11px] font-bold">
                     {current.number}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-md bg-orange-100 text-[#ff5722] text-xs font-semibold">
+                  <span className="px-2.5 py-0.5 rounded-md bg-orange-100 text-[#ff5722] text-[11px] font-semibold">
                     {current.consultingModule}
                   </span>
                 </div>
-                <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
                   ✦ {current.impact}
                 </span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+              {/* Title & Description */}
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 leading-snug">
                 {current.title}
               </h3>
 
-              <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="mt-1 text-xs sm:text-[13px] text-slate-600 leading-relaxed">
                 {current.description}
               </p>
 
-              {/* Station Image & Equipment Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 mt-5 pt-5 border-t border-slate-200 items-center">
-                {/* Equipment List */}
-                <div className="sm:col-span-6 space-y-2.5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block mb-1">
-                    Simulation Workstations Included:
+              {/* Station Image & Equipment Grid (Expansive 50/50 Split) */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 mt-4 pt-3.5 border-t border-slate-200 items-center">
+                {/* Equipment List (5 cols) */}
+                <div className="md:col-span-5 space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 block mb-1">
+                    Simulation Stations Included:
                   </span>
                   {current.equipment.map((eq, eIdx) => (
-                    <div key={eIdx} className="flex items-start gap-2 text-xs sm:text-[13px] text-slate-700">
+                    <div key={eIdx} className="flex items-start gap-1.5 text-xs text-slate-700">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#ff5722] shrink-0 mt-0.5" />
                       <span className="leading-snug">{eq}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Station Photo */}
-                <div className="sm:col-span-6 relative h-48 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+                {/* Prominent, Expanded Station Photo (7 cols) - Click to Open */}
+                <div
+                  onClick={() => {
+                    setLightboxIndex(activeZone);
+                    if (onOpenImage) {
+                      onOpenImage({
+                        images: zones.map((z) => ({
+                          src: z.image,
+                          alt: z.title,
+                          title: `${z.number}: ${z.title}`,
+                        })),
+                        currentIndex: activeZone,
+                      });
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setLightboxIndex(activeZone);
+                      if (onOpenImage) {
+                        onOpenImage({
+                          images: zones.map((z) => ({
+                            src: z.image,
+                            alt: z.title,
+                            title: `${z.number}: ${z.title}`,
+                          })),
+                          currentIndex: activeZone,
+                        });
+                      }
+                    }
+                  }}
+                  title="Click to view full image"
+                  className="md:col-span-7 relative h-48 sm:h-52 rounded-xl overflow-hidden border border-slate-200 shadow-sm cursor-zoom-in group/img"
+                >
                   <Image
                     src={current.image}
                     alt={current.title}
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover/img:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-                  <span className="absolute bottom-2.5 left-3 text-xs text-white font-medium">
-                    {current.number} Workstation Layout
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-80 group-hover/img:opacity-60 transition-opacity" />
+                  
+                  {/* View / Zoom Pill on Top Left */}
+                  <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-medium flex items-center gap-1 group-hover/img:bg-[#ff5722] transition-colors">
+                    <ZoomIn className="w-3 h-3 text-[#ff5722] group-hover/img:text-white" />
+                    <span>View</span>
                   </span>
+
+                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-[11px]">
+                    <span className="font-semibold">
+                      {current.number} • Workstation Architecture
+                    </span>
+                    <span className="bg-black/40 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-medium border border-white/20">
+                      Step {activeZone + 1} of 6
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Panel CTA */}
-            <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <span className="text-xs text-slate-500">
-                Designed for modularity and adaptation to specific plant line constraints.
-              </span>
+            {/* Bottom Panel CTA & Bottom-Right Next Button */}
+            <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => onOpenVideoModal(`Blueprint Layout for ${current.title}`)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md hover:shadow-orange-900/30 shrink-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-semibold transition-all cursor-pointer shadow-xs shrink-0"
               >
                 <Video className="w-3.5 h-3.5" />
                 <span>Discuss {current.number} Layout</span>
               </button>
+
+              {/* Bottom Right Next Button to see next card */}
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button
+                  type="button"
+                  onClick={() => setActiveZone(prevIdx)}
+                  aria-label="Previous Zone"
+                  className="p-2 rounded-full bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-colors cursor-pointer shadow-xs"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveZone(nextIdx)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#001730] text-[#001730] hover:text-white border border-slate-300 hover:border-[#001730] text-xs font-bold transition-all shadow-xs cursor-pointer group"
+                >
+                  <span>Next: {zones[nextIdx].shortTitle}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#ff5722] group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {lightboxIndex !== null && (
+        <ImageLightboxModal
+          images={zones.map((z) => ({
+            src: z.image,
+            alt: z.title,
+            title: `${z.number}: ${z.title}`,
+          }))}
+          currentIndex={lightboxIndex}
+          onIndexChange={(newIdx) => {
+            setLightboxIndex(newIdx);
+            setActiveZone(newIdx);
+          }}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </section>
   );
 }
