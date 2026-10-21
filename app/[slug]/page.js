@@ -646,6 +646,27 @@ export default function ServiceOrBlogPage({ params }) {
     );
   }, [data, dataKeys]);
 
+  // Update document title and meta description on client
+  useEffect(() => {
+    if (data?.metaTitle) {
+      document.title = data.metaTitle;
+    } else if (data?.title) {
+      document.title = `${data.title} | Tetrahedron`;
+    }
+
+    if (data?.metaDescription) {
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", data.metaDescription);
+      } else {
+        metaDesc = document.createElement("meta");
+        metaDesc.name = "description";
+        metaDesc.content = data.metaDescription;
+        document.head.appendChild(metaDesc);
+      }
+    }
+  }, [data]);
+
   // Main useEffect for fetching blog data
   useEffect(() => {
     // console.log("🔄 useEffect triggered for slug:", params.slug);
