@@ -2,12 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { Award, Users, ShieldCheck, Factory, CheckCircle2, ZoomIn } from "lucide-react";
+import { Award, ShieldCheck, CheckCircle2 } from "lucide-react";
 
 export default function EmpoweringTeamsSection({ onOpenImage }) {
   const proofMetrics = [
     {
-      value: "200+",
+      value: "100+",
       label: "Dojos Commissioned",
       sub: "Across India & Global Plants",
     },
@@ -20,11 +20,6 @@ export default function EmpoweringTeamsSection({ onOpenImage }) {
       value: "100%",
       label: "Audit Pass Rate",
       sub: "IATF 16949 & VDA 6.3 Ready",
-    },
-    {
-      value: "3–6 Mo.",
-      label: "Capital Payback",
-      sub: "Via scrap & defect elimination",
     },
   ];
 
@@ -44,8 +39,8 @@ export default function EmpoweringTeamsSection({ onOpenImage }) {
           </p>
         </div>
 
-        {/* 4 Quick Impact Counters */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {/* 3 Quick Impact Counters */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           {proofMetrics.map((m, idx) => (
             <div
               key={idx}
@@ -88,49 +83,15 @@ export default function EmpoweringTeamsSection({ onOpenImage }) {
             </div>
           </div>
 
-          {/* High-Resolution Client Logo Grid Display - Click to Zoom */}
-          <div
-            onClick={() =>
-              onOpenImage &&
-              onOpenImage({
-                src: "/assets/images/dojo _client.jpeg",
-                alt: "Client Logos including Hero, Royal Enfield, Autoliv, Tata Motors, Mahindra CIE, Blue Star, Minda, ADM, and SKH",
-                title: "Empowering Teams Across Leading Industries",
-                subtitle: "Automotive OEMs, Tier-1 Giants & Precision Manufacturing",
-                desc: "Trusted by Hero, Royal Enfield, Autoliv, Tata Motors, Mahindra CIE, Blue Star, Minda, ADM, SKH, and leading manufacturing plants across India.",
-              })
-            }
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onOpenImage &&
-                  onOpenImage({
-                    src: "/assets/images/dojo _client.jpeg",
-                    alt: "Client Logos including Hero, Royal Enfield, Autoliv, Tata Motors, Mahindra CIE, Blue Star, Minda, ADM, and SKH",
-                    title: "Empowering Teams Across Leading Industries",
-                    subtitle: "Automotive OEMs, Tier-1 Giants & Precision Manufacturing",
-                    desc: "Trusted by Hero, Royal Enfield, Autoliv, Tata Motors, Mahindra CIE, Blue Star, Minda, ADM, SKH, and leading manufacturing plants across India.",
-                  });
-              }
-            }}
-            title="Click to view full client logos"
-            className="relative w-full rounded-2xl overflow-hidden bg-slate-50/50 border border-slate-200 p-2 sm:p-4 cursor-zoom-in group shadow-xs hover:border-[#ff5722] transition-colors"
-          >
-            {/* View / Zoom Pill on Top Left */}
-            <span className="absolute top-4 left-4 z-10 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium flex items-center gap-1.5 group-hover:bg-[#ff5722] transition-colors shadow-sm">
-              <ZoomIn className="w-3.5 h-3.5 text-[#ff5722] group-hover:text-white" />
-              <span>View Full Graphic</span>
-            </span>
-
+          {/* High-Resolution Client Logo Grid Display */}
+          <div className="relative w-full rounded-2xl overflow-hidden bg-slate-50/50 border border-slate-200 p-2 sm:p-4 shadow-xs">
             <div className="relative w-full h-[260px] sm:h-[380px] lg:h-[480px]">
               <Image
                 src="/assets/images/dojo _client.jpeg"
                 alt="Empowering Teams Across Industries - Client Logos including Hero, Royal Enfield, Autoliv, Mahindra CIE, Tata Motors, Blue Star, Minda, ADM, and SKH"
                 fill
-                className="object-contain group-hover:scale-[1.02] transition-transform duration-300"
-                priority
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                className="object-contain"
               />
             </div>
           </div>
@@ -138,22 +99,22 @@ export default function EmpoweringTeamsSection({ onOpenImage }) {
           <div className="pt-6 mt-6 border-t border-slate-100 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-[#ff5722]" />
-              Automotive OEMs & Tier-1 Giants
+              Automotive OEMs &amp; Tier-1 Giants
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-[#ff5722]" />
-              Heavy Engineering & Robotics
+              Heavy Engineering &amp; Robotics
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-[#ff5722]" />
-              Electrical, Appliances & White Goods
+              Electrical, Appliances &amp; White Goods
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-[#ff5722]" />
-              Process & FMCG Packaging
+              Process &amp; FMCG Packaging
             </span>
           </div>
         </div>

@@ -2,9 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-import { ArrowRight, Video, Sparkles, Building2, ShieldCheck } from "lucide-react";
+import { ArrowRight, Video, Sparkles, Building2, ShieldCheck, Download } from "lucide-react";
 
-export default function HeroSection({ onOpenVideoModal }) {
+export default function HeroSection({ onOpenVideoModal, onOpenBrochureModal }) {
   const scrollToBlueprint = (e) => {
     e.preventDefault();
     const element = document.getElementById("six-zones");
@@ -40,27 +40,38 @@ export default function HeroSection({ onOpenVideoModal }) {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl">
-              Cut blue-collar onboarding by <strong className="text-white font-semibold">80%</strong> and eliminate assembly defects with custom simulation jigs, 6-zone experiential learning pods, and L1–L4 skill matrices in <strong className="text-white font-semibold">8 weeks</strong>.
+              Train shopfloor operators <strong className="text-white font-semibold">80% faster</strong>, eliminate assembly defects, and build zero-error manufacturing quality from Day 1.
             </p>
 
             {/* High-Craft, Modern Industrial Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-3">
-              <button
-                type="button"
+            <div className="flex flex-wrap items-center gap-3.5 pt-3">
+              <a
+                href="https://calendly.com/kartikey-tetrahedron/new-meeting"
+                target="_blank"
+                rel="noopener noreferrer"
                 id="hero-book-meeting-btn"
-                onClick={() => onOpenVideoModal("Full-Scale Dojo Setup (600–2,000 sq.ft)")}
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer border border-orange-400/30"
+                className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer border border-orange-400/30"
               >
                 <Video className="w-4 h-4 text-white shrink-0 group-hover:scale-110 transition-transform" />
                 <span>Book a Virtual Meeting</span>
+              </a>
+
+              <button
+                type="button"
+                id="hero-download-brochure-btn"
+                onClick={onOpenBrochureModal}
+                className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3.5 rounded-full bg-white text-[#001730] hover:bg-orange-50 active:scale-[0.98] font-semibold text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 cursor-pointer border border-white/90"
+              >
+                <Download className="w-4 h-4 text-[#ff5722] shrink-0 group-hover:scale-110 transition-transform" />
+                <span>Download Brochure</span>
               </button>
 
               <button
                 type="button"
                 onClick={scrollToBlueprint}
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white/[0.08] hover:bg-white/[0.14] text-white font-medium text-sm border border-white/20 hover:border-white/40 backdrop-blur-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer"
+                className="group inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-white/[0.08] hover:bg-white/[0.14] text-white font-medium text-sm border border-white/20 hover:border-white/40 backdrop-blur-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer"
               >
-                <span>Explore 6-Zone Blueprint</span>
+                <span>6-Zone Blueprint</span>
                 <ArrowRight className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -69,7 +80,7 @@ export default function HeroSection({ onOpenVideoModal }) {
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-300">
               <span className="flex items-center gap-1.5 font-medium">
                 <Building2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
-                200+ Plants Commissioned
+                100+ Plants Commissioned
               </span>
               <span className="text-white/20">•</span>
               <span className="flex items-center gap-1.5 font-medium">
@@ -83,9 +94,10 @@ export default function HeroSection({ onOpenVideoModal }) {
           <div className="lg:col-span-5">
             <div className="relative h-80 sm:h-96 lg:h-[400px] xl:h-[420px] w-full rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
               <Image
-                src="/images/servicesData/dojoherosection.png"
+                src="/images/servicesData/dojoherosection.webp"
                 alt="Tetrahedron Dojo Training Center Shopfloor"
                 fill
+                sizes="(max-width: 1024px) 100vw, 550px"
                 className="object-cover"
                 priority
               />

@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import ModernLayout from "@/components/layout/ModernLayout";
-import VideoMeetingModal from "./components/VideoMeetingModal";
+import DownloadBrochureModal from "./components/DownloadBrochureModal";
+import SilentMeetingPopup from "./components/SilentMeetingPopup";
 
 // Modular High-Craft Components
 import HeroSection from "./components/HeroSection";
@@ -16,23 +17,32 @@ import FAQSection from "./components/FAQSection";
 import BottomCTA from "./components/BottomCTA";
 
 export default function DojoTrainingCenterNewPage() {
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [modalTopic, setModalTopic] = useState("Full-Scale Dojo Setup (600–2,000 sq.ft)");
+  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false);
 
-  const handleOpenVideoModal = (topic = "Full-Scale Dojo Setup (600–2,000 sq.ft)") => {
-    setModalTopic(topic);
-    setIsVideoModalOpen(true);
+  const handleOpenVideoModal = () => {
+    window.open(
+      "https://calendly.com/kartikey-tetrahedron/new-meeting",
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
-  const handleCloseVideoModal = () => {
-    setIsVideoModalOpen(false);
+  const handleOpenBrochureModal = () => {
+    setIsBrochureModalOpen(true);
+  };
+
+  const handleCloseBrochureModal = () => {
+    setIsBrochureModalOpen(false);
   };
 
   return (
     <ModernLayout>
       <div className="modern-page dojo-page-root bg-white text-slate-800 antialiased selection:bg-[#ff5722] selection:text-white">
-        {/* 1. Viewport-Fitted Hero with Integrated Quick Stats */}
-        <HeroSection onOpenVideoModal={handleOpenVideoModal} />
+        {/* 1. Viewport-Fitted Hero with Integrated Quick Stats & Download Brochure Action */}
+        <HeroSection
+          onOpenVideoModal={handleOpenVideoModal}
+          onOpenBrochureModal={handleOpenBrochureModal}
+        />
 
         {/* 2. Japanese Origin, Concept & 6 Core Strengths */}
         <DojoFoundationStrengths onOpenVideoModal={handleOpenVideoModal} />
@@ -56,13 +66,19 @@ export default function DojoTrainingCenterNewPage() {
         <FAQSection />
 
         {/* 9. Final Conversion Video Consultation Banner */}
-        <BottomCTA onOpenVideoModal={handleOpenVideoModal} />
+        <BottomCTA
+          onOpenVideoModal={handleOpenVideoModal}
+          onOpenBrochureModal={handleOpenBrochureModal}
+        />
 
-        {/* Streamlined 2-Step Video Meeting Scheduler Modal */}
-        <VideoMeetingModal
-          open={isVideoModalOpen}
-          onClose={handleCloseVideoModal}
-          defaultTopic={modalTopic}
+        {/* Silent Floating Pop Up from Below (Centered) */}
+        <SilentMeetingPopup onOpenVideoModal={handleOpenVideoModal} />
+
+        {/* Download Technical Brochure Modal */}
+        <DownloadBrochureModal
+          open={isBrochureModalOpen}
+          onClose={handleCloseBrochureModal}
+          onOpenVideoModal={handleOpenVideoModal}
         />
       </div>
     </ModernLayout>

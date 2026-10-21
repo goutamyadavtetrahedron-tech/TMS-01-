@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 
 export default function FAQSection() {
-  const [openIdx, setOpenIdx] = useState(0);
+  const [openIndices, setOpenIndices] = useState([0]);
   const [showAll, setShowAll] = useState(false);
 
   const faqs = [
@@ -46,75 +46,117 @@ export default function FAQSection() {
     },
   ];
 
-  const visibleFaqs = showAll ? faqs : faqs.slice(0, 4);
+  const visibleFaqs = showAll ? faqs : faqs.slice(0, 6);
+
+  const toggleFaq = (idx) => {
+    setOpenIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) {
+        next.delete(idx);
+      } else {
+        next.add(idx);
+      }
+      return Array.from(next);
+    });
+  };
+
+  const leftColumnFaqs = visibleFaqs
+    .map((faq, originalIndex) => ({ faq, originalIndex }))
+    .filter((_, i) => i % 2 === 0);
+
+  const rightColumnFaqs = visibleFaqs
+    .map((faq, originalIndex) => ({ faq, originalIndex }))
+    .filter((_, i) => i % 2 === 1);
+
+  const renderFaqCard = ({ faq, originalIndex }) => {
+    const isOpen = openIndices.includes(originalIndex);
+    return (
+      <div
+        key={originalIndex}
+        className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+          isOpen
+            ? "border-[#ff5722]/50 bg-white shadow-md ring-1 ring-orange-500/10"
+            : "border-slate-200 bg-white hover:border-slate-300 shadow-xs"
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleFaq(originalIndex)}
+          className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/70 transition-colors"
+        >
+          <span className="text-xs sm:text-sm font-bold text-[#001730] leading-snug">
+            {faq.q}
+          </span>
+          <span
+            className={`p-1.5 rounded-full shrink-0 transition-colors ${
+              isOpen
+                ? "bg-orange-100 text-[#ff5722]"
+                : "bg-slate-100 text-slate-500"
+            }`}
+          >
+            {isOpen ? (
+              <ChevronUp className="w-4 h-4 text-[#ff5722]" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
+          </span>
+        </button>
+        {isOpen && (
+          <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/40">
+            {faq.a}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <section className="py-20 bg-slate-50 border-b border-slate-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="dojo-faqs" className="py-20 bg-slate-50/70 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-[#ff5722] tracking-wider mb-2">
             <HelpCircle className="w-3.5 h-3.5" />
             <span>Frequently Asked Questions</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001730] tracking-tight leading-tight">
-            Dojo Training Center FAQs
+            Dojo Training Center <span className="text-[#ff5722]">FAQs</span>
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-slate-600">
-            Clear, transparent answers on spatial requirements, setup timelines, ROI, curriculum, and audit compliance.
+          <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Clear, transparent answers on spatial requirements, setup timelines, ROI, custom curriculum, and manufacturing audit compliance.
           </p>
         </div>
 
-        {/* Accordion List (Shows 4 by default) */}
-        <div className="space-y-3">
-          {visibleFaqs.map((f, i) => {
-            const isOpen = openIdx === i;
-            return (
-              <div
-                key={i}
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all shadow-xs hover:border-slate-300"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : i)}
-                  className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/70 transition-colors"
-                >
-                  <span className="text-xs sm:text-sm font-bold text-[#001730] leading-snug">
-                    {f.q}
-                  </span>
-                  <span className="p-1.5 rounded-full bg-slate-100 text-slate-600 shrink-0">
-                    {isOpen ? (
-                      <ChevronUp className="w-4 h-4 text-[#ff5722]" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4" />
-                    )}
-                  </span>
-                </button>
-                {isOpen && (
-                  <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                    {f.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        {/* 2-Column Responsive FAQ Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 items-start">
+          {/* Left Column */}
+          <div className="space-y-4">{leftColumnFaqs.map(renderFaqCard)}</div>
+
+          {/* Right Column */}
+          <div className="space-y-4">{rightColumnFaqs.map(renderFaqCard)}</div>
         </div>
 
         {/* View More / Show Less Toggle Button */}
-        <div className="mt-8 text-center">
-          <button
-            type="button"
-            onClick={() => setShowAll(!showAll)}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white hover:bg-slate-100 text-[#001730] font-semibold text-xs sm:text-sm border border-slate-300 shadow-xs hover:border-[#ff5722] hover:shadow-sm transition-all cursor-pointer"
-          >
-            <span>{showAll ? "Show Fewer Questions" : `View More FAQs (${faqs.length - 4} More)`}</span>
-            {showAll ? (
-              <ChevronUp className="w-4 h-4 text-[#ff5722]" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-[#ff5722]" />
-            )}
-          </button>
-        </div>
+        {faqs.length > 6 && (
+          <div className="mt-10 text-center">
+            <button
+              type="button"
+              onClick={() => setShowAll(!showAll)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white hover:bg-slate-50 text-[#001730] font-semibold text-xs sm:text-sm border border-slate-300 shadow-xs hover:border-[#ff5722] hover:shadow-sm transition-all cursor-pointer"
+            >
+              <span>
+                {showAll
+                  ? "Show Fewer FAQs"
+                  : `View More FAQs (${faqs.length - 6} More)`}
+              </span>
+              {showAll ? (
+                <ChevronUp className="w-4 h-4 text-[#ff5722]" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-[#ff5722]" />
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

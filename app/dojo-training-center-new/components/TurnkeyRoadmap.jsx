@@ -10,55 +10,55 @@ import {
   Sparkles,
 } from "lucide-react";
 
-export default function TurnkeyRoadmap({ onOpenVideoModal }) {
+export default function TurnkeyRoadmap() {
   const phases = [
     {
       step: "01",
       weeks: "Weeks 1 – 2",
-      category: "Diagnostic & Defect Audit",
-      title: "Needs Assessment & Scrap Pareto Audit",
-      desc: "Comprehensive on-site plant assessment: identifying specific skill gaps, shopfloor defect logs, training objectives, and target technician cohorts.",
-      milestone: "Scrap Pareto & Critical Process Map",
+      category: "Plant Study & Skill Analysis",
+      title: "Understanding Your Plant's Defects & Training Needs",
+      desc: "We visit your plant to understand your assembly line issues, common operator mistakes, safety risks, and the exact practical skills your workers need to master.",
+      milestone: "Clear Skill Gap & Training Plan",
     },
     {
       step: "02",
       weeks: "Week 3",
-      category: "CAD & Spatial Architecture",
-      title: "Conceptual Design & 3D Floor Architecture",
-      desc: "Planning the Dojo layout, ergonomics, station footprints, pneumatic/electrical routing, and learning modules based on plant floor constraints.",
-      milestone: "Approved 3D Floor Plan & CAD Specs",
+      category: "Layout & 3D Center Design",
+      title: "Designing Your Dojo Floor Layout in 3D",
+      desc: "We create a customized 3D layout plan for your available space (600–2,000 sq.ft) with optimal workstation positions, power points, and worker movement flow.",
+      milestone: "Final 3D Layout & Workstation Design",
     },
     {
       step: "03",
       weeks: "Weeks 4 – 5",
-      category: "Precision Rig Fabrication",
-      title: "Physical Setup & Precision Rig Fabrication",
-      desc: "Fabrication of CE/OSHA compliant simulation benches, safety interlocking danger domes, sensorized jigs, and visual communication aids.",
-      milestone: "Fabricated Simulation Jigs & Benches",
+      category: "Rig Fabrication & Setup",
+      title: "Building Your Custom Simulation Benches",
+      desc: "Our engineering team fabricates custom hands-on training benches, safety demonstration rigs, and mistake-proofing jigs tailored to your specific plant components.",
+      milestone: "Ready-to-Install Training Rigs",
     },
     {
       step: "04",
       weeks: "Week 6",
-      category: "Curriculum & Standard Work",
-      title: "Content Development & L1–L4 Competency Matrix",
-      desc: "Creating tailored training materials, bilingual visual standard work instructions (SOS/SOPs), pass/fail rubrics, and digital scorecards.",
-      milestone: "Visual SOP Sheets & Competency Rubrics",
+      category: "Training Modules & Work SOPs",
+      title: "Creating Simple Step-by-Step Training Manuals",
+      desc: "We prepare easy-to-follow visual training manuals, standard operating procedures (SOPs), and clear evaluation checklists in local languages so workers learn fast.",
+      milestone: "Visual SOP Cards & Evaluation Sheets",
     },
     {
       step: "05",
       weeks: "Week 7",
-      category: "Train-the-Trainer (TTT)",
-      title: "Train-the-Trainer (TTT) Master Accreditation",
-      desc: "Intensive coaching and pedagogical certification of internal plant trainers and shift supervisors to effectively facilitate hands-on drills.",
-      milestone: "Certified Internal Dojo Masters",
+      category: "Trainer Certification",
+      title: "Training & Certifying Your In-House Trainers",
+      desc: "We coach your plant supervisors and senior operators on how to run practical drills, guide new trainees, and grade worker performance confidently.",
+      milestone: "Certified In-House Dojo Trainers",
     },
     {
       step: "06",
       weeks: "Week 8",
-      category: "Pilot, Rollout & Handover",
-      title: "Pilot Program, Full Rollout & Monitoring",
-      desc: "Running initial pilot training sessions, refinement based on operator feedback, full HR/operations integration, and continuous KPI impact tracking.",
-      milestone: "Pilot Cohort Graduation & Full Handover",
+      category: "Testing, Handover & Go-Live",
+      title: "Running First Batch & Final Handover",
+      desc: "We conduct a trial training session with your first batch of workers, fine-tune the practical drills, and officially hand over your fully operational Dojo center.",
+      milestone: "First Batch Certified & Center Live",
     },
   ];
 
@@ -68,14 +68,14 @@ export default function TurnkeyRoadmap({ onOpenVideoModal }) {
         {/* Centered Clean Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-bold uppercase text-[#ff5722] tracking-wider">
-            Our Approach &amp; Implementation Process
+            Our 8-Week Execution Process
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#001730] mt-1 tracking-tight">
-            Setting Up Your Dojo:{" "}
-            <span className="text-[#ff5722]">8-Week Execution Roadmap</span>
+            How We Set Up Your Dojo Center in{" "}
+            <span className="text-[#ff5722]">8 Weeks</span>
           </h2>
           <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-            A structured 6-phase journey engineered from initial plant diagnostic assessment to fully commissioned simulation pods and certified internal Dojo masters.
+            From studying your plant floor challenges to delivering custom training benches and certifying your internal trainers — we handle the complete setup end-to-end.
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export default function TurnkeyRoadmap({ onOpenVideoModal }) {
           <div className="flex items-center justify-start lg:justify-center mb-10 pl-2 lg:pl-0">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 text-[#ff5722] border border-orange-200 text-xs font-bold shadow-xs z-10">
               <Flag className="w-3.5 h-3.5" />
-              <span>Week 0: Diagnostics &amp; Project Kickoff</span>
+              <span>Week 0: Project Kickoff &amp; Plant Alignment</span>
             </div>
           </div>
 
@@ -195,13 +195,14 @@ export default function TurnkeyRoadmap({ onOpenVideoModal }) {
               </span>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => onOpenVideoModal("8-Week Implementation Consultation")}
+          <a
+            href="https://calendly.com/kartikey-tetrahedron/new-meeting"
+            target="_blank"
+            rel="noopener noreferrer"
             className="whitespace-nowrap px-5 py-2 rounded-full bg-[#001730] hover:bg-slate-900 text-white font-semibold shadow-sm transition-colors cursor-pointer"
           >
             Review Plant Timeline
-          </button>
+          </a>
         </div>
       </div>
     </section>
