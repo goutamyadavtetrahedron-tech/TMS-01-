@@ -8,25 +8,13 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
   const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
-    // Check if user already dismissed it during this browser session
-    try {
-      const dismissed = sessionStorage.getItem("silent_meeting_dismissed");
-      if (dismissed === "true") {
-        setIsDismissed(true);
-        return;
-      }
-    } catch (e) {
-      // sessionStorage not available
-    }
-
-    // Timer to trigger silent pop up after 3 seconds
+    // Show after 1.5 seconds or immediately when scrolling > 80px
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 3000);
+    }, 1500);
 
-    // Or trigger when user has scrolled down > 250px
     const handleScroll = () => {
-      if (window.scrollY > 250) {
+      if (window.scrollY > 80) {
         setIsVisible(true);
       }
     };
@@ -42,11 +30,6 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
   const handleDismiss = () => {
     setIsVisible(false);
     setIsDismissed(true);
-    try {
-      sessionStorage.setItem("silent_meeting_dismissed", "true");
-    } catch (e) {
-      // ignore
-    }
   };
 
   if (isDismissed) return null;
@@ -79,16 +62,19 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
             <span>Book a Virtual Meeting</span>
           </div>
           <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5 leading-tight">
-            1-on-1 with Principal Dojo Architects • Live Calendly Booking
+            1-on-1 with Principal Dojo Architects • Live Virtual Booking
           </div>
         </div>
 
         {/* Action Button & Dismiss */}
         <div className="flex items-center gap-2 shrink-0">
           <a
-            href="https://calendly.com/kartikey-tetrahedron/new-meeting"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://cal.com/tetrahedron/dojo"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenVideoModal?.();
+            }}
             className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white text-xs sm:text-sm font-semibold shadow-md shadow-orange-950/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
             <span>Book Now</span>

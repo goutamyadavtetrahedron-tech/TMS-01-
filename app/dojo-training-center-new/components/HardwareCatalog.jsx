@@ -284,9 +284,12 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
             </div>
           </div>
           <a
-            href="https://calendly.com/kartikey-tetrahedron/new-meeting"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://cal.com/tetrahedron/dojo"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenVideoModal?.();
+            }}
             className="whitespace-nowrap px-5 py-2 rounded-full bg-[#001730] hover:bg-slate-900 text-white font-semibold shadow-sm transition-colors cursor-pointer"
           >
             Consult on Custom Jigs

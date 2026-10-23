@@ -22,9 +22,12 @@ export default function BottomCTA({ onOpenVideoModal, onOpenBrochureModal }) {
         {/* Refined, Well-Proportioned Action Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
           <a
-            href="https://calendly.com/kartikey-tetrahedron/new-meeting"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://cal.com/tetrahedron/dojo"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenVideoModal?.();
+            }}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] active:scale-[0.98] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 transition-all cursor-pointer border border-orange-400/30"
           >
             <Video className="w-4 h-4 text-white" />

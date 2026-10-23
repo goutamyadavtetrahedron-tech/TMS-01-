@@ -313,9 +313,12 @@ export default function DownloadBrochureModal({
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <a
-                    href="https://calendly.com/kartikey-tetrahedron/new-meeting"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="https://cal.com/tetrahedron/dojo"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onOpenVideoModal?.();
+                    }}
                     className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full bg-[#001730] hover:bg-[#00254d] text-white text-xs sm:text-sm font-semibold shadow-sm transition-all cursor-pointer"
                   >
                     <Calendar className="w-4 h-4 text-orange-400" />

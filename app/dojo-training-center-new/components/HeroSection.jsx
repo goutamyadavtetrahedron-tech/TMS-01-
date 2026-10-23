@@ -46,9 +46,12 @@ export default function HeroSection({ onOpenVideoModal, onOpenBrochureModal }) {
             {/* High-Craft, Modern Industrial Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-3">
               <a
-                href="https://calendly.com/kartikey-tetrahedron/new-meeting"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="https://cal.com/tetrahedron/dojo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onOpenVideoModal?.();
+                }}
                 id="hero-book-meeting-btn"
                 className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer border border-orange-400/30"
               >
