@@ -11,7 +11,11 @@ export async function POST(
     await connectDB();
 
     const { id } = await params;
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      { $inc: { likes: 1 } },
+      { timestamps: false, new: true }
+    );
 
     if (!blog) {
       return NextResponse.json(
@@ -19,9 +23,6 @@ export async function POST(
         { status: 404 }
       );
     }
-
-    blog.likes += 1;
-    await blog.save();
 
     return NextResponse.json({
       success: true,

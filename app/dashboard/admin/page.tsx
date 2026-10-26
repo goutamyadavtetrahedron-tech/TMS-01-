@@ -2118,10 +2118,10 @@ export default function AdminBlogDashboard() {
     }
   };
 
-  const formatArticleDate = (dateStr?: string) => {
-    if (!dateStr) return '—';
+  const formatArticleDate = (dateVal?: string | Date) => {
+    if (!dateVal) return '—';
     try {
-      const d = new Date(dateStr);
+      const d = new Date(dateVal);
       if (isNaN(d.getTime())) return '—';
       return d.toLocaleDateString('en-US', {
         month: 'short',
@@ -2459,8 +2459,8 @@ export default function AdminBlogDashboard() {
         return sortOrder === 'asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
       }
       // Default: date (newest first)
-      const da = new Date(a.updatedAt || a.createdAt || 0).getTime();
-      const db = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      const da = new Date(a.createdAt || a.updatedAt || 0).getTime();
+      const db = new Date(b.createdAt || b.updatedAt || 0).getTime();
       return sortOrder === 'asc' ? da - db : db - da;
     });
   }, [blogs, statusFilter, categoryFilter, search, sortBy, sortOrder]);
@@ -3226,9 +3226,9 @@ export default function AdminBlogDashboard() {
 
                       {/* 5. Date */}
                       <td>
-                        <div className="adm-date-wrap" title={`Last updated: ${new Date(blog.updatedAt || blog.createdAt).toLocaleString()}`}>
+                        <div className="adm-date-wrap" title={`Published: ${new Date(blog.createdAt || blog.updatedAt).toLocaleString()}${blog.updatedAt ? ` • Last updated: ${new Date(blog.updatedAt).toLocaleString()}` : ''}`}>
                           <Calendar size={12} className="adm-date-icon" />
-                          <span className="adm-date-val">{formatArticleDate(blog.updatedAt || blog.createdAt)}</span>
+                          <span className="adm-date-val">{formatArticleDate(blog.createdAt || blog.updatedAt)}</span>
                         </div>
                       </td>
 

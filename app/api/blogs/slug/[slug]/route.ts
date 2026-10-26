@@ -12,8 +12,12 @@ export async function GET(
 
     const { slug } = await params;
 
-    // Find blog by slug
-    const blog = await Blog.findOne({ slug });
+    // Find blog and atomically increment view count without modifying updatedAt
+    const blog = await Blog.findOneAndUpdate(
+      { slug },
+      { $inc: { views: 1 } },
+      { timestamps: false, new: true }
+    );
 
     if (!blog) {
       return NextResponse.json(
@@ -21,10 +25,6 @@ export async function GET(
         { status: 404 }
       );
     }
-
-    // Increment view count
-    blog.views += 1;
-    await blog.save();
 
     return NextResponse.json({
       success: true,

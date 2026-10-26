@@ -18,7 +18,12 @@ export async function GET(
     const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
     const query = isObjectId ? { _id: id } : { slug: id };
 
-    const blog = await Blog.findOne(query);
+    // Find blog and atomically increment view count without modifying updatedAt
+    const blog = await Blog.findOneAndUpdate(
+      query,
+      { $inc: { views: 1 } },
+      { timestamps: false, new: true }
+    );
 
     if (!blog) {
       return NextResponse.json(
@@ -26,10 +31,6 @@ export async function GET(
         { status: 404 }
       );
     }
-
-    // Increment view count
-    blog.views += 1;
-    await blog.save();
 
     return NextResponse.json({
       success: true,
