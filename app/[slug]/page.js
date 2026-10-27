@@ -340,20 +340,25 @@ const styles = {
     listStyle: "none",
     paddingLeft: 0,
     textAlign: "center",
-    maxWidth: "600px",
-    margin: "auto",
+    maxWidth: "960px",
+    margin: "1.5rem auto",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "0.85rem",
   },
   toolItem: {
     backgroundColor: "#fff",
-    border: "1px solid #eee",
-    padding: "0.75rem 1.5rem",
-    borderRadius: "50px",
-    marginBottom: "0.75rem",
-    display: "inline-block", // Make them flow inline if space allows
-    marginRight: "0.5rem", // Space between items
+    border: "1px solid rgba(226, 232, 240, 0.9)",
+    padding: "0.75rem 1.4rem",
+    borderRadius: "9999px",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.6rem",
     fontWeight: 500,
-    color: "#333",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
+    color: "#1e293b",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+    transition: "all 0.2s ease",
   },
   comparisonPointsTable: {
     // For Dojo 1 vs 2 table
@@ -2469,96 +2474,129 @@ export default function ServiceOrBlogPage({ params }) {
               </section>
             )}
 
-            {/* Tools Used / Skills Developed / Tech Components / Use Cases / Safety Services / Audit Types (Simple List Format) */}
+            {/* Tools Used / Skills Developed / Tech Components / Use Cases / Safety Services / Audit Types (Modern Interactive Badges / Cards) */}
             {(() => {
-              const toolsData = data.toolsUsed;
-              const skillsData = data.skillsDeveloped;
-              const techData = data.technologyComponents;
-              const useCasesData = data.useCases;
-              const safetyData = data.safetyServices;
-              const auditData = data.auditTypes;
+              const sections = [
+                { data: data.toolsUsed, type: "tools", defaultTitle: "Tools We Utilize", icon: "Wrench" },
+                { data: data.skillsDeveloped, type: "skills", defaultTitle: "Skills Developed", icon: "GraduationCap" },
+                { data: data.technologyComponents, type: "tech", defaultTitle: "Key Technology Components", icon: "Cpu" },
+                { data: data.useCases, type: "useCases", defaultTitle: "Applications & Use Cases", icon: "Sparkles" },
+                { data: data.safetyServices, type: "safety", defaultTitle: "Safety Services", icon: "ShieldCheck" },
+                { data: data.auditTypes, type: "audit", defaultTitle: "Types of Audits", icon: "ClipboardCheck" },
+              ].filter(
+                (sec) =>
+                  sec.data &&
+                  (isNonEmptyArray(sec.data.items) ||
+                    isNonEmptyString(sec.data.introText) ||
+                    sec.data.image)
+              );
 
-              const items =
-                toolsData?.items ||
-                skillsData?.items ||
-                techData?.items ||
-                useCasesData?.items ||
-                safetyData?.items ||
-                auditData?.items ||
-                [];
-              const introText =
-                toolsData?.introText ||
-                skillsData?.introText ||
-                techData?.introText ||
-                useCasesData?.introText ||
-                safetyData?.introText ||
-                auditData?.introText;
-              const title =
-                toolsData?.title ||
-                skillsData?.title ||
-                techData?.title ||
-                useCasesData?.title ||
-                safetyData?.title ||
-                auditData?.title ||
-                "Key Elements";
-              const image = auditData?.image; // Only audit has image in this group currently
+              if (sections.length === 0) return null;
 
-              const hasContent =
-                isNonEmptyArray(items) ||
-                isNonEmptyString(introText) ||
-                (auditData && auditData.image);
+              return sections.map((sec, secIdx) => {
+                const secData = sec.data;
+                const items = secData.items || [];
+                const introText = secData.introText;
+                const title = secData.title || sec.defaultTitle;
+                const image = secData.image;
+                const SectionIcon = Icons[sec.icon] || Icons.CheckCircle2;
 
-              return (
-                hasContent && (
+                const hasRichDescriptions = items.some(
+                  (item) => item && typeof item === "object" && item.desc
+                );
+
+                return (
                   <section
+                    key={secIdx}
                     style={styles.dynamicSection}
-                    className="text-center"
+                    className="text-center my-12 sm:my-16"
                   >
-                    {/* --- MODIFIED: Conditional Title (based on hasContent) --- */}
-                    {hasContent && renderSectionTitle(title)}
+                    {renderSectionTitle(title)}
 
-                    {/* Render image if present (e.g., auditTypes) */}
                     {image && (
-                      <img
-                        src={image}
-                        alt={title}
-                        className="img-fluid rounded mb-4 shadow-sm"
-                        style={{ maxWidth: "600px" }}
-                      />
+                      <div className="flex justify-center mb-8 px-4">
+                        <div className="rounded-2xl overflow-hidden border border-slate-200/90 shadow-md max-w-2xl bg-white p-2">
+                          <img
+                            src={image}
+                            alt={title}
+                            className="w-full h-auto rounded-xl object-contain"
+                          />
+                        </div>
+                      </div>
                     )}
 
-                    {/* Render intro text if present */}
                     {isNonEmptyString(introText) && (
-                      <div
-                        className="fs-5 mx-auto mb-4"
-                        style={{ maxWidth: "800px" }}
-                      >
+                      <div className="text-slate-600 text-base sm:text-lg max-w-3xl mx-auto mb-8 leading-relaxed px-4">
                         {renderParagraphs(introText)}
                       </div>
                     )}
 
-                    {/* Render list based on available data */}
                     {isNonEmptyArray(items) && (
-                      <ul style={styles.toolsList}>
-                        {items.map((item, index) => (
-                          <li key={index} style={styles.toolItem}>
-                            {typeof item === "string"
-                              ? item
-                              : item.title || item.level}{" "}
-                            {/* Handle string array or object with title/level */}
-                            {item.desc && (
-                              <div className="d-block small text-muted mt-1">
-                                {item.desc}
+                      hasRichDescriptions ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-5xl mx-auto my-6 px-4 text-left">
+                          {items.map((item, index) => {
+                            const itemTitle = typeof item === "string" ? item : item.title || item.level;
+                            const itemDesc = item.desc;
+                            return (
+                              <div
+                                key={index}
+                                className="group p-5 sm:p-6 bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md hover:border-[#ff5722]/40 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
+                              >
+                                <div>
+                                  <div className="flex items-center gap-3 mb-2.5">
+                                    <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#ff5722] flex items-center justify-center shrink-0 group-hover:bg-[#ff5722] group-hover:text-white transition-colors duration-200 shadow-xs">
+                                      <SectionIcon size={18} />
+                                    </div>
+                                    <h5 className="text-slate-900 font-semibold text-base sm:text-lg m-0 group-hover:text-[#002244] transition-colors">
+                                      {itemTitle}
+                                    </h5>
+                                  </div>
+                                  {itemDesc && (
+                                    <p className="text-slate-600 text-sm leading-relaxed m-0 pl-12">
+                                      {itemDesc}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                            )}{" "}
-                            {/* Optional description */}
-                          </li>
-                        ))}
-                      </ul>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap justify-center gap-3 sm:gap-3.5 max-w-5xl mx-auto my-6 px-4">
+                          {items.map((item, index) => {
+                            const rawText = typeof item === "string" ? item : item.title || item.level;
+                            const separatorMatch = typeof rawText === "string" ? rawText.match(/^(.*?)([:–—])\s*(.*)$/) : null;
+                            const hasPrefix = separatorMatch && separatorMatch[1].length < 32;
+                            const prefix = hasPrefix ? separatorMatch[1] : null;
+                            const rest = hasPrefix ? separatorMatch[3] : rawText;
+
+                            return (
+                              <div
+                                key={index}
+                                className="group flex items-center gap-3 px-4 sm:px-5 py-3 bg-white hover:bg-slate-50/90 rounded-2xl sm:rounded-full border border-slate-200/90 hover:border-[#ff5722]/50 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-left"
+                              >
+                                <div className="w-7 h-7 rounded-full bg-slate-100 text-[#002244] group-hover:bg-[#ff5722] group-hover:text-white flex items-center justify-center shrink-0 transition-colors duration-200 shadow-xs">
+                                  <SectionIcon size={14} />
+                                </div>
+                                <span className="text-slate-800 font-medium text-sm sm:text-[15px] leading-snug group-hover:text-slate-900">
+                                  {prefix ? (
+                                    <>
+                                      <strong className="text-slate-900 font-semibold">{prefix}: </strong>
+                                      <span>{rest}</span>
+                                    </>
+                                  ) : (
+                                    rawText
+                                  )}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )
                     )}
                   </section>
-                )
-              );
+                );
+              });
             })()}
 
             {/* Core Concepts Section (Image + List/Cards) */}
