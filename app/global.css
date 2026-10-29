@@ -103,7 +103,7 @@
   /* Global body text styling */
   .section-text,
   .content-text,
-  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *):not(.modern-page p):not(.modern-page *):not(.dojo-page-root p):not(.dojo-page-root *):not(.dojo-modal-root p):not(.dojo-modal-root *) {
+  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *):not(.modern-page p):not(.modern-page *):not(.modern-footer p):not(.modern-footer *):not(.dojo-page-root p):not(.dojo-page-root *):not(.dojo-modal-root p):not(.dojo-modal-root *) {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--body-text-size);
     line-height: 1.6;
@@ -233,12 +233,12 @@ img.mx-auto {
 }
 
 /* Ensure modern page headings follow Tailwind utility classes without user-agent inflation */
-.modern-page h1,
-.modern-page h2,
-.modern-page h3,
-.modern-page h4,
-.modern-page h5,
-.modern-page h6 {
+:where(.modern-page) h1,
+:where(.modern-page) h2,
+:where(.modern-page) h3,
+:where(.modern-page) h4,
+:where(.modern-page) h5,
+:where(.modern-page) h6 {
   margin: 0;
   font-family: var(--font-poppins, 'Poppins', sans-serif);
 }

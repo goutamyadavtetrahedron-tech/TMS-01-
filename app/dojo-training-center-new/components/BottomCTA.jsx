@@ -1,26 +1,24 @@
 "use client";
 
 import React from "react";
-import { Video, PhoneCall, ShieldCheck, Mail, Download } from "lucide-react";
+import { Video, PhoneCall, Download } from "lucide-react";
 
 export default function BottomCTA({ onOpenVideoModal, onOpenBrochureModal }) {
   return (
-    <section className="relative overflow-hidden py-16 bg-[#001b3a] text-white border-t border-white/10">
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-        <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-orange-300 text-xs font-semibold tracking-wider border border-white/15">
-          8-Week Implementation &amp; Launch
-        </span>
+    <section className="relative overflow-hidden pt-8 sm:pt-10 pb-7 sm:pb-8 bg-[#001730] text-white border-t border-white/10 border-b border-slate-800/80">
+      {/* Subtle Ambient Radial Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[160px] bg-[#ff5722]/10 blur-[90px] pointer-events-none" />
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
-          Ready to Build a Zero-Defect Dojo Academy in 8 Weeks?
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 sm:space-y-5">
+        {/* Balanced Headline */}
+        <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-tight">
+          Ready to Build a High-Impact <br className="hidden sm:inline" />
+          <span className="text-[#ff5722]">DOJO Training Center?</span>
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
-          Book a 1-on-1 virtual meeting with our Principal Dojo Architects to review your plant&apos;s assembly bottlenecks, custom CAD floor plans, and measurable ROI.
-        </p>
-
-        {/* Refined, Well-Proportioned Action Buttons */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+        {/* Action Buttons: Unified Primary & Secondary Hierarchy */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          {/* Primary CTA */}
           <a
             href="https://cal.com/tetrahedron/dojo"
             onClick={(e) => {
@@ -28,41 +26,34 @@ export default function BottomCTA({ onOpenVideoModal, onOpenBrochureModal }) {
               e.stopPropagation();
               onOpenVideoModal?.();
             }}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] active:scale-[0.98] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 transition-all cursor-pointer border border-orange-400/30"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] active:scale-[0.98] text-white font-semibold text-sm shadow-lg shadow-orange-950/40 hover:shadow-orange-900/60 hover:-translate-y-0.5 transition-all cursor-pointer border border-orange-400/30"
           >
-            <Video className="w-4 h-4 text-white" />
+            <Video className="w-4 h-4 text-white shrink-0" />
             <span>Book a Virtual Meeting</span>
           </a>
 
+          {/* Secondary CTA - Matching Hero White Solid Button */}
           <button
             type="button"
             onClick={onOpenBrochureModal}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-white text-[#001730] hover:bg-orange-50 active:scale-[0.98] font-semibold text-sm shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer border border-white/90"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white text-[#001730] hover:bg-orange-50 active:scale-[0.98] font-semibold text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 cursor-pointer border border-white/90"
           >
-            <Download className="w-4 h-4 text-[#ff5722]" />
+            <Download className="w-4 h-4 text-[#ff5722] shrink-0" />
             <span>Download Brochure</span>
           </button>
-
-          <a
-            href="tel:+917506927976"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/20 hover:border-white/40 hover:-translate-y-0.5 transition-all"
-          >
-            <PhoneCall className="w-3.5 h-3.5 text-orange-400" />
-            <span>+91 75069 27976</span>
-          </a>
         </div>
 
-        {/* Trust Points */}
-        <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Guaranteed ROI in 3 to 6 months
-          </span>
-          <span className="text-white/20">•</span>
-          <span className="flex items-center gap-1.5">
-            <Mail className="w-3.5 h-3.5 text-cyan-400" />
-            Calendar invitation sent instantly
-          </span>
+        {/* Direct Advisory Line - Minimal & Clean */}
+        <div className="pt-1">
+          <a
+            href="tel:+917506927976"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-400 hover:text-white transition-colors"
+          >
+            <PhoneCall className="w-3.5 h-3.5 text-orange-400" />
+            <span>
+              Call direct: <strong className="text-white font-semibold hover:underline">+91 75069 27976</strong>
+            </span>
+          </a>
         </div>
       </div>
     </section>

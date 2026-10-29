@@ -123,7 +123,7 @@ export default function DownloadBrochureModal({
             </div>
             <div>
               <div className="text-base sm:text-lg font-bold text-white leading-tight">
-                Download Dojo Training Center Brochure
+                Download DOJO Training Center Brochure
               </div>
               <div className="text-xs sm:text-[13px] text-slate-300 mt-1 leading-tight flex items-center gap-2">
                 <span className="inline-block px-2 py-0.5 rounded bg-white/15 text-[11px] text-orange-300 font-semibold">

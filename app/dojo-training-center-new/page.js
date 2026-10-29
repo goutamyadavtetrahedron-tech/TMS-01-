@@ -8,11 +8,11 @@ import SilentMeetingPopup from "./components/SilentMeetingPopup";
 
 // Modular High-Craft Components
 import HeroSection from "./components/HeroSection";
-import DojoFoundationStrengths from "./components/DojoFoundationStrengths";
-import SixZonesBlueprint from "./components/SixZonesBlueprint";
-import DojoCurriculumMatrix from "./components/DojoCurriculumMatrix";
+import DojoDefinition from "./components/DojoDefinition";
+import WhyChooseTetrahedron from "./components/WhyChooseTetrahedron";
+import TenLevelsDojo from "./components/TenLevelsDojo";
 import HardwareCatalog from "./components/HardwareCatalog";
-import TurnkeyRoadmap from "./components/TurnkeyRoadmap";
+import DojoSetupJourney from "./components/DojoSetupJourney";
 import EmpoweringTeamsSection from "./components/EmpoweringTeamsSection";
 import FAQSection from "./components/FAQSection";
 import BottomCTA from "./components/BottomCTA";
@@ -141,34 +141,34 @@ export default function DojoTrainingCenterNewPage() {
   return (
     <ModernLayout>
       <div className="modern-page dojo-page-root bg-white text-slate-800 antialiased selection:bg-[#ff5722] selection:text-white">
-        {/* 1. Viewport-Fitted Hero with Integrated Quick Stats & Download Brochure Action */}
+        {/* 1. Viewport-Fitted Hero with Real Gurukul Dojo Visual & Integrated Actions */}
         <HeroSection
           onOpenVideoModal={handleOpenVideoModal}
           onOpenBrochureModal={handleOpenBrochureModal}
         />
 
-        {/* 2. Japanese Origin, Concept & 6 Core Strengths */}
-        <DojoFoundationStrengths onOpenVideoModal={handleOpenVideoModal} />
+        {/* 2. DOJO Training Center Definition & Classroom vs. Dojo Hands-On Comparison */}
+        <DojoDefinition onOpenVideoModal={handleOpenVideoModal} />
 
-        {/* 3. The Proven 6-Zone Blueprint & Consulting Modules */}
-        <SixZonesBlueprint onOpenVideoModal={handleOpenVideoModal} />
+        {/* 3. Why Choose Tetrahedron: 13 Turnkey Capabilities & DOJO 2.0 Dashboards Spotlight */}
+        <WhyChooseTetrahedron onOpenVideoModal={handleOpenVideoModal} />
 
-        {/* 4. Types of Skills Developed: L1–L4 Capability Matrix */}
-        <DojoCurriculumMatrix />
+        {/* 4. 10 Levels of DOJO: Progressive Skilling & Competency Ladder */}
+        <TenLevelsDojo />
 
         {/* 5. Industrial Training Simulations We Develop */}
         <HardwareCatalog onOpenVideoModal={handleOpenVideoModal} />
 
-        {/* 6. 8-Week Setup & Implementation Roadmap */}
-        <TurnkeyRoadmap onOpenVideoModal={handleOpenVideoModal} />
+        {/* 6. Setting Up Your DOJO: 8-Step Simple Journey with Floorplan Showcase */}
+        <DojoSetupJourney onOpenVideoModal={handleOpenVideoModal} />
 
-        {/* 7. Restored Client Showcase: Empowering Teams Across Industries */}
+        {/* 7. Client Showcase: Empowering Teams Across Industries */}
         <EmpoweringTeamsSection />
 
-        {/* 8. Harmonized Master FAQs (Single Clean Accordion) */}
+        {/* 8. Harmonized Essential FAQs (Curated Top 6 Questions) */}
         <FAQSection />
 
-        {/* 9. Final Conversion Video Consultation Banner */}
+        {/* 9. Ready to Build High-Impact DOJO Training Center CTA */}
         <BottomCTA
           onOpenVideoModal={handleOpenVideoModal}
           onOpenBrochureModal={handleOpenBrochureModal}
