@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverActions: {}, // Provide an empty object
-      },
+  experimental: {
+    serverActions: {}, // Provide an empty object
+  },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -43,6 +44,15 @@ const nextConfig = {
       },
     ],
     minimumCacheTTL: 1500000,
+  },
+  async redirects() {
+    return [
+      {
+        source: '/dojo-training-center-new',
+        destination: '/dojo-training-center',
+        permanent: true,
+      },
+    ];
   },
 }
 

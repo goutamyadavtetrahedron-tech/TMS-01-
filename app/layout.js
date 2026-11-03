@@ -37,8 +37,6 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="/assets/css/elitecons.css" />
-        <link rel="stylesheet" href="/assets/css/elitecons-responsive.css" />
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

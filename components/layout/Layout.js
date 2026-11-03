@@ -36,6 +36,9 @@ export default function Layout({ breadcrumbTitle, children, wrapperCls }) {
     }, [])
     return (
         <>
+            {/* Legacy template stylesheet links scoped exclusively to legacy pages */}
+            <link rel="stylesheet" href="/assets/css/elitecons.css" />
+            <link rel="stylesheet" href="/assets/css/elitecons-responsive.css" />
             <DataBg />
             <div className={`page-wrapper ${wrapperCls ? wrapperCls : ""}`} id="#top">
                 <Navbar />
