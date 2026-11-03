@@ -3,24 +3,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import "./global.css";
-import { Poppins, Outfit } from "next/font/google";
 import Script from "next/script";
 import ReduxProvider from "./providers/ReduxProvider";
 import FloatingButton from "@/components/layout/floating-button";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  variable: "--font-poppins",
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["700", "800", "900"],
-  display: "swap",
-});
 
 export const metadata = {
   title: "Tetrahedron",
@@ -29,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${outfit.variable}`}>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -48,7 +35,6 @@ export default function RootLayout({ children }) {
         </Script>
       </head>
       <body
-        className={poppins.className}
         style={{
           fontFamily: "var(--font-poppins, 'Poppins', sans-serif)",
           lineHeight: "1.6",
