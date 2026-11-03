@@ -17,13 +17,13 @@ export const metadata = {
     "Tetrahedron Dojo",
   ],
   alternates: {
-    canonical: "https://www.tetrahedron.in/dojo-training-center-new",
+    canonical: "https://www.tetrahedron.in/dojo-training-center",
   },
   openGraph: {
     title: "Dojo Training Center Setup in India | Lean Skilling & TPS Dojo | Tetrahedron",
     description:
       "Cut operator onboarding by 80% and achieve zero-defect manufacturing. Complete 6-zone Dojo Center setup with sensory simulation jigs and L1-L4 skill matrices.",
-    url: "https://www.tetrahedron.in/dojo-training-center-new",
+    url: "https://www.tetrahedron.in/dojo-training-center",
     siteName: "Tetrahedron Manufacturing Solutions",
     images: [
       {
@@ -50,7 +50,7 @@ export default function DojoLayout({ children }) {
     "@graph": [
       {
         "@type": "Service",
-        "@id": "https://www.tetrahedron.in/dojo-training-center-new/#service",
+        "@id": "https://www.tetrahedron.in/dojo-training-center/#service",
         "name": "Dojo Training Center Design & Setup",
         "provider": {
           "@type": "Organization",
@@ -92,7 +92,7 @@ export default function DojoLayout({ children }) {
             "@type": "ListItem",
             "position": 3,
             "name": "Dojo Training Center",
-            "item": "https://www.tetrahedron.in/dojo-training-center-new",
+            "item": "https://www.tetrahedron.in/dojo-training-center",
           },
         ],
       },

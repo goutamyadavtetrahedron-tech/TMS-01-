@@ -159,7 +159,7 @@ export default function ModernFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/dojo-training-center-new"
+                    href="/dojo-training-center"
                     className="group inline-flex items-center gap-2 text-[14.5px] sm:text-[15px] text-slate-300 hover:text-white transition-colors"
                   >
                     <ChevronRight className="w-4 h-4 text-[#ff5722] shrink-0 group-hover:translate-x-0.5 transition-transform" />

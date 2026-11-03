@@ -45,6 +45,15 @@ const nextConfig = {
     ],
     minimumCacheTTL: 1500000,
   },
+  async redirects() {
+    return [
+      {
+        source: '/dojo-training-center-new',
+        destination: '/dojo-training-center',
+        permanent: true,
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

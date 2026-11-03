@@ -17,7 +17,7 @@ import EmpoweringTeamsSection from "./components/EmpoweringTeamsSection";
 import FAQSection from "./components/FAQSection";
 import BottomCTA from "./components/BottomCTA";
 
-export default function DojoTrainingCenterNewPage() {
+export default function DojoTrainingCenterPage() {
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false);
 
   useEffect(() => {
