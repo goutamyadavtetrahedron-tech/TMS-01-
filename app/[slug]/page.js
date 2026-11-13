@@ -149,14 +149,14 @@ const styles = {
     backgroundColor: "#eee", // Placeholder bg
     boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
     transition: "all 0.3s ease",
-    height: "180px", // Ensure container respects height
+    height: "auto", // Ensure container respects full height
   },
   industryImage: {
     width: "100%",
-    height: "100%", // Make image fill container height
-    objectFit: "cover",
+    height: "auto", // Make image display fully without cropping
     borderRadius: "8px",
     transition: "all 0.3s ease",
+    display: "block",
   },
   industryImageHover: {
     // Apply hover to container for shadow
@@ -1586,45 +1586,61 @@ export default function ServiceOrBlogPage({ params }) {
             {(isNonEmptyArray(data.industries) ||
               (data.industriesServed &&
                 isNonEmptyArray(data.industriesServed.images))) && (
-                <section style={styles.dynamicSection} className="text-center">
-                  {/* --- MODIFIED: Conditional Title --- */}
-                  {(isNonEmptyArray(data.industries) ||
-                    (data.industriesServed &&
-                      isNonEmptyArray(data.industriesServed.images))) &&
-                    renderSectionTitle(
-                      data.industriesServed?.title || "Industries We Serve"
-                    )}
-                  <div className="row g-4 justify-content-center">
+                <section
+                  className="text-center py-10 px-4 w-full mx-auto mb-16"
+                  style={{
+                    maxWidth: "min(70vw, 1200px)",
+                    margin: "0 auto 4rem auto",
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "clamp(1.75rem, 3vw, 2.375rem)",
+                      fontWeight: "800",
+                      color: "#00265b",
+                      marginBottom: "30px",
+                      fontFamily: "var(--font-poppins, 'Poppins', sans-serif)",
+                    }}
+                  >
+                    {data.industriesServed?.title ||
+                      data.industriesTitle ||
+                      "Industries We Serve"}
+                  </h2>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        (data.industriesServed?.images || data.industries).length === 3
+                          ? "repeat(auto-fit, minmax(280px, 1fr))"
+                          : "repeat(auto-fit, minmax(200px, 1fr))",
+                      gap: "20px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: "30px",
+                    }}
+                  >
                     {(data.industriesServed?.images || data.industries).map(
                       (imgSrc, idx) => (
-                        <div className="col-lg-3 col-md-4 col-sm-6" key={idx}>
-                          <div
-                            style={{
-                              ...styles.industryImageContainer,
-                              ...(hoveredIndustry === idx
-                                ? styles.industryImageHover
-                                : {}),
-                            }}
-                            onMouseEnter={() => setHoveredIndustry(idx)}
-                            onMouseLeave={() => setHoveredIndustry(null)}
-                          >
-                            <img
-                              src={
-                                typeof imgSrc === "string"
-                                  ? imgSrc
-                                  : imgSrc.url /* Handle object if needed */
-                              }
-                              className="img-fluid"
-                              alt={
-                                typeof imgSrc === "string"
-                                  ? `Industry ${idx + 1}`
-                                  : imgSrc.alt || `Industry ${idx + 1}`
-                              }
-                              style={styles.industryImage}
-                            />
-                            {/* Optional: Add caption here if imgSrc is object with caption */}
-                          </div>
-                        </div>
+                        <img
+                          key={idx}
+                          src={
+                            typeof imgSrc === "string"
+                              ? imgSrc
+                              : imgSrc.url /* Handle object if needed */
+                          }
+                          className="img-fluid"
+                          alt={
+                            typeof imgSrc === "string"
+                              ? `Industry ${idx + 1}`
+                              : imgSrc.alt || `Industry ${idx + 1}`
+                          }
+                          style={{
+                            width: "100%",
+                            height: "auto",
+                            borderRadius: "10px",
+                            display: "block",
+                          }}
+                        />
                       )
                     )}
                   </div>

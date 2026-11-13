@@ -103,7 +103,7 @@
   /* Global body text styling */
   .section-text,
   .content-text,
-  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *):not(.modern-page p):not(.modern-page *):not(.modern-footer p):not(.modern-footer *):not(.dojo-page-root p):not(.dojo-page-root *):not(.dojo-modal-root p):not(.dojo-modal-root *) {
+  p:not(.section-title__tagline):not([class*="tagline"]):not(.blog-modern-layout p):not(.blog-modern-layout *):not(.modern-page p):not(.modern-page *):not(.modern-footer p):not(.modern-footer *):not(.dojo-page-root p):not(.dojo-page-root *):not(.dojo-2-page-root p):not(.dojo-2-page-root *):not(.dojo-modal-root p):not(.dojo-modal-root *) {
     font-family: var(--font-poppins), Poppins, sans-serif !important;
     font-size: var(--body-text-size);
     line-height: 1.6;

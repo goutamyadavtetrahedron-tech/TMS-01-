@@ -21,7 +21,7 @@ export default function DojoSetupJourney({ onOpenVideoModal }) {
     {
       step: "02",
       title: "Design Your DOJO",
-      desc: "We create a customized layout and recommend the right training modules, simulators, tools, and digital solutions for your facility.",
+      desc: "We create a customized DOJO design and recommend the right training modules, simulators, tools, and digital solutions for your facility.",
     },
     {
       step: "03",
@@ -148,7 +148,7 @@ export default function DojoSetupJourney({ onOpenVideoModal }) {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-orange-950/20 hover:shadow-orange-900/40 transition-all cursor-pointer"
           >
             <Video className="w-4 h-4" />
-            <span>Book a 1-on-1 Layout Consultation</span>
+            <span>Book a Virtual Meeting</span>
           </a>
         </div>
 

@@ -41,14 +41,17 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
       style={{ fontFamily: "var(--font-poppins, 'Poppins', sans-serif)" }}
     >
       <div
-        className={`relative bg-[#001730]/95 backdrop-blur-md text-white border border-white/20 shadow-2xl shadow-slate-950/50 rounded-2xl sm:rounded-full p-3 sm:px-5 sm:py-2.5 flex items-center justify-between sm:justify-center gap-3 sm:gap-4 transition-all duration-500 ease-out transform ${
+        className={`relative overflow-hidden bg-slate-950/45 hover:bg-slate-950/55 backdrop-blur-xl backdrop-saturate-150 text-white border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.25)] rounded-2xl sm:rounded-full p-3 sm:px-5 sm:py-2.5 flex items-center justify-between sm:justify-center gap-3 sm:gap-4 transition-all duration-500 ease-out transform ${
           isVisible
             ? "translate-y-0 opacity-100 pointer-events-auto scale-100"
             : "translate-y-24 opacity-0 pointer-events-none scale-95"
         }`}
       >
+        {/* Subtle Glass Top Rim Reflection */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
+
         {/* Pulsing Live Availability Indicator */}
-        <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#ff5722]/20 text-[#ff5722] shrink-0">
+        <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#ff5722]/20 border border-[#ff5722]/30 text-[#ff5722] shrink-0">
           <Video className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#ff5722]" />
           <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -58,10 +61,10 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
 
         {/* Text Pitch */}
         <div className="flex-1 pr-1 sm:pr-2">
-          <div className="text-xs sm:text-[14px] font-bold text-white leading-tight flex items-center gap-1.5">
+          <div className="text-xs sm:text-[14px] font-semibold text-white leading-tight flex items-center gap-1.5">
             <span>Book a Virtual Meeting</span>
           </div>
-          <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5 leading-tight">
+          <div className="text-[11px] sm:text-xs text-slate-300/90 mt-0.5 leading-tight">
             1-on-1 with Principal Dojo Architects • Live Virtual Booking
           </div>
         </div>
@@ -75,17 +78,17 @@ export default function SilentMeetingPopup({ onOpenVideoModal }) {
               e.stopPropagation();
               onOpenVideoModal?.();
             }}
-            className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white text-xs sm:text-sm font-semibold shadow-md shadow-orange-950/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="group inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#ff5722] to-[#ff6f00] hover:from-[#f4511e] hover:to-[#ff5722] text-white text-xs sm:text-sm font-semibold shadow-[0_2px_12px_rgba(255,87,34,0.4)] hover:shadow-[0_4px_16px_rgba(255,87,34,0.6)] hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer border border-orange-400/30"
           >
             <span>Book Now</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
 
           <button
             type="button"
             onClick={handleDismiss}
             aria-label="Dismiss meeting popup"
-            className="w-7 h-7 rounded-full hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-full text-slate-300 hover:text-white hover:bg-white/10 flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

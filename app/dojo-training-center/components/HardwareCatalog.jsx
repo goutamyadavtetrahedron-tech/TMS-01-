@@ -26,7 +26,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "Safety & Hazard",
       title: "Hand Safety Simulation",
       image: "/assets/images/dojo-physical-simulation/hand-safety.webp",
-      desc: "Identifies machinery pinch-points and builds instant emergency-stop reflexes.",
+      desc: "Master machine hand safety using safety sensors, light curtains, and push buttons.",
       specs: [
         "Pinch-point reaction drill",
         "CE sensor safety interlocks",
@@ -40,7 +40,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "TPM & Reliability",
       title: "TPM Pillar Simulation",
       image: "/assets/images/dojo-physical-simulation/TPM-Pillar.webp",
-      desc: "Instills autonomous cleaning (CLITA) and daily machine inspection routines.",
+      desc: "Scan TPM pillar QR codes to learn key functions that boost machine reliability.",
       specs: [
         "8 TPM pillars interactive model",
         "Autonomous cleaning & inspection",
@@ -54,7 +54,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "Process & Metrics",
       title: "Process Parameter Awareness",
       image: "/assets/images/dojo-physical-simulation/process-parameter-awareness.jpg",
-      desc: "Teaches precise pressure, temperature, and software tolerance matching.",
+      desc: "Scan QR codes for parameters, units, and standards, verified live on the HMI.",
       specs: [
         "SI pressure, temp & flow units",
         "HMI software display matching",
@@ -68,7 +68,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "PPE Compliance",
       title: "PPE Matrix Simulation",
       image: "/assets/images/dojo-physical-simulation/PPE-Matrix.webp",
-      desc: "Simulates hazard-specific PPE selection and proper donning protocols.",
+      desc: "Select the correct PPE for specific jobs to ensure 100% safety compliance.",
       specs: [
         "Activity-to-PPE matrix board",
         "Chemical & thermal resistance",
@@ -80,9 +80,9 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       shortName: "Sensory Quality",
       icon: Eye,
       category: "Sensory Quality",
-      title: "Five Senses – Metal Aggregation",
+      title: "Five Senses Simulation",
       image: "/assets/images/dojo-physical-simulation/5-senses-metal-aggregation.webp",
-      desc: "Calibrates sensory reflexes to detect alloy variations by pitch, finish & weight.",
+      desc: "Identify OK and NG parts using 5 senses: sight, sound, touch, smell, and taste.",
       specs: [
         "Acoustic pitch discrimination",
         "Surface texture & weight balance",
@@ -96,7 +96,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "Fastening Integrity",
       title: "Torquing & Detorquing Simulation",
       image: "/assets/images/dojo-physical-simulation/torquing-detorquing.webp",
-      desc: "Builds muscle memory for torque angles and cross-threading prevention.",
+      desc: "Select specified bolts to practice precision tightening and loosening torque cycles.",
       specs: [
         "Angle & torque verification",
         "Cross-threading poka-yoke",
@@ -110,7 +110,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "Ergonomics & Posture",
       title: "Standing Posture Simulation",
       image: "/assets/images/dojo-physical-simulation/standing-posture.webp",
-      desc: "Demonstrates anti-fatigue posture to prevent strain across long shifts.",
+      desc: "Practice correct standing postures on anti-fatigue mats to avoid body strain.",
       specs: [
         "Anti-fatigue posture alignment",
         "Spine & core strain biomechanics",
@@ -124,7 +124,7 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
       category: "Motor Skills & Agility",
       title: "Hand Stability Simulation",
       image: "/assets/images/dojo-physical-simulation/hand-stabilization-buzz-wire.webp",
-      desc: "Hones fine-motor dexterity and steadiness using a takt-calibrated wire drill.",
+      desc: "Navigate wire paths without touching sides to build hand control and focus.",
       specs: [
         "Auditory fault alarm buzzer",
         "Precision path steady-hand drill",
@@ -196,14 +196,14 @@ export default function HardwareCatalog({ onOpenVideoModal, onOpenImage }) {
 
                   {/* Title - Full, unclipped */}
                   <h3
-                    className="text-sm font-bold text-slate-900 group-hover:text-[#ff5722] transition-colors leading-snug"
+                    className="text-sm font-bold text-slate-900 group-hover:text-[#ff5722] transition-colors leading-snug min-h-[38px] flex items-center"
                     title={item.title}
                   >
                     {item.title}
                   </h3>
 
                   {/* Full Description - Complete, no cut-off ellipsis */}
-                  <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed min-h-[36px] flex items-start">
                     {item.desc}
                   </p>
                 </div>

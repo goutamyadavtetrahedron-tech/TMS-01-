@@ -59,7 +59,7 @@ export default function DojoLayout({ children }) {
           "logo": "https://www.tetrahedron.in/assets/images/Tetrahedron%20Logo.png",
         },
         "description":
-          "End-to-end establishment of industrial Dojo Training Centers, including 6-zone architectural layouts, 5-sense tactile simulation jigs, safety dojos, SOP standard development, and Train-the-Trainer accreditation.",
+          "End-to-end establishment of industrial Dojo Training Centers, including 6-zone architectural DOJO setups, 5-sense tactile simulation jigs, safety dojos, SOP standard development, and Train-the-Trainer accreditation.",
         "areaServed": "India & Global",
         "serviceType": "Manufacturing Excellence & Skill Development",
       },

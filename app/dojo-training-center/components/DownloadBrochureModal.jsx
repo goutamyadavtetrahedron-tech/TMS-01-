@@ -308,7 +308,7 @@ export default function DownloadBrochureModal({
               {/* Simple, Clean Next Step */}
               <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
                 <div className="text-xs sm:text-sm font-medium text-slate-600">
-                  Need a custom layout for your plant?
+                  Need a custom DOJO setup for your plant?
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">

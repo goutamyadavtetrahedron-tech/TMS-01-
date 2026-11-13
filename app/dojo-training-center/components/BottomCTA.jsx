@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { Video, PhoneCall, Download } from "lucide-react";
+import { Video, Download } from "lucide-react";
 
 export default function BottomCTA({ onOpenVideoModal, onOpenBrochureModal }) {
   return (
-    <section className="relative overflow-hidden pt-8 sm:pt-10 pb-7 sm:pb-8 bg-[#001730] text-white border-t border-white/10 border-b border-slate-800/80">
+    <section className="relative overflow-hidden pt-8 sm:pt-10 pb-8 sm:pb-10 bg-[#001730] text-white border-t border-white/10 border-b border-slate-800/80">
       {/* Subtle Ambient Radial Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[160px] bg-[#ff5722]/10 blur-[90px] pointer-events-none" />
 
@@ -41,19 +41,6 @@ export default function BottomCTA({ onOpenVideoModal, onOpenBrochureModal }) {
             <Download className="w-4 h-4 text-[#ff5722] shrink-0" />
             <span>Download Brochure</span>
           </button>
-        </div>
-
-        {/* Direct Advisory Line - Minimal & Clean */}
-        <div className="pt-1">
-          <a
-            href="tel:+917506927976"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-400 hover:text-white transition-colors"
-          >
-            <PhoneCall className="w-3.5 h-3.5 text-orange-400" />
-            <span>
-              Call direct: <strong className="text-white font-semibold hover:underline">+91 75069 27976</strong>
-            </span>
-          </a>
         </div>
       </div>
     </section>
